@@ -1,0 +1,39 @@
+@use "../variables" as *;
+@use "../global";
+
+.home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(45deg, $accent, $accent-light 30%, white 60%);
+
+  &__main {
+    text-align: center;
+    padding: $spacing-large;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 90%;
+    margin: $spacing-base;
+
+    @media (min-width: $breakpoint-md) {
+      width: 80%;
+    }
+  }
+
+  &__title {
+    font-size: $font-size-h1;
+    margin-bottom: $spacing-base;
+    color: $accent-dark;
+    font-weight: bold;
+  }
+
+  &__description {
+    font-size: $font-size-base;
+    color: #666;
+    margin-bottom: $spacing-large;
+    line-height: 1.6;
+  }
+}
