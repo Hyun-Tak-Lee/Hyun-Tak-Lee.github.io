@@ -1,17 +1,5 @@
 @use "variables" as *;
 
-:root {
-  --accent: 76, 175, 80; /* 연한 초록색 */
-  --accent-light: 129, 199, 212; /* 연한 하늘색 */
-  --accent-dark: 46, 125, 50; /* 진한 초록색 */
-  --accent-gradient: linear-gradient(
-    45deg,
-    rgb(var(--accent)),
-    rgb(var(--accent-light)) 30%,
-    white 60%
-  );
-}
-
 html {
   font-family: $font-family-base;
   background: #f6f6f6;
