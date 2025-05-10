@@ -1,40 +1,34 @@
-// Colors
-$accent: rgb(76, 175, 80) !default; /* 연한 초록색 */
-$accent-light: rgb(129, 199, 212) !default; /* 연한 하늘색 */
-$accent-dark: rgb(46, 125, 50) !default; /* 진한 초록색 */
+$color-primary: #4caf50;
+$color-primary-light: #81c7d4;
+$color-primary-dark: #2e7d32;
+$color-white: #ffffff;
+$color-black: #000000;
 
-// Gradients
-$accent-gradient: linear-gradient(
-  45deg,
-  $accent,
-  $accent-light 30%,
-  white 60%
-) !default;
+$font-family-base: system-ui, sans-serif;
+$font-size-base: 1rem;
+$font-size-h3: 1.75rem;
+$font-size-h2: 2rem;
+$font-size-h1: 2.5rem;
+$line-height-base: 1.5;
+$font-weight-normal: 400;
+$font-weight-bold: 700;
 
-// Typography
-$font-family-base: system-ui, sans-serif !default;
-$font-size-base: 1rem !default;
-$font-size-h1: 2.5rem !default;
-$font-size-h2: 2rem !default;
-$font-size-h3: 1.75rem !default;
+$spacing-small: 0.5rem;
+$spacing-base: 1rem;
+$spacing-large: 2rem;
 
-// Spacing
-$spacing-base: 1rem !default;
-$spacing-large: 2rem !default;
-$spacing-small: 0.5rem !default;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
 
-// Breakpoints
-$breakpoint-sm: 576px !default;
-$breakpoint-md: 768px !default;
-$breakpoint-lg: 992px !default;
-$breakpoint-xl: 1200px !default;
+$transition-duration: 0.2s;
+$transition-timing: ease-in-out;
 
-// Export all variables
 :export {
-  accent: $accent;
-  accentLight: $accent-light;
-  accentDark: $accent-dark;
-  accentGradient: $accent-gradient;
+  colorPrimary: $color-primary;
+  colorPrimaryLight: $color-primary-light;
+  colorPrimaryDark: $color-primary-dark;
   fontFamilyBase: $font-family-base;
   fontSizeBase: $font-size-base;
   fontSizeH1: $font-size-h1;
