@@ -1,0 +1,43 @@
+@use "../variables" as *;
+
+@mixin page-layout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(
+    45deg,
+    var(--color-primary),
+    var(--color-primary-light) 30%,
+    var(--color-background) 60%
+  );
+}
+
+@mixin content-container {
+  text-align: center;
+  padding: var(--spacing-large);
+  background: var(--color-background);
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  width: 90%;
+  margin: var(--spacing-base);
+
+  @media (min-width: $breakpoint-md) {
+    width: 80%;
+  }
+}
+
+@mixin page-title {
+  font-size: $font-size-h1;
+  margin-bottom: var(--spacing-large);
+  color: var(--color-primary-dark);
+  font-weight: var(--font-weight-bold);
+}
+
+@mixin page-content {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-base);
+  text-align: left;
+}

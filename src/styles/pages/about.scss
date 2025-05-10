@@ -2,21 +2,18 @@
 @use "../global";
 @use "../mixins/layout" as *;
 
-.home {
+.about {
   @include page-layout;
 
   &__main {
     @include content-container;
-    max-width: 600px;
   }
 
   &__title {
     @include page-title;
-    margin-bottom: var(--spacing-base);
   }
 
-  &__description {
+  &__content {
     @include page-content;
-    margin-bottom: var(--spacing-large);
   }
 }

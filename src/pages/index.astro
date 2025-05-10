@@ -1,22 +1,12 @@
 ---
 import '../styles/pages/home.scss';
-import Header from '../layouts/header.astro';
+import Layout from '../layouts/BaseLayout.astro';
 ---
 
-<html lang="ko">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Hyun-Tak-Lee</title>
-	</head>
-	<body>
-		<Header title='Home'/>
-		<div class="home">
-			<main class="home__main">
-				<h1 class="home__title">Title!</h1>
-			</main>
-		</div>
-	</body>
-</html> 
+<Layout title="Home">
+	<div class="home">
+		<main class="home__main">
+			<h1 class="home__title">Title!</h1>
+		</main>
+	</div>
+</Layout> 
