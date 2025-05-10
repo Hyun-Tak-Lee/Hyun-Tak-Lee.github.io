@@ -1,22 +1,78 @@
 @use "variables" as *;
 
+:root {
+  color-scheme: light dark;
+
+  --color-primary: #{$color-primary};
+  --color-primary-light: #{$color-primary-light};
+  --color-primary-dark: #{$color-primary-dark};
+  --color-background: light-dark(#{$color-white}, #1a1a1a);
+  --color-text: light-dark(#333333, #{$color-white});
+  --color-text-secondary: light-dark(#666666, #a0a0a0);
+  --color-border: light-dark(#e0e0e0, #404040);
+
+  --font-family-base: #{$font-family-base};
+  --font-size-base: #{$font-size-base};
+  --line-height-base: #{$line-height-base};
+  --font-weight-normal: #{$font-weight-normal};
+  --font-weight-bold: #{$font-weight-bold};
+
+  --spacing-small: #{$spacing-small};
+  --spacing-base: #{$spacing-base};
+  --spacing-large: #{$spacing-large};
+
+  --transition-duration: #{$transition-duration};
+  --transition-timing: #{$transition-timing};
+}
+
 html {
-  font-family: $font-family-base;
-  background: #f6f6f6;
-  background-size: 224px;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  background: var(--color-background);
+  color: var(--color-text);
+  
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 a {
-  color: $accent;
+  color: var(--color-primary);
   text-decoration: none;
+  transition: color var(--transition-duration) var(--transition-timing);
 
   &:hover {
     text-decoration: underline;
+  }
+}
+
+::selection {
+  background-color: var(--color-primary);
+  color: var(--color-background);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-text-secondary);
+  border-radius: 4px;
+
+  &:hover {
+    background: var(--color-primary);
   }
 }
