@@ -1,9 +1,9 @@
 ---
-category: "카테고리"
+category: "ct"
+sub_category: ["ct", "ct2"]
 title: "HelloWorld"
 pubDate: 2024-03-20
 description: "Description"
-author: "리아"
 ---
 
 ## 마크다운 기능
