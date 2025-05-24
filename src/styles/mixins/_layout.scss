@@ -20,18 +20,25 @@
 
 @mixin content-container {
   text-align: center;
-  padding: var(--spacing-large);
   background: var(--color-background);
   border-radius: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  max-width: 1200px;
-  width: 90%;
-  margin: var(--spacing-base);
+  width: 1200px;
+  overflow-x: hidden;
+  overflow-y: auto;
 
-  @include mobile;
-  @include tablet;
-  @include laptop;
-  @include desktop;
+  @include mobile {
+    width: 100vw;
+  }
+  @include tablet {
+    width: 550px;
+  }
+  @include laptop {
+    width: 700px;
+  }
+  @include desktop {
+    width: 900px;
+  }
 }
 
 @mixin page-title {

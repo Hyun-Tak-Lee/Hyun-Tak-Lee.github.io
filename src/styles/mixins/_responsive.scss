@@ -8,25 +8,25 @@ $breakpoints: (
 );
 
 @mixin mobile {
-  @media (max-width: map.get($breakpoints, "mobile")) {
+  @media (max-width: (map.get($breakpoints, "mobile") - 0.02px)) {
     @content;
   }
 }
 
 @mixin tablet {
-  @media (max-width: map.get($breakpoints, "tablet")) {
+  @media (min-width: map.get($breakpoints, "mobile")) and (max-width: (map.get($breakpoints, "tablet") - 0.02px)) {
     @content;
   }
 }
 
 @mixin laptop {
-  @media (max-width: map.get($breakpoints, "laptop")) {
+  @media (min-width: map.get($breakpoints, "tablet")) and (max-width: (map.get($breakpoints, "laptop") - 0.02px)) {
     @content;
   }
 }
 
 @mixin desktop {
-  @media (max-width: map.get($breakpoints, "desktop")) {
+  @media (min-width: map.get($breakpoints, "laptop")) {
     @content;
   }
 }
