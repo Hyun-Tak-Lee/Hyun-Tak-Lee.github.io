@@ -5,22 +5,11 @@ $color-white: #ffffff;
 $color-black: #000000;
 
 $font-family-base: system-ui, sans-serif;
-$font-size-base: 1rem;
-$font-size-h3: 1.75rem;
-$font-size-h2: 2rem;
-$font-size-h1: 2.5rem;
 $line-height-base: 1.5;
-$font-weight-normal: 400;
-$font-weight-bold: 700;
 
-$spacing-small: 0.5rem;
-$spacing-base: 1rem;
-$spacing-large: 2rem;
-
-$breakpoint-sm: 576px;
-$breakpoint-md: 768px;
-$breakpoint-lg: 992px;
-$breakpoint-xl: 1200px;
+$spacing-small: 1rem;
+$spacing-base: 2rem;
+$spacing-large: 3rem;
 
 $transition-duration: 0.2s;
 $transition-timing: ease-in-out;
@@ -30,15 +19,7 @@ $transition-timing: ease-in-out;
   colorPrimaryLight: $color-primary-light;
   colorPrimaryDark: $color-primary-dark;
   fontFamilyBase: $font-family-base;
-  fontSizeBase: $font-size-base;
-  fontSizeH1: $font-size-h1;
-  fontSizeH2: $font-size-h2;
-  fontSizeH3: $font-size-h3;
   spacingBase: $spacing-base;
   spacingLarge: $spacing-large;
   spacingSmall: $spacing-small;
-  breakpointSm: $breakpoint-sm;
-  breakpointMd: $breakpoint-md;
-  breakpointLg: $breakpoint-lg;
-  breakpointXl: $breakpoint-xl;
 }

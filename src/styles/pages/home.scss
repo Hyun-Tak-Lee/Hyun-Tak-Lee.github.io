@@ -7,16 +7,13 @@
 
   &__main {
     @include content-container;
-    max-width: 600px;
   }
 
   &__title {
     @include page-title;
-    margin-bottom: var(--spacing-base);
   }
 
   &__description {
     @include page-content;
-    margin-bottom: var(--spacing-large);
   }
 }
