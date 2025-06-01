@@ -1,23 +1,27 @@
 ---
-import Header from './HeaderLayout.astro';
+import "../styles/layouts/base.scss";
+import Header from "./HeaderLayout.astro";
 
 interface Props {
-	title: string;
+  title: string;
 }
 
 const { title } = Astro.props;
 ---
 
 <html lang="ko">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-	</head>
-	<body>
-		<Header title={title} />
-		<slot />
-	</body>
-</html> 
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <Header title={title} />
+    <div class="content">
+      <div class="side-bar"></div>
+      <slot />
+    </div>
+  </body>
+</html>
