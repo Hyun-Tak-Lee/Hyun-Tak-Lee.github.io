@@ -1,6 +1,3 @@
-$color-primary: #4caf50;
-$color-primary-light: #81c7d4;
-$color-primary-dark: #2e7d32;
 $color-white: #ffffff;
 $color-black: #000000;
 
@@ -15,9 +12,6 @@ $transition-duration: 0.2s;
 $transition-timing: ease-in-out;
 
 :export {
-  colorPrimary: $color-primary;
-  colorPrimaryLight: $color-primary-light;
-  colorPrimaryDark: $color-primary-dark;
   fontFamilyBase: $font-family-base;
   spacingBase: $spacing-base;
   spacingLarge: $spacing-large;

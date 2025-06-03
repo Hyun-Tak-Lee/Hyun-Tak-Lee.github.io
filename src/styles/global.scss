@@ -3,9 +3,6 @@
 :root {
   color-scheme: light dark;
 
-  --color-primary: #{$color-primary};
-  --color-primary-light: #{$color-primary-light};
-  --color-primary-dark: #{$color-primary-dark};
   --color-background: light-dark(#{$color-white}, #1a1a1a);
   --color-text: light-dark(#333333, #{$color-white});
   --color-text-secondary: light-dark(#666666, #a0a0a0);

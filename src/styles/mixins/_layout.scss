@@ -5,11 +5,13 @@
   display: grid;
   place-items: center;
   min-height: 100vh;
-  background: linear-gradient(
-    45deg,
-    var(--color-primary),
-    var(--color-primary-light) 30%,
-    var(--color-background) 60%
+  background: radial-gradient(
+    circle at top left,
+    light-dark(#e6f0ff, #2a1532) 0%,
+    light-dark(#e6e6ff, #3a1a3e) 25%,
+    light-dark(#ffd6e6, #5a2a5e) 50%,
+    light-dark(#ffcce0, #7a3a7e) 75%,
+    light-dark(#ffc2da, #a04a8a) 100%
   );
 
   @include mobile;
@@ -42,7 +44,7 @@
 }
 
 @mixin page-title {
-  color: var(--color-primary-dark);
+  color: light-dark(#000000,#ffffff);
   margin-bottom: var(--spacing-large);
 
   @include mobile;
