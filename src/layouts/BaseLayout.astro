@@ -1,23 +1,45 @@
 ---
-import Header from './HeaderLayout.astro';
+import "../styles/layouts/base.scss";
+import "../styles/components/icons/menu-icon.scss";
+import Header from "./HeaderLayout.astro";
+import MenuIcon from "../components/icons/MenuIcon.astro";
 
 interface Props {
-	title: string;
+  title: string;
 }
 
 const { title } = Astro.props;
 ---
 
 <html lang="ko">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-	</head>
-	<body>
-		<Header title={title} />
-		<slot />
-	</body>
-</html> 
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <Header title={title} />
+    <button class="menu-toggle" id="menuToggle">
+      <MenuIcon />
+    </button>
+    <div class="content">
+      <div class="sidebar__background" id="sidebar">
+        <div class="sidebar__body"></div>
+      </div>
+      <div class="main-content">
+        <slot />
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  const menuToggle = document.getElementById("menuToggle");
+  const sidebar = document.getElementById("sidebar");
+
+  menuToggle?.addEventListener("click", () => {
+    sidebar?.classList.toggle("active");
+  });
+</script>

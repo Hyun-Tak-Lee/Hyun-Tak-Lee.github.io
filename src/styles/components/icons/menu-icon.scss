@@ -1,0 +1,26 @@
+.menu-toggle {
+  display: block;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 3;
+  width: 4rem;
+  height: 4rem;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--color-text);
+  transition: color var(--transition-duration) var(--transition-timing);
+  -webkit-tap-highlight-color: transparent;
+
+  &:active {
+    background: light-dark(#d0d0d0, #3a3a3a);
+  }
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+}

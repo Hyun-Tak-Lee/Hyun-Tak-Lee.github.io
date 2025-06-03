@@ -3,9 +3,6 @@
 :root {
   color-scheme: light dark;
 
-  --color-primary: #{$color-primary};
-  --color-primary-light: #{$color-primary-light};
-  --color-primary-dark: #{$color-primary-dark};
   --color-background: light-dark(#{$color-white}, #1a1a1a);
   --color-text: light-dark(#333333, #{$color-white});
   --color-text-secondary: light-dark(#666666, #a0a0a0);
@@ -31,12 +28,13 @@ html {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100%;
 }
 
 body {
   margin: 0;
   padding: 0;
-  min-height: 100vh;
+  height: 100%;
   overflow-x: hidden;
 }
 
