@@ -16,7 +16,6 @@
 
   @include mobile;
   @include tablet;
-  @include laptop;
   @include desktop;
 }
 
@@ -33,9 +32,6 @@
     width: 100vw;
   }
   @include tablet {
-    width: 550px;
-  }
-  @include laptop {
     width: 700px;
   }
   @include desktop {
@@ -44,12 +40,11 @@
 }
 
 @mixin page-title {
-  color: light-dark(#000000,#ffffff);
-  margin-bottom: var(--spacing-large);
+  color: light-dark(#000000, #ffffff);
+  margin-bottom: 2rem;
 
   @include mobile;
   @include tablet;
-  @include laptop;
   @include desktop;
 }
 
@@ -60,6 +55,5 @@
 
   @include mobile;
   @include tablet;
-  @include laptop;
   @include desktop;
 }

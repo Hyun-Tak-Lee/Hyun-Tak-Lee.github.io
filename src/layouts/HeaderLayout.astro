@@ -1,22 +1,18 @@
 ---
-import '../styles/layouts/header.scss';
-
-type Props = {
-    title: string;
-}
-
-const { title } = Astro.props;
+import "../styles/layouts/header.scss";
 ---
 
 <header class="home__header">
-    <div class="header">
-        <h1><a href="/">{title}</a></h1>
-        <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/about">About</a></li>
-                <li><a href="/contact">Contact</a></li>
-            </ul>
-        </nav>
-    </div>
-</header> 
+  <div class="header">
+    <nav>
+      <div class="header__left"></div>
+      <div class="header__right">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</header>

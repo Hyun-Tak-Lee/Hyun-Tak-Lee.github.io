@@ -1,5 +1,7 @@
+@use "../../mixins/responsive" as *;
+
 .menu-toggle {
-  display: block;
+  display: none;
   position: fixed;
   top: 1rem;
   left: 1rem;
@@ -20,7 +22,7 @@
     background: light-dark(#d0d0d0, #3a3a3a);
   }
 
-  @media (max-width: 768px) {
+  @include mobile {
     display: block;
   }
 }
