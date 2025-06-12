@@ -2,12 +2,6 @@
 
 .menu-toggle {
   display: none;
-  position: fixed;
-  top: 1rem;
-  left: 1rem;
-  z-index: 3;
-  width: 4rem;
-  height: 4rem;
   margin: 0;
   padding: 0;
   background: none;
@@ -17,6 +11,7 @@
   color: var(--color-text);
   transition: color var(--transition-duration) var(--transition-timing);
   -webkit-tap-highlight-color: transparent;
+  z-index: 3;
 
   &:active {
     background: light-dark(#d0d0d0, #3a3a3a);
@@ -24,5 +19,7 @@
 
   @include mobile {
     display: block;
+    height: 100%;
+    aspect-ratio: 1;
   }
 }

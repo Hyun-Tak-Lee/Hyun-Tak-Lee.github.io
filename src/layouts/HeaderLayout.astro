@@ -1,12 +1,15 @@
 ---
+import MenuIcon from "../components/icons/MenuIcon.astro";
 import "../styles/layouts/header.scss";
 ---
 
 <header class="home__header">
   <div class="header">
+    <button class="menu-toggle" id="menuToggle">
+      <MenuIcon />
+    </button>
     <nav>
-      <div class="header__left"></div>
-      <div class="header__right">
+      <div class="header__menu">
         <ul>
           <li><a href="/">Home</a></li>
           <li><a href="/about">About</a></li>

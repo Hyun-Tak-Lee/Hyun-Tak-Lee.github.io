@@ -1,8 +1,7 @@
 ---
-import "../styles/layouts/base.scss";
 import "../styles/components/icons/menu-icon.scss";
+import "../styles/layouts/base.scss";
 import Header from "./HeaderLayout.astro";
-import MenuIcon from "../components/icons/MenuIcon.astro";
 
 interface Props {
   title: string;
@@ -21,9 +20,6 @@ const { title } = Astro.props;
   </head>
   <body>
     <Header />
-    <button class="menu-toggle" id="menuToggle">
-      <MenuIcon />
-    </button>
     <div class="content">
       <div class="sidebar__background" id="sidebar">
         <div class="sidebar__body"></div>
