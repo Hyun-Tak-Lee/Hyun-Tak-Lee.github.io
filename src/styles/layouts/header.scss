@@ -11,6 +11,10 @@
     @include mobile {
       height: 60px;
     }
+
+    @include tablet {
+      height: 60px;
+    }
   }
 }
 
