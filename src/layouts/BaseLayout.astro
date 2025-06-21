@@ -1,5 +1,5 @@
 ---
-import "../styles/components/icons/menu-icon.scss";
+import SideBar from "../components/menus/SideBar.astro";
 import "../styles/layouts/base.scss";
 import Header from "./HeaderLayout.astro";
 
@@ -22,7 +22,9 @@ const { title } = Astro.props;
     <Header />
     <div class="content">
       <div class="sidebar__background" id="sidebar">
-        <div class="sidebar__body"></div>
+        <div class="sidebar__body">
+          <SideBar />
+        </div>
       </div>
       <div class="main-content">
         <slot />
