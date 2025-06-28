@@ -1,19 +1,21 @@
-@use "../variables" as *;
-@use "../global";
-@use "../mixins/layout" as *;
+@use "../mixins/responsive" as *;
 
 .contact {
-  @include page-layout;
-
-  &__main {
-    @include content-container;
-  }
 
   &__title {
-    @include page-title;
+    color: light-dark(#000000, #ffffff);
+    margin-bottom: 2rem;
+
+    @include mobile;
+    @include tablet;
   }
 
   &__content {
-    @include page-content;
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-base);
+    text-align: left;
+
+    @include mobile;
+    @include tablet;
   }
 }

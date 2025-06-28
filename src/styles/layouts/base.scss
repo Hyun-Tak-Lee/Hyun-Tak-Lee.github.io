@@ -56,4 +56,15 @@
 .main-content {
   flex-grow: 1;
   background-color: #ffffff;
+  width: 1200px;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  @include mobile {
+    width: 100vw;
+  }
+
+  @include tablet {
+    width: 768px;
+  }
 }
