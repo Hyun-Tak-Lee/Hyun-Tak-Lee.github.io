@@ -4,16 +4,9 @@ $color-black: #000000;
 $font-family-base: system-ui, sans-serif;
 $line-height-base: 1.5;
 
-$spacing-small: 2rem;
-$spacing-base: 4rem;
-$spacing-large: 6rem;
-
 $transition-duration: 0.2s;
 $transition-timing: ease-in-out;
 
 :export {
   fontFamilyBase: $font-family-base;
-  spacingBase: $spacing-base;
-  spacingLarge: $spacing-large;
-  spacingSmall: $spacing-small;
 }

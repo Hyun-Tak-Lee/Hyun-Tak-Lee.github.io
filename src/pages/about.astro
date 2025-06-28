@@ -1,15 +1,11 @@
 ---
-import '../styles/pages/about.scss';
-import Layout from '../layouts/BaseLayout.astro';
+import "../styles/pages/about.scss";
+import PageLayout from "../layouts/PageLayout.astro";
 ---
 
-<Layout title="About">
-	<div class="about">
-		<main class="about__main">
-			<h1 class="about__title">Introduction</h1>
-			<div class="about__content">
-				<p>description</p>
-			</div>
-		</main>
-	</div>
-</Layout> 
+<PageLayout title="About">
+  <h1 class="section__title">Introduction</h1>
+  <div class="section__content">
+    <p>description</p>
+  </div>
+</PageLayout>

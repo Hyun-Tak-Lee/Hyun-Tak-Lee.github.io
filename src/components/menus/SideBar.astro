@@ -1,0 +1,23 @@
+---
+import { getCollection } from "astro:content";
+import "../../styles/components/menus/side-bar.scss";
+
+const posts = await getCollection("post");
+const categories = [...new Set(posts.map((post) => post.data.category))];
+---
+
+<nav class="sidebar__menu">
+  <ul class="menu__box">
+    <li class="menu__sub">
+      <ul>
+        {
+          categories.map((category) => (
+            <li>
+              <a href={`/category/${category}`}>{category}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </li>
+  </ul>
+</nav>

@@ -1,19 +1,11 @@
-@use "../variables" as *;
-@use "../global";
-@use "../mixins/layout" as *;
+@use "../mixins/responsive" as *;
 
 .home {
-  @include page-layout;
-
-  &__main {
-    @include content-container;
-  }
-
   &__title {
-    @include page-title;
-  }
+    color: light-dark(#000000, #ffffff);
+    margin-bottom: 2rem;
 
-  &__description {
-    @include page-content;
+    @include mobile;
+    @include tablet;
   }
 }

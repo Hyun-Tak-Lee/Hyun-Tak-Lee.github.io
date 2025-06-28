@@ -1,9 +1,7 @@
 @use "sass:map";
 
 $breakpoints: (
-  "mobile": 576px,
-  "tablet": 768px,
-  "laptop": 992px,
+  "mobile": 768px,
   "desktop": 1200px,
 );
 
@@ -14,19 +12,7 @@ $breakpoints: (
 }
 
 @mixin tablet {
-  @media (min-width: map.get($breakpoints, "mobile")) and (max-width: (map.get($breakpoints, "tablet") - 0.02px)) {
-    @content;
-  }
-}
-
-@mixin laptop {
-  @media (min-width: map.get($breakpoints, "tablet")) and (max-width: (map.get($breakpoints, "laptop") - 0.02px)) {
-    @content;
-  }
-}
-
-@mixin desktop {
-  @media (min-width: map.get($breakpoints, "laptop")) {
+  @media (min-width: map.get($breakpoints, "mobile")) and (max-width: (map.get($breakpoints, "desktop") - 0.02px)) {
     @content;
   }
 }
