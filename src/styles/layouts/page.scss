@@ -24,8 +24,7 @@
     border-radius: 1rem;
     box-shadow: 0 4px 6px #0000001a;
     margin-left: 1vw;
-    width: 1200px;
-    max-width: 90%;
+    width: 1000px;
     overflow-x: hidden;
     overflow-y: auto;
 
@@ -34,8 +33,13 @@
       border-radius: 0;
       margin-left: 0;
     }
+
     @include tablet {
-      width: 768px;
+      width: 600px;
+    }
+
+    @include desktop {
+      width: 800px;
     }
   }
 }

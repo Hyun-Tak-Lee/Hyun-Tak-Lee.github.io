@@ -7,6 +7,7 @@
 
   ul {
     padding: 0;
+    margin: 0;
   }
 
   li {
@@ -17,14 +18,68 @@
     &__box {
       display: grid;
       place-items: center;
-      width: 50%;
-      height: 50%;
+      width: 100%;
+      height: 90%;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
 
     &__sub {
       font-size: 3rem;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+
+      &__button {
+        cursor: pointer;
+        border: none;
+        background: transparent;
+        box-shadow: 0 0 6px 3px light-dark(#5297ff, #8ab4f8);
+        width: 100%;
+        height: 4vh;
+        margin: 0;
+        padding: 0;
+      }
+
+      &__list {
+        max-height: 0;
+        width: 100%;
+        height: auto;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        transition: max-height 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+
+        &--active {
+          max-height: 400px;
+          padding: 5px 0;
+        }
+      }
+
+      &__item {
+        border-radius: 1rem;
+        box-shadow: 1px 1px 3px 0 light-dark(#f3f3f3, #97c1ff),
+          3px 3px 4px 2px light-dark(#72b6ff, #cae4ff);
+        width: 90%;
+        flex-shrink: 0;
+        display: grid;
+        place-items: center;
+      }
+
+      span {
+        font-size: 2rem;
+      }
+
       a {
-        
+        margin: 0;
+        padding: 0;
       }
     }
   }

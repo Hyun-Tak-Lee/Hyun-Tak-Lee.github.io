@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import Layout from "../../layouts/BaseLayout.astro";
+import PageLayout from "../../layouts/PageLayout.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("post");
@@ -20,7 +20,7 @@ export async function getStaticPaths() {
 const { category, posts } = Astro.props;
 ---
 
-<Layout title={`카테고리: ${category}`}>
+<PageLayout title={`카테고리: ${category}`}>
   <div class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold mb-8">카테고리: {category}</h1>
 
@@ -60,4 +60,4 @@ const { category, posts } = Astro.props;
       )
     }
   </div>
-</Layout>
+</PageLayout>

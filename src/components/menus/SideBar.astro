@@ -9,11 +9,31 @@ const categories = [...new Set(posts.map((post) => post.data.category))];
 <nav class="sidebar__menu">
   <ul class="menu__box">
     <li class="menu__sub">
-      <ul>
+      <button
+        class="menu__sub__button"
+        aria-expanded="false"
+        aria-controls="category-submenu"
+      >
+        <span>카테고리</span>
+        <svg
+          class="menu__sub__icon"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <polyline points="6,9 12,15 18,9"></polyline>
+        </svg>
+      </button>
+      <ul id="category-submenu" class="menu__sub__list menu__sub__list--active">
         {
           categories.map((category) => (
-            <li>
-              <a href={`/category/${category}`}>{category}</a>
+            <li class="menu__sub__item">
+              <a href={`/category/${category}`} class="menu__sub__link">
+                {category}
+              </a>
             </li>
           ))
         }
@@ -21,3 +41,19 @@ const categories = [...new Set(posts.map((post) => post.data.category))];
     </li>
   </ul>
 </nav>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const menuButtons = document.querySelectorAll(".menu__sub__button");
+
+    menuButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        const submenu = this.nextElementSibling;
+        const isExpanded = this.getAttribute("aria-expanded") === "true";
+
+        this.setAttribute("aria-expanded", !isExpanded);
+        submenu.classList.toggle("menu__sub__list--active");
+      });
+    });
+  });
+</script>

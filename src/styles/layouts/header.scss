@@ -24,6 +24,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: linear-gradient(
+    90deg,
+    light-dark(#e3f2fd, #1a237e) 0%,
+    light-dark(#bbdefb, #283593) 50%,
+    light-dark(#90caf9, #3949ab) 100%
+  );
 
   &__menu {
     display: flex;
@@ -48,6 +54,7 @@
       margin: 0;
       padding: 0;
       font-size: 2rem;
+      margin-right: 10px;
 
       li {
         height: 100%;
