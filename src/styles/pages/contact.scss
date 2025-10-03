@@ -1,7 +1,6 @@
 @use "../mixins/responsive" as *;
 
 .contact {
-
   &__title {
     color: light-dark(#000000, #ffffff);
     margin-bottom: 2rem;
@@ -11,8 +10,8 @@
   }
 
   &__content {
-    color: var(--color-text-secondary);
-    line-height: var(--line-height-base);
+    color: light-dark(#666666, #a0a0a0);
+    line-height: 1.5;
     text-align: left;
 
     @include mobile;

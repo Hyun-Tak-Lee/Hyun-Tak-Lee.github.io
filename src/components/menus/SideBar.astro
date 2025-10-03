@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import "../../styles/components/menus/side-bar.scss";
+import DropdownIcon from "../icons/DropdownIcon.astro";
 
 const posts = await getCollection("post");
 const categories = [...new Set(posts.map((post) => post.data.category))];
@@ -15,19 +16,14 @@ const categories = [...new Set(posts.map((post) => post.data.category))];
         aria-controls="category-submenu"
       >
         <span>카테고리</span>
-        <svg
-          class="menu__sub__icon"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <polyline points="6,9 12,15 18,9"></polyline>
-        </svg>
+        <div class="menu__sub__icon">
+          <DropdownIcon
+            size="24px"
+            color="light-dark(rgba(63,92,255, 0.9),rgba(255,255,255,0.9))"
+          />
+        </div>
       </button>
-      <ul id="category-submenu" class="menu__sub__list menu__sub__list--active">
+      <ul id="category-submenu" class="menu__sub__list menu-active">
         {
           categories.map((category) => (
             <li class="menu__sub__item">
@@ -52,7 +48,11 @@ const categories = [...new Set(posts.map((post) => post.data.category))];
         const isExpanded = this.getAttribute("aria-expanded") === "true";
 
         this.setAttribute("aria-expanded", !isExpanded);
-        submenu.classList.toggle("menu__sub__list--active");
+        submenu.classList.toggle("menu-active");
+        const iconDiv = this.querySelector(".menu__sub__icon");
+        if (iconDiv) {
+          iconDiv.classList.toggle("rotate-icon", !isExpanded);
+        }
       });
     });
   });

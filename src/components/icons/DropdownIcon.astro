@@ -1,0 +1,15 @@
+---
+const {
+  size = "24px",
+  color = "light-dark(rgba(0, 0, 0, 0.9),rgba(255,255,255,0.9))",
+} = Astro.props;
+---
+
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path d="M7 10 L 17 10 L 12 15 Z" fill={color}></path>
+</svg>

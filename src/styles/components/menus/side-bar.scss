@@ -31,17 +31,50 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 5px;
 
       &__button {
         cursor: pointer;
+        box-sizing: border-box;
         border: none;
-        background: transparent;
-        box-shadow: 0 0 6px 3px light-dark(#5297ff, #8ab4f8);
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.2),
+          inset 0px -2px 4px rgba(255, 255, 255, 0.2);
         width: 100%;
         height: 4vh;
         margin: 0;
         padding: 0;
+        transition: all 0.3s ease;
+        color: rgba(255, 255, 255, 0.9);
+        position: relative;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.25);
+        }
+
+        &:active {
+          box-shadow: inset 4px 4px 4px rgba(0, 0, 0, 0.1),
+            inset -4px -4px 4px rgba(255, 255, 255, 0.1);
+        }
+      }
+
+      &__icon {
+        width: 24px;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: grid;
+        place-items: center;
+        transition: transform 0.3s ease;
+      }
+
+      .rotate-icon {
+        transform: rotate(-90deg);
       }
 
       &__list {
@@ -55,31 +88,52 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 12px;
+        gap: 6px;
+      }
 
-        &--active {
-          max-height: 400px;
-          padding: 5px 0;
-        }
+      .menu-active {
+        max-height: 400px;
+        padding: 5px 0;
       }
 
       &__item {
-        border-radius: 1rem;
-        box-shadow: 1px 1px 3px 0 light-dark(#f3f3f3, #97c1ff),
-          3px 3px 4px 2px light-dark(#72b6ff, #cae4ff);
         width: 90%;
+        height: 48px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.4),
+          inset -2px -2px 4px rgba(0, 0, 0, 0.4);
         flex-shrink: 0;
         display: grid;
         place-items: center;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.25);
+          box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.1),
+            inset -1px -1px 4px rgba(255, 255, 255, 0.1);
+        }
+
+        &:active {
+          box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.4),
+            inset -2px -2px 4px rgba(255, 255, 255, 0.4);
+        }
       }
 
       span {
         font-size: 2rem;
+        color: rgba(0, 0, 0, 0.9);
+        font-weight: 500;
       }
 
       a {
+        width: 100%;
         margin: 0;
         padding: 0;
+        transition: color 0.3s ease;
+        text-align: center;
       }
     }
   }

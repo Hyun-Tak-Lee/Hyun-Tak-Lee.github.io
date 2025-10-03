@@ -1,26 +1,47 @@
-@use "../variables" as *;
 @use "../global";
 @use "../mixins/responsive" as *;
+
+.content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+}
+
+.main-content {
+  flex-grow: 1;
+  background: transparent;
+  width: 1200px;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  @include mobile {
+    width: 100vw;
+  }
+
+  @include tablet {
+    width: 600px;
+  }
+
+  @include desktop {
+    width: 800px;
+  }
+}
 
 .page {
   display: grid;
   place-items: center start;
   min-height: 100vh;
-  background: radial-gradient(
-    circle at top left,
-    light-dark(#e6f0ff, #2a1532) 0%,
-    light-dark(#e6e6ff, #3a1a3e) 25%,
-    light-dark(#ffd6e6, #5a2a5e) 50%,
-    light-dark(#ffcce0, #7a3a7e) 75%,
-    light-dark(#ffc2da, #a04a8a) 100%
-  );
+  background: transparent;
 
   @include mobile;
   @include tablet;
 
   &__main {
     text-align: center;
-    background: var(--color-background);
+    background: light-dark(#ffffff, #1a1a1a);
     border-radius: 1rem;
     box-shadow: 0 4px 6px #0000001a;
     margin-left: 1vw;
@@ -40,6 +61,58 @@
 
     @include desktop {
       width: 800px;
+    }
+  }
+}
+
+.sidebar {
+  &__background {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    width: 300px;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      light-dark(#e6f7ff, #1f2a3e) 0%,
+      light-dark(#cceeff, #283750) 25%,
+      light-dark(#b3e0ff, #314464) 50%,
+      light-dark(#99d6ff, #3a5178) 75%,
+      light-dark(#80c7ff, #435e8c) 100%
+    );
+    transition: transform 0.3s ease-in-out;
+
+    @include tablet {
+      width: 200px;
+    }
+
+    @include mobile {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      transform: translateX(-100%);
+      z-index: 2;
+
+      &.active {
+        transform: translateX(0);
+      }
+    }
+  }
+
+  &__body {
+    width: 300px;
+    height: 100%;
+    background-color: inherit;
+
+    @include tablet {
+      width: 200px;
+    }
+
+    @include mobile {
+      width: 100%;
+      height: 100%;
     }
   }
 }

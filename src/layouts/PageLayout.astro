@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import "../styles/layouts/page.scss";
+import SideBar from "../components/menus/SideBar.astro";
 
 interface Props {
   title: string;
@@ -10,9 +11,18 @@ const { title } = Astro.props;
 ---
 
 <BaseLayout title={title}>
-  <div class="page">
-    <main class="page__main">
-      <slot />
-    </main>
+  <div class="content">
+    <div class="sidebar__background" id="sidebar">
+      <div class="sidebar__body">
+        <SideBar />
+      </div>
+    </div>
+    <div class="main-content">
+      <div class="page">
+        <main class="page__main">
+          <slot />
+        </main>
+      </div>
+    </div>
   </div>
 </BaseLayout>

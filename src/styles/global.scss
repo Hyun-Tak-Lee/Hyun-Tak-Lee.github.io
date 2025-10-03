@@ -1,25 +1,12 @@
-@use "variables" as *;
-
 :root {
   color-scheme: light dark;
-
-  --color-background: light-dark(#{$color-white}, #1a1a1a);
-  --color-text: light-dark(#333333, #{$color-white});
-  --color-text-secondary: light-dark(#666666, #a0a0a0);
-  --color-border: light-dark(#e0e0e0, #404040);
-
-  --font-family-base: #{$font-family-base};
-  --line-height-base: #{$line-height-base};
-
-  --transition-duration: #{$transition-duration};
-  --transition-timing: #{$transition-timing};
 }
 
 html {
-  font-family: var(--font-family-base);
-  line-height: var(--line-height-base);
-  background: var(--color-background);
-  color: var(--color-text);
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+  background: light-dark(#ffffff, #1a1a1a);
+  color: light-dark(#333333, #ffffff);
   font-size: 10px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -37,31 +24,12 @@ body {
 a {
   color: #1a73e8;
   text-decoration: none;
-  transition: all var(--transition-duration) var(--transition-timing);
   position: relative;
   padding: 0.2em 0;
-
-  &::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background-color: #1662c1;
-    transform: scaleX(0);
-    transform-origin: bottom right;
-    transition: transform 0.3s ease-out;
-  }
 
   &:hover {
     color: #1662c1;
     text-decoration: none;
-
-    &::after {
-      transform: scaleX(1);
-      transform-origin: bottom left;
-    }
   }
 }
 

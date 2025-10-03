@@ -1,82 +1,10 @@
-@use "../mixins/responsive" as *;
-
-.content {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
+.background-base {
+  width: 100%;
   height: 100%;
-  position: relative;
-}
-
-.sidebar {
-  &__background {
-    display: flex;
-    justify-content: center;
-    flex-grow: 1;
-    width: 300px;
-    height: 100%;
-    background: linear-gradient(
-      135deg,
-      light-dark(#f5fbff, #1a2636) 0%,
-      light-dark(#e8f5ff, #22304a) 25%,
-      light-dark(#d8f0ff, #2a3c5e) 50%,
-      light-dark(#c8ebff, #314872) 75%,
-      light-dark(#b8e6ff, #395486) 100%
-    );
-    transition: transform 0.3s ease-in-out;
-
-    @include tablet {
-      width: 200px;
-    }
-
-    @include mobile {
-      position: fixed;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      transform: translateX(-100%);
-      z-index: 2;
-
-      &.active {
-        transform: translateX(0);
-      }
-    }
-  }
-
-  &__body {
-    width: 300px;
-    height: 100%;
-    background-color: inherit;
-
-    @include tablet {
-      width: 200px;
-    }
-
-    @include mobile {
-      width: 100%;
-      height: 100%;
-    }
-  }
-}
-
-.main-content {
-  flex-grow: 1;
-  background-color: #ffffff;
-  width: 1200px;
-  overflow-x: hidden;
-  overflow-y: auto;
-
-  @include mobile {
-    width: 100vw;
-  }
-
-  @include tablet {
-    width: 600px;
-  }
-
-  @include desktop {
-    width: 800px;
-  }
+  background: linear-gradient(
+    90deg,
+    light-dark(#f9fcfe, #151515) 0%,
+    light-dark(#f3f8fe, #151515) 50%,
+    light-dark(#e9f4fd, #151515) 100%
+  );
 }

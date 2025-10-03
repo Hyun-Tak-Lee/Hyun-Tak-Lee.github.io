@@ -6,14 +6,14 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 5vh;
+    height: 80px;
 
     @include mobile {
       height: 60px;
     }
 
     @include tablet {
-      height: 60px;
+      height: 80px;
     }
   }
 }
@@ -24,20 +24,53 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(
-    90deg,
-    light-dark(#e3f2fd, #1a237e) 0%,
-    light-dark(#bbdefb, #283593) 50%,
-    light-dark(#90caf9, #3949ab) 100%
-  );
+  background: transparent;
 
   &__menu {
     display: flex;
     justify-content: flex-end;
     width: 100%;
     height: 100%;
+    min-width: 0;
+    min-height: 0;
 
-    @include mobile {
+    &__button {
+      width: 150px;
+      height: 45px;
+      display: grid;
+      place-items: center;
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border-radius: 15px;
+      transition: all 0.2s ease-in-out;
+
+      background: linear-gradient(
+        135deg,
+        light-dark(#d9e7f6, #2c3a47) 0%,
+        light-dark(#f5fcff, #2c3a47) 100%
+      );
+      box-shadow: 5px 5px 8px light-dark(#0000002a, #1f262e),
+        -5px -5px 8px light-dark(#ffffff2a, #33404d);
+
+      &:hover {
+        box-shadow: 2px 2px 5px light-dark(#0000002a, #1f262e),
+          -2px -2px 5px light-dark(#ffffff2a, #33404d),
+          inset 3px 3px 5px light-dark(#0000002a, #1f262e),
+          inset -3px -3px 5px light-dark(#d9e7f6, #33404d);
+      }
+
+      &:active {
+        box-shadow: inset 5px 5px 8px light-dark(#0000002a, #1f262e),
+          inset -6px -6px 10px light-dark(#d9e7f6, #33404d);
+      }
+
+      @include mobile {
+        width: auto;
+        height: auto;
+        padding: 12px 20px;
+      }
     }
   }
 
@@ -57,25 +90,8 @@
       margin-right: 10px;
 
       li {
-        height: 100%;
         display: grid;
         place-items: center;
-
-        a {
-          text-decoration: none;
-          color: inherit;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          border-radius: 1vh;
-          padding: 0.5rem 1rem;
-          transition: all 0.3s ease;
-          background: #f1f8ff;
-
-          &:hover {
-            background: #d3eaff;
-          }
-        }
       }
     }
   }
@@ -89,8 +105,8 @@
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  color: var(--color-text);
-  transition: color var(--transition-duration) var(--transition-timing);
+  color: light-dark(#333333, #ffffff);
+  transition: color 0.2s ease-in-out;
   -webkit-tap-highlight-color: transparent;
   z-index: 3;
 
