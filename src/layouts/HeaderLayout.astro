@@ -3,16 +3,20 @@ import MenuIcon from "../components/icons/MenuIcon.astro";
 import "../styles/layouts/header.scss";
 ---
 
-<header class="home__header">
-  <div class="header">
-    <button class="menu-toggle" id="menuToggle">
+<header class="header__home">
+  <div class="header__content">
+    <button class="menu__toggle" id="menuToggle">
       <MenuIcon size="100%" />
     </button>
-    <nav>
+    <nav class="header__nav">
       <div class="header__menu">
-        <ul>
-          <li><a class="header__menu__button" href="/">Home</a></li>
-          <li><a class="header__menu__button" href="/contact">Contact</a></li>
+        <ul class="header__menu__list">
+          <li class="header__menu__item">
+            <a class="header__menu__button" href="/">Home</a>
+          </li>
+          <li class="header__menu__item">
+            <a class="header__menu__button" href="/contact">Contact</a>
+          </li>
         </ul>
       </div>
     </nav>

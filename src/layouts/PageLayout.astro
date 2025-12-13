@@ -11,14 +11,14 @@ const { title } = Astro.props;
 ---
 
 <BaseLayout title={title}>
-  <div class="content">
-    <div class="sidebar__background" id="sidebar">
-      <div class="sidebar__body">
+  <div class="page__content">
+    <div class="page__sidebar__container" id="sidebar">
+      <div class="page__sidebar__body">
         <SideBar />
       </div>
     </div>
-    <div class="main-content">
-      <div class="page">
+    <div class="page__site__content">
+      <div class="page__site__container">
         <main class="page__main">
           <slot />
         </main>

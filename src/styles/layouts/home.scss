@@ -1,0 +1,33 @@
+.home {
+  &__content {
+    display: grid;
+    place-items: center start;
+    min-height: 100vh;
+    background: transparent;
+  }
+
+  &__main {
+    width: 1000px;
+    margin-left: 1vw;
+    text-align: center;
+    background: light-dark(#ffffff, #1a1a1a);
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px #0000001a;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    @include mobile {
+      width: 100vw;
+      border-radius: 0;
+      margin-left: 0;
+    }
+
+    @include tablet {
+      width: 600px;
+    }
+
+    @include desktop {
+      width: 800px;
+    }
+  }
+}
