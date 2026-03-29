@@ -1,7 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import PageLayout from "../../layouts/PageLayout.astro";
-import "../../styles/pages/category/category.scss";
+import BaseLayout from "../../layouts/BaseLayout.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("post");
@@ -21,52 +20,5 @@ export async function getStaticPaths() {
 const { category, posts } = Astro.props;
 ---
 
-<PageLayout title={`Category: ${category}`}>
-  <section class="category__container">
-    <header class="category__header">
-      <div class="category__header-inner">
-        <span class="category__badge">Archive</span>
-        <h1 class="category__headline">{category}</h1>
-        <p class="category__summary">
-          총 <strong>{posts.length}</strong>개
-        </p>
-      </div>
-    </header>
-
-    <div class="category__list">
-      {
-        posts.map((post) => (
-          <article class="category__post-card">
-            <a href={`/post/${post.slug}`} class="category__post-link">
-              <h2 class="category__post-title">{post.data.title}</h2>
-              <p class="category__post-excerpt">{post.data.description}</p>
-
-              <footer class="category__post-meta">
-                <time class="category__post-date">
-                  {new Date(post.data.pubDate).toLocaleDateString("ko-KR", {
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                  })}
-                </time>
-                <div class="category__post-tags">
-                  {post.data.sub_category.map((sub) => (
-                    <span class="category__post-tag">{sub}</span>
-                  ))}
-                </div>
-              </footer>
-            </a>
-          </article>
-        ))
-      }
-    </div>
-
-    {
-      posts.length === 0 && (
-        <div class="category__empty-state">
-          <p>이 카테고리에는 게시글이 없습니다</p>
-        </div>
-      )
-    }
-  </section>
-</PageLayout>
+<BaseLayout title={category}>
+</BaseLayout>
