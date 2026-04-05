@@ -16,7 +16,12 @@
   --color-base-bg-start: light-dark(#f9fcfe, #151515);
   --color-base-bg-mid: light-dark(#f3f8fe, #151515);
   --color-base-bg-end: light-dark(#e9f4fd, #151515);
-
+  
+  --color-icon-primary: light-dark(rgba(0, 0, 0, 0.9), rgba(255, 255, 255, 0.9));
+  --color-brand-muted: light-dark(rgba(26, 115, 232, 0.1), rgba(138, 180, 248, 0.1));
+  --color-brand-soft: light-dark(rgba(26, 115, 232, 0.05), rgba(138, 180, 248, 0.05));
+  --color-text-muted: light-dark(rgba(0, 0, 0, 0.5), rgba(255, 255, 255, 0.5));
+  --color-mobile-menu-bg: light-dark(rgba(243, 248, 254, 0.95), rgba(21, 21, 21, 0.95));
   --color-glass-bg: rgba(255, 255, 255, 0.15);
   --color-glass-border: rgba(255, 255, 255, 0.2);
   --color-glass-bg-hover: rgba(255, 255, 255, 0.25);
@@ -27,6 +32,8 @@
     -2px -2px 5px light-dark(#ffffff2a, #33404d),
     inset 3px 3px 5px light-dark(#0000002a, #1f262e),
     inset -3px -3px 5px light-dark(#d9e7f6, #33404d);
+  --shadow-header-scrolled: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
   --bg-header-button: linear-gradient(
     135deg,
@@ -61,28 +68,23 @@ html {
     "Open Sans",
     "Helvetica Neue",
     sans-serif;
-  line-height: 1.5;
+  line-height: 1.6;
   background-color: var(--color-background);
   color: var(--color-text-primary);
-  font-size: 10px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  height: 100%;
 }
 
 body {
   margin: 0;
-  padding: 0;
-  height: 100%;
-  overflow-x: hidden;
+  min-height: 100vh;
 }
 
 a {
   color: var(--color-brand);
   text-decoration: none;
   position: relative;
-  padding: 0.2em 0;
   transition: color 0.2s ease-in-out;
 
   &:hover {

@@ -1,0 +1,59 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const techPosts = await getCollection("tech");
+  return techPosts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BaseLayout title={post.data.title}>
+  <div class="max-w-5xl mx-auto py-12 px-6">
+    <header class="mb-12">
+      <div class="text-xs font-mono tracking-widest text-brand mb-4 flex items-center space-x-2">
+        <span>TECH / {post.data.category}</span>
+      </div>
+      <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-6">
+        {post.data.title}
+      </h1>
+      <p class="text-xl text-text-muted mb-8 max-w-2xl leading-relaxed">
+        {post.data.description}
+      </p>
+      <div class="flex items-center text-sm text-text-muted font-mono space-x-4">
+        <span>{new Date(post.data.pubDate).toLocaleDateString('ko-KR')}</span>
+        <span>•</span>
+        <span>By {post.data.author}</span>
+      </div>
+    </header>
+
+    <div class="w-full h-px bg-glass-border mb-12"></div>
+
+    <article class="prose prose-lg prose-invert max-w-none prose-headings:font-bold prose-a:text-brand hover:prose-a:underline prose-img:rounded-3xl">
+      <Content />
+    </article>
+
+    <div class="mt-20 pt-10 border-t border-glass-border flex justify-between items-center">
+      <a href="/tech" class="text-lg font-bold hover:text-brand transition-colors flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to Knowledge Base
+      </a>
+      
+      <div class="flex space-x-2">
+        {post.data.tags?.map(tag => (
+          <span class="px-3 py-1 rounded-full bg-glass-bg border border-glass-border text-sm font-medium text-brand">
+            #{tag}
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
+</BaseLayout>

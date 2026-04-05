@@ -1,0 +1,81 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<BaseLayout title={project.data.title}>
+  <div class="max-w-5xl mx-auto py-12 px-6">
+    <header class="mb-12">
+      <div class="text-sm font-medium text-brand mb-4 flex items-center space-x-2">
+        <span>{project.data.category}</span>
+        {project.data.sub_category?.map(sub => (
+          <span class="flex items-center space-x-2">
+            <span class="text-text-muted">/</span>
+            <span>{sub}</span>
+          </span>
+        ))}
+      </div>
+      <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-6">
+        {project.data.title}
+      </h1>
+      <div class="flex items-center text-sm text-text-muted font-mono space-x-4">
+        <span>{new Date(project.data.pubDate).toLocaleDateString('ko-KR')}</span>
+        <span>•</span>
+        <span>By {project.data.author}</span>
+      </div>
+    </header>
+
+    {project.data.image && (
+      <div class="mb-12 rounded-3xl overflow-hidden shadow-neumorphism">
+        <img 
+          src={project.data.image.url} 
+          alt={project.data.image.alt} 
+          class="w-full h-auto object-cover"
+        />
+      </div>
+    )}
+
+    <article class="prose prose-lg prose-brand max-w-none prose-headings:font-bold prose-a:text-brand hover:prose-a:underline prose-img:rounded-3xl">
+      <Content />
+    </article>
+
+    <div class="mt-20 pt-10 border-t border-glass-border flex justify-between items-center">
+      <a href="/projects" class="text-lg font-bold hover:text-brand transition-colors flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to Projects
+      </a>
+      
+      <div class="flex space-x-2">
+        {project.data.tags?.map(tag => (
+          <span class="px-3 py-1 rounded-full bg-glass-bg border border-glass-border text-sm font-medium text-brand">
+            #{tag}
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  /* Custom prose styles to match the premium theme if Tailwind Typography isn't fully configured */
+  .prose :global(h1), .prose :global(h2), .prose :global(h3) {
+    color: var(--color-text-primary);
+  }
+  .prose :global(p), .prose :global(li) {
+    color: var(--color-text-primary);
+    opacity: 0.85;
+  }
+</style>
