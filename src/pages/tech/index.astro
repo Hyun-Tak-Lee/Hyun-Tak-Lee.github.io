@@ -1,0 +1,57 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const techPosts = await getCollection("tech");
+const sortedTech = techPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// Group by category
+const categories = [...new Set(techPosts.map(p => p.data.category))];
+---
+
+<BaseLayout title="Technologies">
+  <div class="max-w-5xl mx-auto py-12 px-6">
+    <header class="mb-16">
+      <h1 class="text-5xl font-extrabold tracking-tight mb-4 text-transparent bg-clip-text bg-linear-to-r from-brand to-brand-hover">
+        Knowledge Base
+      </h1>
+      <p class="text-xl text-text-muted">
+        사용한 기술들의 '방법'과 '이유'를 정리한 공간입니다.
+      </p>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+      {categories.map(category => (
+        <section class="p-8 rounded-3xl bg-glass-bg border border-glass-border shadow-neumorphism">
+          <h2 class="text-2xl font-bold mb-6 flex items-center">
+            <span class="w-2 h-8 bg-brand rounded-full mr-4"></span>
+            {category}
+          </h2>
+          <div class="space-y-4">
+            {sortedTech
+              .filter(p => p.data.category === category)
+              .map(post => (
+                <a 
+                  href={`/tech/${post.id}`}
+                  class="group block p-4 rounded-xl hover:bg-glass-bg-hover transition-all duration-200"
+                >
+                  <div class="flex justify-between items-start">
+                    <h3 class="text-lg font-semibold group-hover:text-brand transition-colors">
+                      {post.data.title}
+                    </h3>
+                    <span class="text-[10px] uppercase tracking-widest text-text-muted font-mono mt-1 whitespace-nowrap">
+                      {new Date(post.data.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    </span>
+                  </div>
+                  <p class="text-sm text-text-muted mt-2 line-clamp-1">
+                    {post.data.description}
+                  </p>
+                </a>
+              ))
+            }
+          </div>
+        </section>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

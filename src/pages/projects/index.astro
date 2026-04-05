@@ -1,0 +1,61 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const projects = await getCollection("projects");
+const sortedProjects = projects.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// Group by category
+const categories = [...new Set(projects.map(p => p.data.category))];
+---
+
+<BaseLayout title="Projects">
+  <div class="max-w-5xl mx-auto py-12 px-6">
+    <header class="mb-16">
+      <h1 class="text-5xl font-extrabold tracking-tight mb-4">
+        Projects
+      </h1>
+      <p class="text-xl text-text-muted">
+        프로젝트들을 정리한 공간입니다.
+      </p>
+    </header>
+
+    <div class="space-y-16">
+      {categories.map(category => (
+        <section>
+          <h2 class="text-2xl font-bold border-l-4 border-brand pl-4 mb-8">
+            {category}
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {sortedProjects
+              .filter(p => p.data.category === category)
+              .map(project => (
+                <a 
+                  href={`/projects/${project.id}`}
+                  class="group block p-6 rounded-2xl bg-glass-bg border border-glass-border shadow-neumorphism hover:shadow-neumorphism-hover transition-all duration-300"
+                >
+                  <h3 class="text-xl font-bold mb-2 group-hover:text-brand transition-colors">
+                    {project.data.title}
+                  </h3>
+                  <p class="text-sm text-text-muted mb-4 line-clamp-2">
+                    {project.data.description}
+                  </p>
+                  <div class="flex flex-wrap gap-2">
+                    {project.data.tags?.map(tag => (
+                      <span class="text-xs px-2 py-1 rounded-md bg-brand-muted text-brand font-medium">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                  <div class="mt-4 text-xs text-text-muted font-mono">
+                    {new Date(project.data.pubDate).toLocaleDateString('ko-KR')}
+                  </div>
+                </a>
+              ))
+            }
+          </div>
+        </section>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

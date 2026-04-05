@@ -1,20 +1,129 @@
 ---
 import MenuIcon from "../components/icons/MenuIcon.astro";
-import "../styles/layouts/header.scss";
+
+const navItems = [
+  { name: "Home", href: "/" },
+  { name: "Projects", href: "/projects" },
+  { name: "Tech", href: "/tech" },
+];
 ---
 
-<header class="home__header">
-  <div class="header">
-    <button class="menu-toggle" id="menuToggle">
-      <MenuIcon size="100%" />
+<header id="main-header" class="fixed top-0 left-0 w-full z-50 transition-transform duration-300 ease-in-out">
+  <div class="max-w-5xl mx-auto px-6 h-20 flex items-center">
+    <!-- Mobile Menu Button (Left) -->
+    <button 
+      id="mobile-menu-button" 
+      class="md:hidden p-2 rounded-xl bg-bg-header-button shadow-neumorphism hover:shadow-neumorphism-hover transition-all duration-300 focus:outline-none mr-4"
+      aria-label="Toggle Menu"
+    >
+      <MenuIcon size="28px" />
     </button>
-    <nav>
-      <div class="header__menu">
-        <ul>
-          <li><a class="header__menu__button" href="/">Home</a></li>
-          <li><a class="header__menu__button" href="/contact">Contact</a></li>
-        </ul>
-      </div>
+
+    <!-- Logo / Site Title -->
+    <a href="/" class="text-3xl font-extrabold tracking-tighter hover:opacity-80 transition-opacity">
+      <span class="text-transparent bg-clip-text bg-linear-to-r from-brand to-brand-hover">
+        Hyun-Tak Lee
+      </span>
+    </a>
+
+    <!-- Desktop Navigation (Right) -->
+    <nav class="hidden md:flex items-center space-x-8 ml-auto">
+      {navItems.map((item) => (
+        <a 
+          href={item.href} 
+          class="text-lg font-medium hover:text-brand transition-colors duration-200 relative group"
+        >
+          {item.name}
+          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand transition-all duration-300 group-hover:w-full"></span>
+        </a>
+      ))}
+    </nav>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div 
+    id="mobile-menu" 
+    class="md:hidden absolute top-full left-0 w-full bg-mobile-menu-bg backdrop-blur-xl border-b border-glass-border transform -translate-y-full opacity-0 pointer-events-none transition-all duration-300 ease-in-out"
+  >
+    <nav class="flex flex-col p-6 space-y-4">
+      {navItems.map((item) => (
+        <a 
+          href={item.href} 
+          class="text-xl font-semibold p-3 rounded-lg hover:bg-glass-bg-hover transition-colors"
+        >
+          {item.name}
+        </a>
+      ))}
     </nav>
   </div>
 </header>
+
+<style>
+  #main-header {
+    background: var(--color-glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-glass-border);
+    box-shadow: var(--shadow-neumorphism);
+  }
+
+  /* Scrolled state could be added here if needed */
+  :global(.scrolled) #main-header {
+    background: var(--color-base-bg-mid);
+    box-shadow: var(--shadow-header-scrolled);
+  }
+</style>
+
+<script>
+  const header = document.getElementById('main-header');
+  const menuButton = document.getElementById('mobile-menu-button');
+  const mobileMenu = document.getElementById('mobile-menu');
+  
+  let lastScrollTop = 0;
+  let isMenuOpen = false;
+
+  // Toggle Mobile Menu
+  menuButton?.addEventListener('click', () => {
+    isMenuOpen = !isMenuOpen;
+    if (isMenuOpen) {
+      mobileMenu?.classList.remove('-translate-y-full', 'opacity-0', 'pointer-events-none');
+      mobileMenu?.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+    } else {
+      mobileMenu?.classList.add('-translate-y-full', 'opacity-0', 'pointer-events-none');
+      mobileMenu?.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+    }
+  });
+
+  // Scroll Behavior (Show/Hide Header)
+  window.addEventListener('scroll', () => {
+    if (isMenuOpen) return; // Don't hide header if menu is open
+
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+    // Hide on scroll down, show on scroll up
+    if (scrollTop > lastScrollTop && scrollTop > 100) {
+      header?.style.setProperty('transform', 'translateY(-100%)');
+    } else {
+      header?.style.setProperty('transform', 'translateY(0)');
+    }
+
+    // Add visual change on scroll
+    if (scrollTop > 50) {
+      header?.classList.add('scrolled');
+    } else {
+      header?.classList.remove('scrolled');
+    }
+
+    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+  }, { passive: true });
+
+  // Close menu on link click
+  const mobileLinks = mobileMenu?.querySelectorAll('a');
+  mobileLinks?.forEach(link => {
+    link.addEventListener('click', () => {
+      isMenuOpen = false;
+      mobileMenu?.classList.add('-translate-y-full', 'opacity-0', 'pointer-events-none');
+      mobileMenu?.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+    });
+  });
+</script>

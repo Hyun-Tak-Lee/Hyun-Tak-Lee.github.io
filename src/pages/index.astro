@@ -1,8 +1,80 @@
 ---
-import "../styles/pages/home.scss";
-import PageLayout from "../layouts/PageLayout.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<PageLayout title="Home">
-  <h1 class="home__title">Title!</h1>
-</PageLayout>
+<BaseLayout title="Home | Hyun-Tak Lee">
+  <div class="max-w-5xl mx-auto px-6 py-20">
+    <!-- Hero Section -->
+    <section class="text-center mb-32">
+      <h1 class="text-5xl md:text-8xl font-black tracking-tighter mb-8 leading-[1.1]">
+        <span class="text-transparent bg-clip-text bg-linear-to-r from-brand via-brand-hover to-brand py-2">
+          Knowledge Base
+        </span>
+      </h1>
+      <p class="text-xl md:text-2xl text-text-muted max-w-3xl mx-auto leading-relaxed">
+        안녕하세요, 이현탁입니다. 제가 수행한 <span class="text-brand font-bold">프로젝트</span>들과
+        그 과정에서 얻은 <span class="text-brand font-bold">기술적 통찰</span>을 정리해둔 지식 저장고입니다.
+      </p>
+    </section>
+
+    <!-- Main Navigation Sections -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+      <!-- Projects Section -->
+      <a 
+        href="/projects" 
+        class="group relative overflow-hidden p-12 md:p-14 rounded-[3.5rem] bg-glass-bg border border-glass-border shadow-neumorphism hover:shadow-neumorphism-hover transition-all duration-500 hover:-translate-y-2 block"
+      >
+        <div class="relative z-10">
+          <div class="w-16 h-16 rounded-2xl bg-brand-muted flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+          </div>
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">Projects</h2>
+          <p class="text-lg text-text-muted mb-8">
+            기획부터 구현까지, 제가 직접 경험하며 구축한 프로젝트들의 상세한 기록입니다.
+          </p>
+          <span class="inline-flex items-center text-brand font-bold text-lg">
+            Explore Projects
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-2 group-hover:translate-x-2 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </span>
+        </div>
+        <!-- Decorative Background Gradient -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-brand-soft rounded-full blur-3xl group-hover:bg-brand-muted transition-colors"></div>
+      </a>
+
+      <!-- Tech Section -->
+      <a 
+        href="/tech" 
+        class="group relative overflow-hidden p-12 md:p-14 rounded-[3.5rem] bg-glass-bg border border-glass-border shadow-neumorphism hover:shadow-neumorphism-hover transition-all duration-500 hover:-translate-y-2 block"
+      >
+        <div class="relative z-10">
+          <div class="w-16 h-16 rounded-2xl bg-brand-muted flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+          </div>
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">Tech & Reasoning</h2>
+          <p class="text-lg text-text-muted mb-8">
+            단순한 사용법을 넘어, 왜 이 기술을 선택했는지와 어떻게 문제를 해결했는지에 대한 고민을 담았습니다.
+          </p>
+          <span class="inline-flex items-center text-brand font-bold text-lg">
+            View Knowledge
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-2 group-hover:translate-x-2 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </span>
+        </div>
+        <!-- Decorative Background Gradient -->
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-64 h-64 bg-brand-soft rounded-full blur-3xl group-hover:bg-brand-muted transition-colors"></div>
+      </a>
+    </div>
+
+    <!-- Featured Section (Optional/Future) -->
+    <footer class="mt-40 text-center text-text-muted text-sm font-mono tracking-widest">
+      © 2026 HYUN-TAK LEE. BUILT WITH ASTRO.
+    </footer>
+  </div>
+</BaseLayout>
