@@ -23,13 +23,9 @@ const recentIssues = sortedIssues.slice(0, 5);
     <section class="text-center mb-20 md:mb-24">
       <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-6 leading-[1.1]">
         <span class="text-transparent bg-clip-text bg-linear-to-r from-brand via-brand-hover to-brand py-2">
-          Knowledge Base
+          홈 화면
         </span>
       </h1>
-      <p class="text-lg md:text-xl text-text-muted max-w-2xl mx-auto leading-relaxed">
-        안녕하세요, 이현탁입니다. 제가 수행한 <span class="text-brand font-bold">프로젝트</span>들과
-        그 과정에서 얻은 <span class="text-brand font-bold">기술적 통찰</span>을 정리해둔 지식 저장고입니다.
-      </p>
     </section>
 
     <!-- Recent Issues Section -->
@@ -45,7 +41,7 @@ const recentIssues = sortedIssues.slice(0, 5);
       <div class="space-y-6">
         {recentIssues.length === 0 ? (
           <div class="text-center py-16 rounded-3xl bg-glass-bg border border-glass-border shadow-neumorphism text-text-muted">
-            아직 등록된 이슈가 없습니다.
+            아직 등록된 이슈가 없습니다
           </div>
         ) : (
           recentIssues.map((post) => (
@@ -108,7 +104,7 @@ const recentIssues = sortedIssues.slice(0, 5);
 
     <!-- Footer -->
     <footer class="mt-20 text-center text-text-muted text-xs font-mono tracking-widest">
-      © 2026 HYUN-TAK LEE. BUILT WITH ASTRO.
+      © 2026 HYUN-TAK LEE. BUILT WITH ASTRO
     </footer>
   </div>
 </BaseLayout>
