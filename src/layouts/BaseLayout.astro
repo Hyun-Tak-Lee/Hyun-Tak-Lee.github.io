@@ -1,21 +1,21 @@
 ---
 import "../global.css";
 import Header from "./HeaderLayout.astro";
+import BaseHead from "../components/BaseHead.astro";
 
 interface Props {
   title: string;
+  description?: string;
+  image?: string;
+  type?: string;
 }
 
-const { title } = Astro.props;
+const { title, description, image, type } = Astro.props;
 ---
 
 <html lang="ko">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
+    <BaseHead title={title} description={description} image={image} type={type} />
   </head>
   <body class="min-h-screen bg-linear-to-r from-base-bg-start via-base-bg-mid to-base-bg-end">
     <Header />

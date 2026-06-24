@@ -14,7 +14,12 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 ---
 
-<BaseLayout title={post.data.title}>
+<BaseLayout 
+  title={`${post.data.title} | Hyun-Tak Lee`} 
+  description={post.data.description} 
+  image={post.data.image?.url} 
+  type="article"
+>
   <div class="max-w-5xl mx-auto py-12 px-6">
     <header class="mb-12">
       <div class="text-xs font-mono tracking-widest text-brand mb-4 flex items-center space-x-2">

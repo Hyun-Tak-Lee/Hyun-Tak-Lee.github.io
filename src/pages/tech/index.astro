@@ -9,7 +9,10 @@ const sortedTech = techPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
 const categories = [...new Set(techPosts.map(p => p.data.category))];
 ---
 
-<BaseLayout title="Technologies">
+<BaseLayout 
+  title="Technologies | Hyun-Tak Lee" 
+  description="소프트웨어 엔지니어링 과정에서 적용해본 다양한 기술들에 대한 고찰과 방법, 그리고 그 이유들을 정리한 기술 문서 목록입니다."
+>
   <div class="max-w-5xl mx-auto py-12 px-6">
     <header class="mb-16">
       <h1 class="text-5xl font-extrabold tracking-tight mb-4 text-transparent bg-clip-text bg-linear-to-r from-brand to-brand-hover">
