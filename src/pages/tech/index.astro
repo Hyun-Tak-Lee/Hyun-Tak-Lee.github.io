@@ -7,6 +7,15 @@ const sortedTech = techPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
 
 // Group by category
 const categories = [...new Set(techPosts.map(p => p.data.category))];
+
+const postsByCategory = {};
+for (const post of sortedTech) {
+  const category = post.data.category;
+  if (!postsByCategory[category]) {
+    postsByCategory[category] = [];
+  }
+  postsByCategory[category].push(post);
+}
 ---
 
 <BaseLayout title="Technologies">
@@ -28,9 +37,7 @@ const categories = [...new Set(techPosts.map(p => p.data.category))];
             {category}
           </h2>
           <div class="space-y-4">
-            {sortedTech
-              .filter(p => p.data.category === category)
-              .map(post => (
+            {(postsByCategory[category] || []).map(post => (
                 <a 
                   href={`/tech/${post.id}`}
                   class="group block p-4 rounded-xl hover:bg-glass-bg-hover transition-all duration-200"
