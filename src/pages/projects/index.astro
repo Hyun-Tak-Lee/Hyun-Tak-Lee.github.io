@@ -7,6 +7,14 @@ const sortedProjects = projects.sort((a, b) => b.data.pubDate.valueOf() - a.data
 
 // Group by category
 const categories = [...new Set(projects.map(p => p.data.category))];
+const projectsByCategory = new Map();
+for (const project of sortedProjects) {
+  const category = project.data.category;
+  if (!projectsByCategory.has(category)) {
+    projectsByCategory.set(category, []);
+  }
+  projectsByCategory.get(category).push(project);
+}
 ---
 
 <BaseLayout title="Projects">
@@ -27,9 +35,7 @@ const categories = [...new Set(projects.map(p => p.data.category))];
             {category}
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {sortedProjects
-              .filter(p => p.data.category === category)
-              .map(project => (
+            {projectsByCategory.get(category).map(project => (
                 <a 
                   href={`/projects/${project.id}`}
                   class="group block p-6 rounded-2xl bg-glass-bg border border-glass-border shadow-neumorphism hover:shadow-neumorphism-hover transition-all duration-300"
