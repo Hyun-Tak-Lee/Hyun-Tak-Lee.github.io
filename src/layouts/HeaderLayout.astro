@@ -98,7 +98,7 @@ const navItems = [
   window.addEventListener('scroll', () => {
     if (isMenuOpen) return; // Don't hide header if menu is open
 
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollTop = window.scrollY;
     
     // Hide on scroll down, show on scroll up
     if (scrollTop > lastScrollTop && scrollTop > 100) {
