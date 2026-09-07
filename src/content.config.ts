@@ -12,7 +12,7 @@ const projectsCollection = defineCollection({
     author: z.string().default("Hyun-Tak Lee"),
     tags: z.array(z.string()).optional(),
     image: z.object({
-      url: z.string(),
+      url: z.string().url(),
       alt: z.string()
     }).optional(),
   })
@@ -29,7 +29,7 @@ const techCollection = defineCollection({
     author: z.string().default("Hyun-Tak Lee"),
     tags: z.array(z.string()).optional(),
     image: z.object({
-      url: z.string(),
+      url: z.string().url(),
       alt: z.string()
     }).optional(),
   })
