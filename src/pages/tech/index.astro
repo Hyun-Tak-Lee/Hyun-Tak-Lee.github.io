@@ -7,11 +7,20 @@ const sortedTech = techPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
 
 // Group by category
 const categories = [...new Set(techPosts.map(p => p.data.category))];
+
+const postsByCategory: Record<string, typeof sortedTech> = {};
+for (const post of sortedTech) {
+  const category = post.data.category;
+  if (!postsByCategory[category]) {
+    postsByCategory[category] = [];
+  }
+  postsByCategory[category].push(post);
+}
 ---
 
 <BaseLayout 
   title="Technologies | Hyun-Tak Lee" 
-  description="소프트웨어 엔지니어링 과정에서 적용해본 다양한 기술들에 대한 고찰과 방법, 그리고 그 이유들을 정리한 기술 문서 목록입니다."
+  description="사용한 기술들을 정리한 공간입니다."
 >
   <div class="max-w-5xl mx-auto py-12 px-6">
     <header class="mb-16">
@@ -19,7 +28,7 @@ const categories = [...new Set(techPosts.map(p => p.data.category))];
         Knowledge Base
       </h1>
       <p class="text-xl text-text-muted">
-        적용해본 기술들의 방법과 이유
+        사용한 기술들을 정리한 공간입니다.
       </p>
     </header>
 
@@ -31,9 +40,7 @@ const categories = [...new Set(techPosts.map(p => p.data.category))];
             {category}
           </h2>
           <div class="space-y-4">
-            {sortedTech
-              .filter(p => p.data.category === category)
-              .map(post => (
+            {(postsByCategory[category] || []).map(post => (
                 <a 
                   href={`/tech/${post.id}`}
                   class="group block p-4 rounded-xl hover:bg-glass-bg-hover transition-all duration-200"
