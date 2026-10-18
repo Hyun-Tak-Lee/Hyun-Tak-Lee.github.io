@@ -8,8 +8,6 @@ author: "Hyun-Tak Lee"
 tags: ["Astro", "Performance", "SEO"]
 ---
 
-# Astro 도입 배경
-
 콘텐츠 중심의 정적 사이트에 불필요한 런타임 비용을 줄이고 마크다운 관리 효율을 높이기 위해 Astro를 선택했습니다.
 
 ## 1. Zero-JS와 아일랜드 아키텍처 (Islands Architecture)

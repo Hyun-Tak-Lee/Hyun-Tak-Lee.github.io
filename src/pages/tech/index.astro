@@ -32,36 +32,42 @@ for (const post of sortedTech) {
       </p>
     </header>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-      {categories.map(category => (
-        <section class="p-8 rounded-3xl bg-glass-bg border border-glass-border shadow-neumorphism">
-          <h2 class="text-2xl font-bold mb-6 flex items-center">
-            <span class="w-2 h-8 bg-brand rounded-full mr-4"></span>
-            {category}
-          </h2>
-          <div class="space-y-4">
-            {(postsByCategory[category] || []).map(post => (
-                <a 
-                  href={`/tech/${post.id}`}
-                  class="group block p-4 rounded-xl hover:bg-glass-bg-hover transition-all duration-200"
-                >
-                  <div class="flex justify-between items-start">
-                    <h3 class="text-lg font-semibold group-hover:text-brand transition-colors">
-                      {post.data.title}
-                    </h3>
-                    <span class="text-[10px] uppercase tracking-widest text-text-muted font-mono mt-1 whitespace-nowrap">
-                      {new Date(post.data.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                    </span>
-                  </div>
-                  <p class="text-sm text-text-muted mt-2 line-clamp-1">
-                    {post.data.description}
-                  </p>
-                </a>
-              ))
-            }
-          </div>
-        </section>
-      ))}
-    </div>
+    {categories.length === 0 ? (
+      <div class="text-center py-16 rounded-3xl bg-glass-bg border border-glass-border shadow-neumorphism text-text-muted">
+        아직 등록된 기술 문서가 없습니다
+      </div>
+    ) : (
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        {categories.map(category => (
+          <section class="p-8 rounded-3xl bg-glass-bg border border-glass-border shadow-neumorphism">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+              <span class="w-2 h-8 bg-brand rounded-full mr-4"></span>
+              {category}
+            </h2>
+            <div class="space-y-4">
+              {(postsByCategory[category] || []).map(post => (
+                  <a 
+                    href={`/tech/${post.id}`}
+                    class="group block p-4 rounded-xl hover:bg-glass-bg-hover transition-all duration-200"
+                  >
+                    <div class="flex justify-between items-start">
+                      <h3 class="text-lg font-semibold group-hover:text-brand transition-colors">
+                        {post.data.title}
+                      </h3>
+                      <span class="text-[10px] uppercase tracking-widest text-text-muted font-mono mt-1 whitespace-nowrap">
+                        {new Date(post.data.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                      </span>
+                    </div>
+                    <p class="text-sm text-text-muted mt-2 line-clamp-1">
+                      {post.data.description}
+                    </p>
+                  </a>
+                ))
+              }
+            </div>
+          </section>
+        ))}
+      </div>
+    )}
   </div>
 </BaseLayout>
