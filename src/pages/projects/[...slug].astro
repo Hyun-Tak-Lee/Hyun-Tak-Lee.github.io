@@ -14,7 +14,12 @@ const { project } = Astro.props;
 const { Content } = await render(project);
 ---
 
-<BaseLayout title={project.data.title}>
+<BaseLayout 
+  title={`${project.data.title} | Hyun-Tak Lee`} 
+  description={project.data.description} 
+  image={project.data.image?.url} 
+  type="article"
+>
   <div class="max-w-5xl mx-auto py-12 px-6">
     <header class="mb-12">
       <div class="text-sm font-medium text-brand mb-4 flex items-center space-x-2">
@@ -46,7 +51,7 @@ const { Content } = await render(project);
       </div>
     )}
 
-    <article class="prose prose-lg prose-brand max-w-none prose-headings:font-bold prose-a:text-brand hover:prose-a:underline prose-img:rounded-3xl">
+    <article class="prose prose-lg max-w-none prose-headings:font-bold prose-a:text-brand hover:prose-a:underline prose-img:rounded-3xl">
       <Content />
     </article>
 
@@ -68,14 +73,3 @@ const { Content } = await render(project);
     </div>
   </div>
 </BaseLayout>
-
-<style>
-  /* Custom prose styles to match the premium theme if Tailwind Typography isn't fully configured */
-  .prose :global(h1), .prose :global(h2), .prose :global(h3) {
-    color: var(--color-text-primary);
-  }
-  .prose :global(p), .prose :global(li) {
-    color: var(--color-text-primary);
-    opacity: 0.85;
-  }
-</style>

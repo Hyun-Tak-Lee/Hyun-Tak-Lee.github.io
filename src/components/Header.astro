@@ -1,10 +1,11 @@
 ---
-import MenuIcon from "../components/icons/MenuIcon.astro";
+import MenuIcon from "./icons/MenuIcon.astro";
 
 const navItems = [
   { name: "Home", href: "/" },
   { name: "Projects", href: "/projects" },
   { name: "Tech", href: "/tech" },
+  { name: "Contact", href: "/contact" },
 ];
 ---
 
@@ -13,7 +14,7 @@ const navItems = [
     <!-- Mobile Menu Button (Left) -->
     <button 
       id="mobile-menu-button" 
-      class="md:hidden p-2 rounded-xl bg-bg-header-button shadow-neumorphism hover:shadow-neumorphism-hover transition-all duration-300 focus:outline-none mr-4"
+      class="md:hidden p-2 rounded-xl bg-header-button shadow-neumorphism hover:shadow-neumorphism-hover transition-all duration-300 focus:outline-none mr-4"
       aria-label="Toggle Menu"
     >
       <MenuIcon size="28px" />
@@ -98,7 +99,7 @@ const navItems = [
   window.addEventListener('scroll', () => {
     if (isMenuOpen) return; // Don't hide header if menu is open
 
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollTop = window.scrollY;
     
     // Hide on scroll down, show on scroll up
     if (scrollTop > lastScrollTop && scrollTop > 100) {
