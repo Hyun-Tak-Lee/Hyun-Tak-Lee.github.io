@@ -5,16 +5,17 @@
 - `src/components/`: 재사용 UI 컴포넌트 및 벡터 아이콘
 - `src/pages/`: 파일 기반 라우팅 엔드포인트
 - `src/content/`: Content Collections 마크다운 문서
-- `src/styles/`: 전역 스타일시트, 원시 색상 팔레트(`palette.css`) 및 시멘틱 테마 토큰(`theme.css`) 정의
+- `src/content.config.ts`: Content Layer API 컬렉션 로더 및 스키마 정의
+- `src/styles/`: 전역 스타일 진입점(`global.css`), 원시 팔레트(`palette.css`), 시멘틱 테마 토큰(`theme.css`), 기본 스타일(`base.css`), 커스텀 유틸리티(`utilities.css`)
 - `src/utils/`: 공용 유틸리티 함수
 
 ## Astro & Tailwind CSS v4
 - **Static First**: 정적 UI는 Astro 컴포넌트로 작성하고 Props 인터페이스를 명시한다. 인터랙션은 브라우저 표준 스크립트를 우선하며, 리액트 컴포넌트는 필요한 경우에만 최소한의 클라이언트 지시자로 제한한다.
-- **Content Layer API**: 스키마 기반 Content Collections API를 통해 문서 로드, 검증, 렌더링을 처리한다.
-- **CSS-First Theme**: 별도 설정 파일이나 CSS 전처리기 없이 CSS 테마 블록과 시스템 컬러 함수를 사용하며, v4 표준 유틸리티 클래스를 적용한다.
+- **Content Layer API**: `src/content.config.ts`에서 내장 로더와 스키마로 컬렉션을 정의하며, 라우팅과 렌더링에는 엔트리 식별자와 독립 렌더링 함수를 사용한다.
+- **CSS-First Theme**: 테마 블록에서 기본 팔레트와 기본 브레이크포인트를 초기화하고 시멘틱 토큰만 노출한다. 다크 모드는 변형 클래스 대신 CSS 시스템 컬러 함수로 처리하며, 커스텀 유틸리티 지시자와 v4 표준 유틸리티 클래스를 적용한다.
 
 ## Responsive & UI Standards
-- **Window Size Classes**: 컴팩트(모바일), 미디엄(태블릿), 익스팬디드(데스크톱) 기준 화면 폭에 따라 단일 컬럼 및 멀티 컬럼 레이아웃을 분리한다.
+- **Window Size Classes**: 기본 프리셋 대신 컴팩트(모바일), 미디엄(태블릿), 익스팬디드(데스크톱) 브레이크포인트만 사용하며, 화면 폭에 따라 단일 컬럼 및 멀티 컬럼 레이아웃을 분리한다.
 - **내비게이션 구조**: 최상위 대메뉴는 숨김 메뉴 없이 상단 고정 헤더 탭으로 상시 노출한다. 페이지 내부 하위 분류는 항목 수에 따라 균등 분할 고정 탭 또는 가로 스크롤 탭을 적용하고, 스크롤 고정과 선택 항목 중앙 정렬을 보장한다.
 - **모바일 사용성**: 모든 인터랙티브 요소는 최소 터치 타겟 크기(48px 이상)와 가독성 기준 폰트 크기(12px 이상)를 확보하고, 동적 뷰포트 단위 및 가로 오버플로우 방지 처리를 준수한다.
 
