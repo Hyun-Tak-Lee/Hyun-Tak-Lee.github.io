@@ -1,130 +1,115 @@
 ---
-import MenuIcon from "./icons/MenuIcon.astro";
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = Astro.url.pathname } = Astro.props;
 
 const navItems = [
   { name: "Home", href: "/" },
   { name: "Projects", href: "/projects" },
   { name: "Tech", href: "/tech" },
   { name: "Contact", href: "/contact" },
-];
+] as const;
+
+function isActive(href: string, path: string): boolean {
+  if (href === "/") return path === "/";
+  return path === href || path.startsWith(`${href}/`);
+}
 ---
 
-<header id="main-header" class="fixed top-0 left-0 w-full z-50 transition-transform duration-300 ease-in-out">
-  <div class="max-w-5xl mx-auto px-6 h-20 flex items-center">
-    <!-- Mobile Menu Button (Left) -->
-    <button 
-      id="mobile-menu-button" 
-      class="md:hidden p-2 rounded-xl bg-header-button shadow-neumorphism hover:shadow-neumorphism-hover transition-all duration-300 focus:outline-none mr-4"
-      aria-label="Toggle Menu"
+<!-- Google Web Standard Top Header: 2-tier Fixed Tabs on Mobile, 1-tier Inline Bar on PC -->
+<header
+  id="main-header"
+  class="fixed top-0 left-0 right-0 z-40 bg-surface-nav backdrop-blur-xl border-b border-glass-border"
+>
+  <div class="max-w-6xl mx-auto px-4 md:px-8">
+    <!-- Top Row: Brand Logo + Desktop Primary Tabs + GitHub Action -->
+    <div class="h-14 md:h-16 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-8 min-w-0 h-full">
+        <a
+          href="/"
+          class="min-h-12 inline-flex items-center gap-2.5 text-lg md:text-2xl font-extrabold tracking-tight hover:opacity-85 transition-opacity truncate"
+        >
+          <span class="w-8 h-8 rounded-xl bg-brand/15 border border-brand/25 flex items-center justify-center text-brand text-sm font-black shrink-0">
+            HT
+          </span>
+          <span class="text-transparent bg-clip-text bg-linear-to-r from-brand to-brand-hover truncate">
+            Hyun-Tak Lee
+          </span>
+        </a>
+
+        <!-- PC Primary Navigation Tabs (Inline on ≥768px) -->
+        <nav aria-label="Primary Navigation" class="hidden md:flex items-center h-full gap-1">
+          {navItems.map((item) => {
+            const active = isActive(item.href, currentPath);
+            return (
+              <a
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                class:list={[
+                  "relative h-full inline-flex items-center px-4 text-sm font-semibold tracking-tight transition-colors",
+                  active
+                    ? "text-brand font-bold"
+                    : "text-text-muted hover:text-text-primary hover:bg-glass-bg-hover/50",
+                ]}
+              >
+                {item.name}
+                {active && (
+                  <span
+                    class="absolute bottom-0 left-3 right-3 h-[3px] rounded-t-full bg-brand"
+                    aria-hidden="true"
+                  />
+                )}
+              </a>
+            );
+          })}
+        </nav>
+      </div>
+
+      <!-- Right Action: GitHub Profile -->
+      <a
+        href="https://github.com/Hyun-Tak-Lee"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="GitHub 프로필 열기"
+        class="min-h-11 px-3 inline-flex items-center gap-2 rounded-full hover:bg-glass-bg-hover text-text-muted hover:text-brand transition-colors text-sm font-medium shrink-0"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+        </svg>
+        <span class="hidden sm:inline">GitHub</span>
+      </a>
+    </div>
+
+    <!-- Mobile Primary Navigation Tabs (2nd Row on <768px: 4 Equal-Width Fixed Tabs, No Hamburger) -->
+    <nav
+      aria-label="Mobile Primary Navigation"
+      class="md:hidden grid grid-cols-4 border-t border-glass-border -mx-4 px-2"
     >
-      <MenuIcon size="28px" />
-    </button>
-
-    <!-- Logo / Site Title -->
-    <a href="/" class="text-3xl font-extrabold tracking-tighter hover:opacity-80 transition-opacity">
-      <span class="text-transparent bg-clip-text bg-linear-to-r from-brand to-brand-hover">
-        Hyun-Tak Lee
-      </span>
-    </a>
-
-    <!-- Desktop Navigation (Right) -->
-    <nav class="hidden md:flex items-center space-x-8 ml-auto">
-      {navItems.map((item) => (
-        <a 
-          href={item.href} 
-          class="text-lg font-medium hover:text-brand transition-colors duration-200 relative group"
-        >
-          {item.name}
-          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand transition-all duration-300 group-hover:w-full"></span>
-        </a>
-      ))}
-    </nav>
-  </div>
-
-  <!-- Mobile Menu Overlay -->
-  <div 
-    id="mobile-menu" 
-    class="md:hidden absolute top-full left-0 w-full bg-mobile-menu-bg backdrop-blur-xl border-b border-glass-border transform -translate-y-full opacity-0 pointer-events-none transition-all duration-300 ease-in-out"
-  >
-    <nav class="flex flex-col p-6 space-y-4">
-      {navItems.map((item) => (
-        <a 
-          href={item.href} 
-          class="text-xl font-semibold p-3 rounded-lg hover:bg-glass-bg-hover transition-colors"
-        >
-          {item.name}
-        </a>
-      ))}
+      {navItems.map((item) => {
+        const active = isActive(item.href, currentPath);
+        return (
+          <a
+            href={item.href}
+            aria-current={active ? "page" : undefined}
+            class:list={[
+              "relative h-12 inline-flex items-center justify-center text-sm tracking-tight transition-colors",
+              active
+                ? "text-brand font-bold"
+                : "text-text-muted hover:text-text-primary font-medium",
+            ]}
+          >
+            {item.name}
+            {active && (
+              <span
+                class="absolute bottom-0 left-3 right-3 h-[3px] rounded-t-full bg-brand"
+                aria-hidden="true"
+              />
+            )}
+          </a>
+        );
+      })}
     </nav>
   </div>
 </header>
-
-<style>
-  #main-header {
-    background: var(--color-glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--color-glass-border);
-    box-shadow: var(--shadow-neumorphism);
-  }
-
-  /* Scrolled state could be added here if needed */
-  :global(.scrolled) #main-header {
-    background: var(--color-base-bg-mid);
-    box-shadow: var(--shadow-header-scrolled);
-  }
-</style>
-
-<script>
-  const header = document.getElementById('main-header');
-  const menuButton = document.getElementById('mobile-menu-button');
-  const mobileMenu = document.getElementById('mobile-menu');
-  
-  let lastScrollTop = 0;
-  let isMenuOpen = false;
-
-  // Toggle Mobile Menu
-  menuButton?.addEventListener('click', () => {
-    isMenuOpen = !isMenuOpen;
-    if (isMenuOpen) {
-      mobileMenu?.classList.remove('-translate-y-full', 'opacity-0', 'pointer-events-none');
-      mobileMenu?.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
-    } else {
-      mobileMenu?.classList.add('-translate-y-full', 'opacity-0', 'pointer-events-none');
-      mobileMenu?.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
-    }
-  });
-
-  // Scroll Behavior (Show/Hide Header)
-  window.addEventListener('scroll', () => {
-    if (isMenuOpen) return; // Don't hide header if menu is open
-
-    const scrollTop = window.scrollY;
-    
-    // Hide on scroll down, show on scroll up
-    if (scrollTop > lastScrollTop && scrollTop > 100) {
-      header?.style.setProperty('transform', 'translateY(-100%)');
-    } else {
-      header?.style.setProperty('transform', 'translateY(0)');
-    }
-
-    // Add visual change on scroll
-    if (scrollTop > 50) {
-      header?.classList.add('scrolled');
-    } else {
-      header?.classList.remove('scrolled');
-    }
-
-    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-  }, { passive: true });
-
-  // Close menu on link click
-  const mobileLinks = mobileMenu?.querySelectorAll('a');
-  mobileLinks?.forEach(link => {
-    link.addEventListener('click', () => {
-      isMenuOpen = false;
-      mobileMenu?.classList.add('-translate-y-full', 'opacity-0', 'pointer-events-none');
-      mobileMenu?.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
-    });
-  });
-</script>

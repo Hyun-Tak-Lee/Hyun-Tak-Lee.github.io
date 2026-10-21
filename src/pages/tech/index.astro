@@ -22,52 +22,142 @@ for (const post of sortedTech) {
   title="Technologies | Hyun-Tak Lee" 
   description="사용한 기술들을 정리한 공간입니다."
 >
-  <div class="max-w-5xl mx-auto py-12 px-6">
-    <header class="mb-16">
-      <h1 class="text-5xl font-extrabold tracking-tight mb-4 text-transparent bg-clip-text bg-linear-to-r from-brand to-brand-hover">
-        Knowledge Base
-      </h1>
-      <p class="text-xl text-text-muted">
-        사용한 기술들을 정리한 공간입니다.
-      </p>
+  <div class="space-y-8 medium:space-y-12">
+    <header class="p-6 medium:p-8 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism flex flex-col medium:flex-row medium:items-end justify-between gap-4">
+      <div>
+        <span class="text-xs font-mono font-bold uppercase tracking-wider text-brand">Engineering Notes</span>
+        <h1 class="text-3xl medium:text-4xl expanded:text-5xl font-extrabold tracking-tight mt-1 text-transparent bg-clip-text bg-linear-to-r from-brand to-brand-hover">
+          Knowledge Base
+        </h1>
+        <p class="text-sm medium:text-base text-text-muted mt-2">
+          사용한 기술들을 정리한 공간입니다.
+        </p>
+      </div>
+      <div class="text-xs font-mono text-text-muted">
+        Total <strong class="text-brand font-bold">{techPosts.length}</strong> articles
+      </div>
     </header>
 
     {categories.length === 0 ? (
-      <div class="text-center py-16 rounded-3xl bg-glass-bg border border-glass-border shadow-neumorphism text-text-muted">
+      <div class="text-center py-14 px-4 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism text-text-muted">
         아직 등록된 기술 문서가 없습니다
       </div>
     ) : (
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-        {categories.map(category => (
-          <section class="p-8 rounded-3xl bg-glass-bg border border-glass-border shadow-neumorphism">
-            <h2 class="text-2xl font-bold mb-6 flex items-center">
-              <span class="w-2 h-8 bg-brand rounded-full mr-4"></span>
-              {category}
-            </h2>
-            <div class="space-y-4">
-              {(postsByCategory[category] || []).map(post => (
+      <div>
+        <!-- M3 Sticky Scrollable Category Tabs (Right-edge Fade Affordance + Auto-Center on Tap) -->
+        <div class="sticky top-[6.5rem] md:top-16 z-30 -mx-4 px-4 md:mx-0 md:px-0 bg-surface-nav/95 backdrop-blur-xl border-b border-glass-border mb-8 relative">
+          <div
+            role="tablist"
+            aria-label="기술 문서 카테고리 필터"
+            class="flex items-center overflow-x-auto no-scrollbar scroll-smooth pr-10"
+          >
+            <button
+              type="button"
+              role="tab"
+              aria-selected="true"
+              data-tech-tab="all"
+              class="tech-tab relative min-h-12 px-5 shrink-0 inline-flex items-center gap-2 text-sm font-bold text-brand whitespace-nowrap transition-colors cursor-pointer"
+            >
+              <span>전체</span>
+              <span class="text-xs font-mono opacity-80">({techPosts.length})</span>
+              <span class="tab-indicator absolute bottom-0 left-3 right-3 h-[3px] rounded-t-full bg-brand"></span>
+            </button>
+            {categories.map((category) => (
+              <button
+                type="button"
+                role="tab"
+                aria-selected="false"
+                data-tech-tab={category}
+                class="tech-tab relative min-h-12 px-5 shrink-0 inline-flex items-center gap-2 text-sm font-medium text-text-muted hover:text-text-primary whitespace-nowrap transition-colors cursor-pointer"
+              >
+                <span>{category}</span>
+                <span class="text-xs font-mono opacity-80">
+                  ({(postsByCategory[category] || []).length})
+                </span>
+                <span class="tab-indicator absolute bottom-0 left-3 right-3 h-[3px] rounded-t-full bg-brand hidden"></span>
+              </button>
+            ))}
+          </div>
+          <!-- Right-edge Gradient Affordance hinting horizontal swipe -->
+          <div
+            class="pointer-events-none absolute right-0 top-0 bottom-0 w-12 bg-linear-to-l from-base-bg-end to-transparent md:hidden"
+            aria-hidden="true"
+          ></div>
+        </div>
+
+        <div class="grid grid-cols-1 expanded:grid-cols-2 gap-6 medium:gap-8">
+          {categories.map(category => (
+            <section
+              data-tech-section={category}
+              class="p-5 medium:p-7 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism flex flex-col"
+            >
+              <h2 class="text-xl medium:text-2xl font-bold mb-5 flex items-center justify-between">
+                <span class="flex items-center">
+                  <span class="w-2 h-7 bg-brand rounded-full mr-3 shrink-0"></span>
+                  {category}
+                </span>
+                <span class="text-xs font-mono text-text-muted font-normal">
+                  {(postsByCategory[category] || []).length}
+                </span>
+              </h2>
+              <div class="space-y-2.5">
+                {(postsByCategory[category] || []).map(post => (
                   <a 
                     href={`/tech/${post.id}`}
-                    class="group block p-4 rounded-xl hover:bg-glass-bg-hover transition-all duration-200"
+                    class="group block p-4 rounded-2xl bg-glass-bg hover:bg-glass-bg-hover border border-transparent hover:border-glass-border transition-all duration-200"
                   >
-                    <div class="flex justify-between items-start">
-                      <h3 class="text-lg font-semibold group-hover:text-brand transition-colors">
+                    <div class="flex justify-between items-start gap-3">
+                      <h3 class="text-base medium:text-lg font-semibold group-hover:text-brand transition-colors">
                         {post.data.title}
                       </h3>
-                      <span class="text-[10px] uppercase tracking-widest text-text-muted font-mono mt-1 whitespace-nowrap">
+                      <time
+                        datetime={post.data.pubDate.toISOString()}
+                        class="text-xs uppercase tracking-widest text-text-muted font-mono mt-0.5 whitespace-nowrap shrink-0"
+                      >
                         {new Date(post.data.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                      </span>
+                      </time>
                     </div>
-                    <p class="text-sm text-text-muted mt-2 line-clamp-1">
-                      {post.data.description}
-                    </p>
+                    {post.data.description && (
+                      <p class="text-sm text-text-muted mt-1.5 line-clamp-2">
+                        {post.data.description}
+                      </p>
+                    )}
                   </a>
-                ))
-              }
-            </div>
-          </section>
-        ))}
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
       </div>
     )}
   </div>
+
+  <script>
+    const tabs = document.querySelectorAll<HTMLButtonElement>(".tech-tab");
+    const sections = document.querySelectorAll<HTMLElement>("[data-tech-section]");
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const selected = tab.dataset.techTab || "all";
+
+        // Auto-scroll selected tab to center of swipe container (Google M3 Scrollable Tabs rule)
+        tab.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+
+        tabs.forEach((t) => {
+          const isSelected = t === tab;
+          t.setAttribute("aria-selected", String(isSelected));
+          t.classList.toggle("text-brand", isSelected);
+          t.classList.toggle("font-bold", isSelected);
+          t.classList.toggle("text-text-muted", !isSelected);
+          t.classList.toggle("font-medium", !isSelected);
+          t.querySelector(".tab-indicator")?.classList.toggle("hidden", !isSelected);
+        });
+
+        sections.forEach((section) => {
+          const match = selected === "all" || section.dataset.techSection === selected;
+          section.classList.toggle("hidden", !match);
+        });
+      });
+    });
+  </script>
 </BaseLayout>

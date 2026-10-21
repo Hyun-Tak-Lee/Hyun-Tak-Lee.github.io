@@ -1,4 +1,10 @@
 @theme {
+  /* Google Material Design 3 Window Size Classes */
+  --breakpoint-compact: 0px;
+  --breakpoint-medium: 600px;
+  --breakpoint-expanded: 840px;
+  --breakpoint-large: 1200px;
+
   --color-background: light-dark(#ffffff, #1a1a1a);
   --color-text-primary: light-dark(#333333, #ffffff);
   --color-brand: light-dark(#1a73e8, #8ab4f8);
@@ -15,21 +21,26 @@
   --color-base-bg-mid: light-dark(#f3f8fe, #151515);
   --color-base-bg-end: light-dark(#e9f4fd, #151515);
 
+  --color-surface-container: light-dark(rgba(255, 255, 255, 0.72), rgba(30, 32, 36, 0.78));
+  --color-surface-nav: light-dark(rgba(243, 248, 254, 0.92), rgba(22, 24, 28, 0.92));
+  --color-active-indicator: light-dark(#d3e3fd, #004a77);
+  --color-on-active-indicator: light-dark(#041e49, #c2e7ff);
+
   --color-icon-primary: light-dark(rgba(0, 0, 0, 0.9), rgba(255, 255, 255, 0.9));
   --color-brand-muted: light-dark(rgba(26, 115, 232, 0.1), rgba(138, 180, 248, 0.1));
   --color-brand-soft: light-dark(rgba(26, 115, 232, 0.05), rgba(138, 180, 248, 0.05));
-  --color-text-muted: light-dark(rgba(0, 0, 0, 0.5), rgba(255, 255, 255, 0.5));
+  --color-text-muted: light-dark(rgba(0, 0, 0, 0.55), rgba(255, 255, 255, 0.6));
   --color-mobile-menu-bg: light-dark(rgba(243, 248, 254, 0.95), rgba(21, 21, 21, 0.95));
-  --color-glass-bg: rgba(255, 255, 255, 0.15);
-  --color-glass-border: rgba(255, 255, 255, 0.2);
-  --color-glass-bg-hover: rgba(255, 255, 255, 0.25);
+  --color-glass-bg: light-dark(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.05));
+  --color-glass-border: light-dark(rgba(26, 115, 232, 0.14), rgba(255, 255, 255, 0.12));
+  --color-glass-bg-hover: light-dark(rgba(26, 115, 232, 0.08), rgba(255, 255, 255, 0.1));
 
-  --shadow-neumorphism: 5px 5px 8px light-dark(#0000002a, #1f262e),
-    -5px -5px 8px light-dark(#ffffff2a, #33404d);
-  --shadow-neumorphism-hover: 2px 2px 5px light-dark(#0000002a, #1f262e),
-    -2px -2px 5px light-dark(#ffffff2a, #33404d),
-    inset 3px 3px 5px light-dark(#0000002a, #1f262e),
-    inset -3px -3px 5px light-dark(#d9e7f6, #33404d);
+  --shadow-neumorphism: 5px 5px 12px light-dark(#00000014, #0d1014),
+    -5px -5px 12px light-dark(#ffffffb3, #252b33);
+  --shadow-neumorphism-hover: 2px 2px 6px light-dark(#0000001a, #0d1014),
+    -2px -2px 6px light-dark(#ffffffcc, #252b33),
+    inset 2px 2px 5px light-dark(#00000012, #0d1014),
+    inset -2px -2px 5px light-dark(#ffffffb3, #252b33);
   --shadow-header-scrolled: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
 

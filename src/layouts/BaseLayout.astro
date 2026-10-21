@@ -17,10 +17,12 @@ const { title, description, image, type } = Astro.props;
   <head>
     <BaseHead title={title} description={description} image={image} type={type} />
   </head>
-  <body class="min-h-screen bg-linear-to-r from-base-bg-start via-base-bg-mid to-base-bg-end">
-    <Header />
-    <main class="pt-24 pb-20 min-h-[calc(100vh-80px)] px-8 md:px-12 lg:px-24">
-      <slot />
+  <body class="min-h-dvh bg-linear-to-r from-base-bg-start via-base-bg-mid to-base-bg-end">
+    <Header currentPath={Astro.url.pathname} />
+    <main class="pt-[6.5rem] md:pt-16 min-h-dvh flex flex-col">
+      <div class="w-full max-w-6xl mx-auto px-4 md:px-8 py-6 md:py-10 flex-1 flex flex-col">
+        <slot />
+      </div>
     </main>
   </body>
 </html>

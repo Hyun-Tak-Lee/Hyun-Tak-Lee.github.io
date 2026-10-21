@@ -13,58 +13,143 @@ const categories = [...new Set(projects.map(p => p.data.category))];
   title="Projects | Hyun-Tak Lee" 
   description="수행한 웹 애플리케이션 및 시스템 인프라 구축 프로젝트 포트폴리오를 소개하고 핵심 기여 사항을 정리한 페이지입니다."
 >
-  <div class="max-w-5xl mx-auto py-12 px-6">
-    <header class="mb-16">
-      <h1 class="text-5xl font-extrabold tracking-tight mb-4">
-        Projects
-      </h1>
-      <p class="text-xl text-text-muted">
-        수행한 프로젝트
-      </p>
+  <div class="space-y-8 medium:space-y-12">
+    <header class="p-6 medium:p-8 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism flex flex-col medium:flex-row medium:items-end justify-between gap-4">
+      <div>
+        <span class="text-xs font-mono font-bold uppercase tracking-wider text-brand">Portfolio</span>
+        <h1 class="text-3xl medium:text-4xl expanded:text-5xl font-extrabold tracking-tight mt-1">
+          Projects
+        </h1>
+        <p class="text-sm medium:text-base text-text-muted mt-2">
+          수행한 웹 애플리케이션 및 시스템 인프라 구축 프로젝트
+        </p>
+      </div>
+      <div class="text-xs font-mono text-text-muted">
+        Total <strong class="text-brand font-bold">{projects.length}</strong> projects
+      </div>
     </header>
 
     {categories.length === 0 ? (
-      <div class="text-center py-16 rounded-3xl bg-glass-bg border border-glass-border shadow-neumorphism text-text-muted">
+      <div class="text-center py-14 px-4 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism text-text-muted">
         아직 등록된 프로젝트가 없습니다
       </div>
     ) : (
-      <div class="space-y-16">
-        {categories.map(category => (
-          <section>
-            <h2 class="text-2xl font-bold border-l-4 border-brand pl-4 mb-8">
-              {category}
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {sortedProjects
-                .filter(p => p.data.category === category)
-                .map(project => (
-                  <a 
-                    href={`/projects/${project.id}`}
-                    class="group block p-6 rounded-2xl bg-glass-bg border border-glass-border shadow-neumorphism hover:shadow-neumorphism-hover transition-all duration-300"
-                  >
-                    <h3 class="text-xl font-bold mb-2 group-hover:text-brand transition-colors">
-                      {project.data.title}
-                    </h3>
-                    <p class="text-sm text-text-muted mb-4 line-clamp-2">
-                      {project.data.description}
-                    </p>
-                    <div class="flex flex-wrap gap-2">
-                      {project.data.tags?.map(tag => (
-                        <span class="text-xs px-2 py-1 rounded-md bg-brand-muted text-brand font-medium">
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
-                    <div class="mt-4 text-xs text-text-muted font-mono">
-                      {new Date(project.data.pubDate).toLocaleDateString('ko-KR')}
-                    </div>
-                  </a>
-                ))
-              }
-            </div>
-          </section>
-        ))}
+      <div>
+        <!-- M3 Sticky Scrollable Category Tabs (Right-edge Fade Affordance + Auto-Center on Tap) -->
+        <div class="sticky top-[6.5rem] md:top-16 z-30 -mx-4 px-4 md:mx-0 md:px-0 bg-surface-nav/95 backdrop-blur-xl border-b border-glass-border mb-8 relative">
+          <div
+            role="tablist"
+            aria-label="프로젝트 카테고리 필터"
+            class="flex items-center overflow-x-auto no-scrollbar scroll-smooth pr-10"
+          >
+            <button
+              type="button"
+              role="tab"
+              aria-selected="true"
+              data-category-tab="all"
+              class="category-tab relative min-h-12 px-5 shrink-0 inline-flex items-center gap-2 text-sm font-bold text-brand whitespace-nowrap transition-colors cursor-pointer"
+            >
+              <span>전체</span>
+              <span class="text-xs font-mono opacity-80">({projects.length})</span>
+              <span class="tab-indicator absolute bottom-0 left-3 right-3 h-[3px] rounded-t-full bg-brand"></span>
+            </button>
+            {categories.map((category) => (
+              <button
+                type="button"
+                role="tab"
+                aria-selected="false"
+                data-category-tab={category}
+                class="category-tab relative min-h-12 px-5 shrink-0 inline-flex items-center gap-2 text-sm font-medium text-text-muted hover:text-text-primary whitespace-nowrap transition-colors cursor-pointer"
+              >
+                <span>{category}</span>
+                <span class="text-xs font-mono opacity-80">
+                  ({sortedProjects.filter((p) => p.data.category === category).length})
+                </span>
+                <span class="tab-indicator absolute bottom-0 left-3 right-3 h-[3px] rounded-t-full bg-brand hidden"></span>
+              </button>
+            ))}
+          </div>
+          <!-- Right-edge Gradient Affordance hinting horizontal swipe -->
+          <div
+            class="pointer-events-none absolute right-0 top-0 bottom-0 w-12 bg-linear-to-l from-base-bg-end to-transparent md:hidden"
+            aria-hidden="true"
+          ></div>
+        </div>
+
+        <div class="space-y-10 medium:space-y-14">
+          {categories.map(category => (
+            <section data-category-section={category}>
+              <h2 class="text-xl medium:text-2xl font-bold border-l-4 border-brand pl-3.5 mb-5 medium:mb-6">
+                {category}
+              </h2>
+              <div class="grid grid-cols-1 expanded:grid-cols-2 gap-4 medium:gap-6">
+                {sortedProjects
+                  .filter(p => p.data.category === category)
+                  .map(project => (
+                    <a 
+                      href={`/projects/${project.id}`}
+                      class="group flex flex-col justify-between p-5 medium:p-6 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism hover:shadow-neumorphism-hover transition-all duration-300"
+                    >
+                      <div>
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                          <span class="text-xs font-mono text-brand font-semibold">{project.data.category}</span>
+                          <time datetime={project.data.pubDate.toISOString()} class="text-xs text-text-muted font-mono">
+                            {new Date(project.data.pubDate).toLocaleDateString('ko-KR')}
+                          </time>
+                        </div>
+                        <h3 class="text-lg medium:text-xl font-bold mb-2 group-hover:text-brand transition-colors">
+                          {project.data.title}
+                        </h3>
+                        <p class="text-sm text-text-muted mb-4 line-clamp-2 leading-relaxed">
+                          {project.data.description}
+                        </p>
+                      </div>
+                      {project.data.tags && project.data.tags.length > 0 && (
+                        <div class="flex flex-wrap gap-2 pt-3 border-t border-glass-border">
+                          {project.data.tags.map(tag => (
+                            <span class="text-xs px-2.5 py-0.5 rounded-md bg-brand-muted text-brand font-medium">
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </a>
+                  ))
+                }
+              </div>
+            </section>
+          ))}
+        </div>
       </div>
     )}
   </div>
+
+  <script>
+    const tabs = document.querySelectorAll<HTMLButtonElement>(".category-tab");
+    const sections = document.querySelectorAll<HTMLElement>("[data-category-section]");
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const selected = tab.dataset.categoryTab || "all";
+
+        // Auto-scroll selected tab to center of swipe container (Google M3 Scrollable Tabs rule)
+        tab.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+
+        tabs.forEach((t) => {
+          const isSelected = t === tab;
+          t.setAttribute("aria-selected", String(isSelected));
+          t.classList.toggle("text-brand", isSelected);
+          t.classList.toggle("font-bold", isSelected);
+          t.classList.toggle("text-text-muted", !isSelected);
+          t.classList.toggle("font-medium", !isSelected);
+          t.querySelector(".tab-indicator")?.classList.toggle("hidden", !isSelected);
+        });
+
+        sections.forEach((section) => {
+          const match = selected === "all" || section.dataset.categorySection === selected;
+          section.classList.toggle("hidden", !match);
+        });
+      });
+    });
+  </script>
 </BaseLayout>

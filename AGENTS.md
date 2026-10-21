@@ -1,23 +1,22 @@
 # AGENTS.md
 
 ## Directory Structure
-- `src/layouts/`: `<slot />`을 포함하는 페이지 레이아웃
-- `src/components/`: 재사용 UI 컴포넌트 (`Header.astro`, `BaseHead.astro`, `icons/`)
-- `src/pages/`: 파일 기반 라우팅 페이지
-- `src/content/`: Content Collections 마크다운 문서 (`projects/`, `tech/`)
-- `src/styles/`: 전역 스타일 엔트리(`global.css`), 디자인 토큰(`theme.css`), 기본 태그 스타일(`base.css`)
+- `src/layouts/`: 페이지 공통 레이아웃 컴포넌트
+- `src/components/`: 재사용 UI 컴포넌트 및 벡터 아이콘
+- `src/pages/`: 파일 기반 라우팅 엔드포인트
+- `src/content/`: Content Collections 마크다운 문서
+- `src/styles/`: 전역 스타일시트 및 테마 토큰 정의
 
-## Astro Rules
-- **Static First**: 정적 UI는 `.astro`로 작성하고 프론트매터에 `interface Props` 명시.
-- **Partial Hydration**: 인터랙션은 `<script>`를 우선 사용하고, React(`.tsx`)는 필수 시에만 최소한의 `client:*` 지시자로 사용.
-- **Content Layer API**: `src/content.config.ts`(`glob` 로더 + Zod)로 스키마를 정의하고 `getCollection()`, `render(entry)`, `entry.id` 사용.
+## Astro & Tailwind CSS v4
+- **Static First**: 정적 UI는 Astro 컴포넌트로 작성하고 Props 인터페이스를 명시한다. 인터랙션은 브라우저 표준 스크립트를 우선하며, 리액트 컴포넌트는 필요한 경우에만 최소한의 클라이언트 지시자로 제한한다.
+- **Content Layer API**: 스키마 기반 Content Collections API를 통해 문서 로드, 검증, 렌더링을 처리한다.
+- **CSS-First Theme**: 별도 설정 파일이나 CSS 전처리기 없이 CSS 테마 블록과 시스템 컬러 함수를 사용하며, v4 표준 유틸리티 클래스를 적용한다.
 
-## Tailwind CSS v4 Rules
-- **CSS-First 설정**: `tailwind.config.js` 및 Sass/Less 전처리기 사용 금지.
-- **테마 토큰**: `src/styles/theme.css`의 `@theme` 블록(`--color-*`, `--shadow-*`, `--background-image-*`)과 `light-dark()`로 정의.
-- **v4 유틸리티**: 구버전 대신 v4 표준 클래스 사용 (예: `bg-linear-to-r`).
+## Responsive & UI Standards
+- **Window Size Classes**: 컴팩트(모바일), 미디엄(태블릿), 익스팬디드(데스크톱) 기준 화면 폭에 따라 단일 컬럼 및 멀티 컬럼 레이아웃을 분리한다.
+- **내비게이션 구조**: 최상위 대메뉴는 숨김 메뉴 없이 상단 고정 헤더 탭으로 상시 노출한다. 페이지 내부 하위 분류는 항목 수에 따라 균등 분할 고정 탭 또는 가로 스크롤 탭을 적용하고, 스크롤 고정과 선택 항목 중앙 정렬을 보장한다.
+- **모바일 사용성**: 모든 인터랙티브 요소는 최소 터치 타겟 크기(48px 이상)와 가독성 기준 폰트 크기(12px 이상)를 확보하고, 동적 뷰포트 단위 및 가로 오버플로우 방지 처리를 준수한다.
 
-## Frontend & Content Standards
-- **Heading 계층**: 페이지당 `<h1>`은 하나만 유지 (상세 페이지 제목이 `<h1>`이므로 마크다운 본문은 `##`부터 작성).
-- **시맨틱 & 접근성**: 시맨틱 태그를 사용하고 이미지 `alt`, 아이콘 버튼 `aria-label` 필수 지정.
-- **외부 링크 보안**: `target="_blank"` 사용 시 `rel="noopener noreferrer"` 필수 명시.
+## Content & Accessibility Standards
+- **시맨틱 마크업**: 페이지당 단일 최상위 제목을 유지하고 본문은 순차적 하위 제목 계층을 준수한다. 모든 비텍스트 요소에는 대체 텍스트 또는 접근성 레이블을 지정하며, 외부 링크에는 보안 속성을 명시한다.
+- **기술 문서 작성 규격**: 제목은 핵심 대상과 기술적 맥락을 명확히 드러내는 명사구 형태로 작성한다. 본문은 개념 정의, 아키텍처 특성, 설계 근거를 중심으로 객관적인 평서문과 개조식 구조로 서술한다.

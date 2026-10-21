@@ -21,41 +21,148 @@ const recentIssues = sortedIssues.slice(0, 5);
   title="Home | Hyun-Tak Lee" 
   description="개인 기술 블로그 및 프로젝트 포트폴리오 사이트입니다. 소프트웨어 엔지니어링 기술 스택과 작업물들을 공유합니다."
 >
-  <div class="max-w-5xl mx-auto px-6 py-12 md:py-20">
-    <!-- Hero Section -->
-    <section class="text-center mb-20 md:mb-24">
-      <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-6 leading-[1.1]">
-        <span class="text-transparent bg-clip-text bg-linear-to-r from-brand via-brand-hover to-brand py-2">
-          홈 화면
-        </span>
-      </h1>
+  <div class="flex-1 flex flex-col justify-between gap-10 expanded:gap-14">
+    <!-- Hero / Overview Banner: Single column on Compact, Split Pane on Expanded (PC) -->
+    <section class="grid grid-cols-1 expanded:grid-cols-12 gap-6 expanded:gap-8 items-stretch">
+      <div class="expanded:col-span-8 p-6 medium:p-8 expanded:p-10 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism flex flex-col justify-between">
+        <div class="space-y-4">
+          <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-muted text-brand text-xs font-mono font-bold tracking-wider uppercase">
+            Software Engineering Workspace
+          </span>
+          <h1 class="text-3xl medium:text-5xl expanded:text-6xl font-black tracking-tight leading-[1.15]">
+            <span class="text-transparent bg-clip-text bg-linear-to-r from-brand via-brand-hover to-brand">
+              홈 화면
+            </span>
+          </h1>
+          <p class="text-sm medium:text-base text-text-muted max-w-2xl leading-relaxed">
+            웹 애플리케이션 아키텍처, 시스템 인프라 구축 프로젝트와 엔지니어링 기술 문서를 기록하고 공유합니다.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-3 pt-6 mt-6 border-t border-glass-border">
+          <a
+            href="/projects"
+            class="min-h-12 inline-flex items-center gap-2 px-5 rounded-full bg-brand text-white dark:text-slate-950 font-semibold text-sm hover:bg-brand-hover transition-colors"
+          >
+            프로젝트 보기
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </a>
+          <a
+            href="/tech"
+            class="min-h-12 inline-flex items-center gap-2 px-5 rounded-full bg-glass-bg border border-glass-border font-semibold text-sm hover:bg-glass-bg-hover transition-colors"
+          >
+            기술 문서 탐색
+          </a>
+        </div>
+      </div>
+
+      <!-- PC / Tablet Summary Metrics Pane -->
+      <div class="expanded:col-span-4 grid grid-cols-2 expanded:grid-cols-1 gap-4">
+        <a
+          href="/projects"
+          class="p-5 medium:p-6 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism hover:shadow-neumorphism-hover transition-all flex flex-col justify-between group"
+        >
+          <div class="flex items-center justify-between text-text-muted">
+            <span class="text-xs font-mono uppercase tracking-wider">Projects</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-brand group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" />
+            </svg>
+          </div>
+          <div class="mt-4">
+            <div class="text-3xl medium:text-4xl font-black text-brand">{projects.length}</div>
+            <p class="text-xs text-text-muted mt-1">등록된 프로젝트</p>
+          </div>
+        </a>
+
+        <a
+          href="/tech"
+          class="p-5 medium:p-6 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism hover:shadow-neumorphism-hover transition-all flex flex-col justify-between group"
+        >
+          <div class="flex items-center justify-between text-text-muted">
+            <span class="text-xs font-mono uppercase tracking-wider">Tech Articles</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-brand group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+          </div>
+          <div class="mt-4">
+            <div class="text-3xl medium:text-4xl font-black text-brand">{techPosts.length}</div>
+            <p class="text-xs text-text-muted mt-1">기술 아티클</p>
+          </div>
+        </a>
+      </div>
     </section>
 
-    <!-- Recent Issues Section -->
-    <section class="mb-24">
-      <div class="flex items-center justify-between mb-8 border-b border-glass-border pb-4">
-        <h2 class="text-2xl md:text-3xl font-bold flex items-center gap-3">
-          <span class="w-2.5 h-8 bg-brand rounded-full"></span>
+    <!-- Recent Issues Section with M3 Fixed Tabs (3 items = Equal 3-column Fixed Tabs on Mobile) -->
+    <section>
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <h2 class="text-xl md:text-2xl font-bold flex items-center gap-3">
+          <span class="w-2 h-7 bg-brand rounded-full shrink-0"></span>
           최근 이슈
         </h2>
-        <span class="text-sm font-mono text-text-muted tracking-wider">Recent Issues</span>
+        <span class="text-xs font-mono text-text-muted tracking-wider uppercase">Recent Issues</span>
+      </div>
+
+      <!-- Sticky M3 Fixed Tabs (3 Equal Width Tabs on Mobile, Inline Tabs on PC) -->
+      <div class="sticky top-[6.5rem] md:top-16 z-30 -mx-4 px-4 md:mx-0 md:px-0 bg-surface-nav/95 md:bg-transparent backdrop-blur-xl md:backdrop-blur-none border-b border-glass-border mb-6">
+        <div
+          role="tablist"
+          aria-label="최근 이슈 분류 필터"
+          class="grid grid-cols-3 md:inline-flex md:w-auto w-full"
+        >
+          <button
+            type="button"
+            role="tab"
+            aria-selected="true"
+            data-issue-filter="all"
+            class="issue-tab relative min-h-12 px-4 inline-flex items-center justify-center gap-2 text-sm font-bold text-brand transition-colors cursor-pointer"
+          >
+            <span>전체</span>
+            <span class="text-xs font-mono opacity-80">({recentIssues.length})</span>
+            <span class="tab-indicator absolute bottom-0 left-3 right-3 h-[3px] rounded-t-full bg-brand"></span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected="false"
+            data-issue-filter="projects"
+            class="issue-tab relative min-h-12 px-4 inline-flex items-center justify-center gap-2 text-sm font-medium text-text-muted hover:text-text-primary transition-colors cursor-pointer"
+          >
+            <span>Projects</span>
+            <span class="text-xs font-mono opacity-80">({recentIssues.filter(i => i.collectionType === "projects").length})</span>
+            <span class="tab-indicator absolute bottom-0 left-3 right-3 h-[3px] rounded-t-full bg-brand hidden"></span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected="false"
+            data-issue-filter="tech"
+            class="issue-tab relative min-h-12 px-4 inline-flex items-center justify-center gap-2 text-sm font-medium text-text-muted hover:text-text-primary transition-colors cursor-pointer"
+          >
+            <span>Tech</span>
+            <span class="text-xs font-mono opacity-80">({recentIssues.filter(i => i.collectionType === "tech").length})</span>
+            <span class="tab-indicator absolute bottom-0 left-3 right-3 h-[3px] rounded-t-full bg-brand hidden"></span>
+          </button>
+        </div>
       </div>
       
-      <div class="space-y-6">
-        {recentIssues.length === 0 ? (
-          <div class="text-center py-16 rounded-3xl bg-glass-bg border border-glass-border shadow-neumorphism text-text-muted">
-            아직 등록된 이슈가 없습니다
-          </div>
-        ) : (
-          recentIssues.map((post) => (
+      {recentIssues.length === 0 ? (
+        <div class="text-center py-12 px-4 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism text-text-muted">
+          아직 등록된 이슈가 없습니다
+        </div>
+      ) : (
+        <div id="issue-list" class="grid grid-cols-1 expanded:grid-cols-2 gap-4 medium:gap-6">
+          {recentIssues.map((post) => (
             <a
               href={`/${post.collectionType}/${post.id}`}
-              class="group relative block p-6 md:p-8 rounded-[2rem] bg-glass-bg border border-glass-border shadow-neumorphism hover:shadow-neumorphism-hover transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+              data-issue-type={post.collectionType}
+              class="issue-card group relative flex flex-col justify-between p-5 medium:p-6 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism hover:shadow-neumorphism-hover transition-all duration-300 hover:-translate-y-0.5 overflow-hidden"
             >
-              <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div class="space-y-3 flex-1">
-                  <div class="flex items-center gap-3 flex-wrap">
-                    <span class={`text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider font-mono ${
+              <div class="space-y-3">
+                <div class="flex items-center justify-between gap-2 flex-wrap">
+                  <div class="flex items-center gap-2">
+                    <span class={`text-xs font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider font-mono ${
                       post.collectionType === "projects"
                         ? "bg-brand-muted text-brand border border-brand/20"
                         : "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20"
@@ -66,48 +173,74 @@ const recentIssues = sortedIssues.slice(0, 5);
                       {post.data.category}
                     </span>
                   </div>
-                  
-                  <h3 class="text-xl md:text-2xl font-bold group-hover:text-brand transition-colors duration-200">
-                    {post.data.title}
-                  </h3>
-                  
-                  {post.data.description && (
-                    <p class="text-sm md:text-base text-text-muted line-clamp-2 leading-relaxed">
-                      {post.data.description}
-                    </p>
-                  )}
-                  
-                  {post.data.tags && post.data.tags.length > 0 && (
-                    <div class="flex flex-wrap gap-1.5 pt-1">
-                      {post.data.tags.map((tag: string) => (
-                        <span class="text-[11px] px-2 py-0.5 rounded-md bg-brand-soft text-brand/80 border border-brand/10 font-medium">
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+
+                  <time
+                    datetime={post.data.pubDate.toISOString()}
+                    class="text-xs font-mono text-text-muted whitespace-nowrap"
+                  >
+                    {new Date(post.data.pubDate).toLocaleDateString("ko-KR", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </time>
                 </div>
                 
-                <div class="text-xs md:text-sm font-mono text-text-muted whitespace-nowrap self-start md:self-center mt-2 md:mt-0">
-                  {new Date(post.data.pubDate).toLocaleDateString("ko-KR", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </div>
+                <h3 class="text-lg medium:text-xl font-bold group-hover:text-brand transition-colors duration-200">
+                  {post.data.title}
+                </h3>
+                
+                {post.data.description && (
+                  <p class="text-sm text-text-muted line-clamp-2 leading-relaxed">
+                    {post.data.description}
+                  </p>
+                )}
               </div>
-              <div class="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 bg-brand-soft rounded-full blur-2xl group-hover:bg-brand-muted transition-colors duration-500"></div>
+
+              {post.data.tags && post.data.tags.length > 0 && (
+                <div class="flex flex-wrap gap-1.5 pt-4 mt-4 border-t border-glass-border">
+                  {post.data.tags.map((tag: string) => (
+                    <span class="text-xs px-2.5 py-0.5 rounded-md bg-brand-soft text-brand/85 border border-brand/10 font-medium">
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              )}
             </a>
-          ))
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </section>
 
-
-
     <!-- Footer -->
-    <footer class="mt-20 text-center text-text-muted text-xs font-mono tracking-widest">
+    <footer class="pt-6 border-t border-glass-border text-center text-text-muted text-xs font-mono tracking-widest">
       © 2026 HYUN-TAK LEE. BUILT WITH ASTRO
     </footer>
   </div>
+
+  <script>
+    const tabs = document.querySelectorAll<HTMLButtonElement>(".issue-tab");
+    const cards = document.querySelectorAll<HTMLElement>(".issue-card");
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const filter = tab.dataset.issueFilter || "all";
+
+        tabs.forEach((t) => {
+          const isSelected = t === tab;
+          t.setAttribute("aria-selected", String(isSelected));
+          t.classList.toggle("text-brand", isSelected);
+          t.classList.toggle("font-bold", isSelected);
+          t.classList.toggle("text-text-muted", !isSelected);
+          t.classList.toggle("font-medium", !isSelected);
+          t.querySelector(".tab-indicator")?.classList.toggle("hidden", !isSelected);
+        });
+
+        cards.forEach((card) => {
+          const match = filter === "all" || card.dataset.issueType === filter;
+          card.classList.toggle("hidden", !match);
+        });
+      });
+    });
+  </script>
 </BaseLayout>
