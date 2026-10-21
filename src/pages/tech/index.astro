@@ -1,40 +1,33 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { formatDate } from "../../utils/date";
 
 const techPosts = await getCollection("tech");
 const sortedTech = techPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 // Group by category
-const categories = [...new Set(techPosts.map(p => p.data.category))];
-
-const postsByCategory: Record<string, typeof sortedTech> = {};
-for (const post of sortedTech) {
-  const category = post.data.category;
-  if (!postsByCategory[category]) {
-    postsByCategory[category] = [];
-  }
-  postsByCategory[category].push(post);
-}
+const postsByCategory = Object.groupBy(sortedTech, (post) => post.data.category);
+const categories = Object.keys(postsByCategory);
 ---
 
 <BaseLayout 
-  title="Technologies | Hyun-Tak Lee" 
+  title="기술 문서 | Hyun-Tak Lee" 
   description="사용한 기술들을 정리한 공간입니다."
 >
   <div class="space-y-8 medium:space-y-12">
     <header class="p-6 medium:p-8 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism flex flex-col medium:flex-row medium:items-end justify-between gap-4">
       <div>
-        <span class="text-xs font-mono font-bold uppercase tracking-wider text-brand">Engineering Notes</span>
+        <span class="text-xs font-mono font-bold uppercase tracking-wider text-brand">엔지니어링 노트</span>
         <h1 class="text-3xl medium:text-4xl expanded:text-5xl font-extrabold tracking-tight mt-1 text-transparent bg-clip-text bg-linear-to-r from-brand to-brand-hover">
-          Knowledge Base
+          기술 문서
         </h1>
         <p class="text-sm medium:text-base text-text-muted mt-2">
           사용한 기술들을 정리한 공간입니다.
         </p>
       </div>
       <div class="text-xs font-mono text-text-muted">
-        Total <strong class="text-brand font-bold">{techPosts.length}</strong> articles
+        총 <strong class="text-brand font-bold">{techPosts.length}</strong>개 문서
       </div>
     </header>
 
@@ -45,7 +38,7 @@ for (const post of sortedTech) {
     ) : (
       <div>
         <!-- M3 Sticky Scrollable Category Tabs (Right-edge Fade Affordance + Auto-Center on Tap) -->
-        <div class="sticky top-[6.5rem] md:top-16 z-30 -mx-4 px-4 md:mx-0 md:px-0 bg-surface-nav/95 backdrop-blur-xl border-b border-glass-border mb-8 relative">
+        <div class="sticky top-header z-30 -mx-4 px-4 medium:mx-0 medium:px-0 bg-surface-nav/95 backdrop-blur-xl border-b border-glass-border mb-8 relative">
           <div
             role="tablist"
             aria-label="기술 문서 카테고리 필터"
@@ -72,7 +65,7 @@ for (const post of sortedTech) {
               >
                 <span>{category}</span>
                 <span class="text-xs font-mono opacity-80">
-                  ({(postsByCategory[category] || []).length})
+                  ({postsByCategory[category]?.length ?? 0})
                 </span>
                 <span class="tab-indicator absolute bottom-0 left-3 right-3 h-[3px] rounded-t-full bg-brand hidden"></span>
               </button>
@@ -80,7 +73,7 @@ for (const post of sortedTech) {
           </div>
           <!-- Right-edge Gradient Affordance hinting horizontal swipe -->
           <div
-            class="pointer-events-none absolute right-0 top-0 bottom-0 w-12 bg-linear-to-l from-base-bg-end to-transparent md:hidden"
+            class="pointer-events-none absolute right-0 top-0 bottom-0 w-12 bg-linear-to-l from-base-bg-end to-transparent medium:hidden"
             aria-hidden="true"
           ></div>
         </div>
@@ -97,11 +90,11 @@ for (const post of sortedTech) {
                   {category}
                 </span>
                 <span class="text-xs font-mono text-text-muted font-normal">
-                  {(postsByCategory[category] || []).length}
+                  {postsByCategory[category]?.length ?? 0}
                 </span>
               </h2>
               <div class="space-y-2.5">
-                {(postsByCategory[category] || []).map(post => (
+                {postsByCategory[category]?.map(post => (
                   <a 
                     href={`/tech/${post.id}`}
                     class="group block p-4 rounded-2xl bg-glass-bg hover:bg-glass-bg-hover border border-transparent hover:border-glass-border transition-all duration-200"
@@ -112,9 +105,9 @@ for (const post of sortedTech) {
                       </h3>
                       <time
                         datetime={post.data.pubDate.toISOString()}
-                        class="text-xs uppercase tracking-widest text-text-muted font-mono mt-0.5 whitespace-nowrap shrink-0"
+                        class="text-xs text-text-muted font-mono mt-0.5 whitespace-nowrap shrink-0"
                       >
-                        {new Date(post.data.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                        {formatDate(post.data.pubDate)}
                       </time>
                     </div>
                     {post.data.description && (

@@ -1,6 +1,9 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { formatDate } from "../utils/date";
+
+const RECENT_LIMIT = 5;
 
 const projects = await getCollection("projects");
 const techPosts = await getCollection("tech");
@@ -8,53 +11,56 @@ const techPosts = await getCollection("tech");
 const allIssues = [
   ...projects.map(post => ({ ...post, collectionType: "projects" as const })),
   ...techPosts.map(post => ({ ...post, collectionType: "tech" as const }))
-];
+].sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const sortedIssues = allIssues.sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+type IssueFilter = "all" | "projects" | "tech";
 
-const recentIssues = sortedIssues.slice(0, 5);
+// 탭별 최근 이슈: 전체는 통합 최신순, 나머지는 분류별 최신순으로 각각 RECENT_LIMIT개
+const recentByFilter: Record<IssueFilter, typeof allIssues> = {
+  all: allIssues.slice(0, RECENT_LIMIT),
+  projects: allIssues.filter(issue => issue.collectionType === "projects").slice(0, RECENT_LIMIT),
+  tech: allIssues.filter(issue => issue.collectionType === "tech").slice(0, RECENT_LIMIT),
+};
+
+// 카드는 한 번만 렌더링하고, 카드가 노출될 탭 목록을 data 속성으로 전달
+const issueFilters = new Map<(typeof allIssues)[number], IssueFilter[]>();
+for (const [filter, issues] of Object.entries(recentByFilter) as [IssueFilter, typeof allIssues][]) {
+  for (const issue of issues) {
+    issueFilters.set(issue, [...(issueFilters.get(issue) ?? []), filter]);
+  }
+}
+const displayedIssues = allIssues.filter(issue => issueFilters.has(issue));
+
+// 프로필 이미지: GitHub 아바타 (표시 크기 96px의 2배 해상도 요청)
+const PROFILE_IMAGE_URL = "https://avatars.githubusercontent.com/u/58458197?s=192&v=4";
 ---
 
 <BaseLayout 
-  title="Home | Hyun-Tak Lee" 
+  title="홈 | Hyun-Tak Lee" 
   description="개인 기술 블로그 및 프로젝트 포트폴리오 사이트입니다. 소프트웨어 엔지니어링 기술 스택과 작업물들을 공유합니다."
 >
   <div class="flex-1 flex flex-col justify-between gap-10 expanded:gap-14">
     <!-- Hero / Overview Banner: Single column on Compact, Split Pane on Expanded (PC) -->
     <section class="grid grid-cols-1 expanded:grid-cols-12 gap-6 expanded:gap-8 items-stretch">
-      <div class="expanded:col-span-8 p-6 medium:p-8 expanded:p-10 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism flex flex-col justify-between">
-        <div class="space-y-4">
-          <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-muted text-brand text-xs font-mono font-bold tracking-wider uppercase">
-            Software Engineering Workspace
-          </span>
-          <h1 class="text-3xl medium:text-5xl expanded:text-6xl font-black tracking-tight leading-[1.15]">
-            <span class="text-transparent bg-clip-text bg-linear-to-r from-brand via-brand-hover to-brand">
-              홈 화면
-            </span>
-          </h1>
-          <p class="text-sm medium:text-base text-text-muted max-w-2xl leading-relaxed">
-            웹 애플리케이션 아키텍처, 시스템 인프라 구축 프로젝트와 엔지니어링 기술 문서를 기록하고 공유합니다.
-          </p>
-        </div>
-
-        <div class="flex flex-wrap gap-3 pt-6 mt-6 border-t border-glass-border">
-          <a
-            href="/projects"
-            class="min-h-12 inline-flex items-center gap-2 px-5 rounded-full bg-brand text-white dark:text-slate-950 font-semibold text-sm hover:bg-brand-hover transition-colors"
-          >
-            프로젝트 보기
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </a>
-          <a
-            href="/tech"
-            class="min-h-12 inline-flex items-center gap-2 px-5 rounded-full bg-glass-bg border border-glass-border font-semibold text-sm hover:bg-glass-bg-hover transition-colors"
-          >
-            기술 문서 탐색
-          </a>
+      <div class="expanded:col-span-8 p-6 medium:p-8 expanded:p-10 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism flex flex-col justify-center">
+        <!-- Profile: GitHub 아바타 + 이름 + 한 줄 소개 -->
+        <div class="flex items-center gap-4 medium:gap-6">
+          <img
+            src={PROFILE_IMAGE_URL}
+            alt="Hyun-Tak Lee 프로필 사진"
+            width="96"
+            height="96"
+            decoding="async"
+            class="w-16 h-16 medium:w-24 medium:h-24 rounded-full border border-glass-border bg-brand-muted shrink-0 object-cover"
+          />
+          <div class="min-w-0">
+            <h1 class="text-2xl medium:text-3xl font-bold tracking-tight">
+              Hyun-Tak Lee
+            </h1>
+            <p class="mt-1 medium:mt-2 text-sm medium:text-base text-text-muted">
+              진행한 프로젝트와 기술별 사용 이유를 정리해 둔 공간입니다.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -65,15 +71,12 @@ const recentIssues = sortedIssues.slice(0, 5);
           class="p-5 medium:p-6 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism hover:shadow-neumorphism-hover transition-all flex flex-col justify-between group"
         >
           <div class="flex items-center justify-between text-text-muted">
-            <span class="text-xs font-mono uppercase tracking-wider">Projects</span>
+            <span class="text-xs font-mono uppercase tracking-wider">프로젝트</span>
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-brand group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" />
             </svg>
           </div>
-          <div class="mt-4">
-            <div class="text-3xl medium:text-4xl font-black text-brand">{projects.length}</div>
-            <p class="text-xs text-text-muted mt-1">등록된 프로젝트</p>
-          </div>
+          <div class="mt-4 text-3xl medium:text-4xl font-black text-brand">{projects.length}</div>
         </a>
 
         <a
@@ -81,15 +84,12 @@ const recentIssues = sortedIssues.slice(0, 5);
           class="p-5 medium:p-6 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism hover:shadow-neumorphism-hover transition-all flex flex-col justify-between group"
         >
           <div class="flex items-center justify-between text-text-muted">
-            <span class="text-xs font-mono uppercase tracking-wider">Tech Articles</span>
+            <span class="text-xs font-mono uppercase tracking-wider">기술 문서</span>
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-brand group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
           </div>
-          <div class="mt-4">
-            <div class="text-3xl medium:text-4xl font-black text-brand">{techPosts.length}</div>
-            <p class="text-xs text-text-muted mt-1">기술 아티클</p>
-          </div>
+          <div class="mt-4 text-3xl medium:text-4xl font-black text-brand">{techPosts.length}</div>
         </a>
       </div>
     </section>
@@ -97,29 +97,28 @@ const recentIssues = sortedIssues.slice(0, 5);
     <!-- Recent Issues Section with M3 Fixed Tabs (3 items = Equal 3-column Fixed Tabs on Mobile) -->
     <section>
       <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-        <h2 class="text-xl md:text-2xl font-bold flex items-center gap-3">
+        <h2 class="text-xl medium:text-2xl font-bold flex items-center gap-3">
           <span class="w-2 h-7 bg-brand rounded-full shrink-0"></span>
           최근 이슈
         </h2>
-        <span class="text-xs font-mono text-text-muted tracking-wider uppercase">Recent Issues</span>
       </div>
 
-      <!-- Sticky M3 Fixed Tabs (3 Equal Width Tabs on Mobile, Inline Tabs on PC) -->
-      <div class="sticky top-[6.5rem] md:top-16 z-30 -mx-4 px-4 md:mx-0 md:px-0 bg-surface-nav/95 md:bg-transparent backdrop-blur-xl md:backdrop-blur-none border-b border-glass-border mb-6">
+      <!-- Sticky M3 Fixed Tabs (3 Equal Width Tabs on Compact, Inline Tabs on Medium+) -->
+      <div class="sticky top-header z-30 -mx-4 px-4 medium:mx-0 medium:px-0 bg-surface-nav/95 medium:bg-transparent backdrop-blur-xl medium:backdrop-blur-none border-b border-glass-border mb-6">
         <div
           role="tablist"
           aria-label="최근 이슈 분류 필터"
-          class="grid grid-cols-3 md:inline-flex md:w-auto w-full"
+          class="grid grid-cols-3 medium:inline-flex medium:w-auto w-full"
         >
           <button
             type="button"
             role="tab"
             aria-selected="true"
             data-issue-filter="all"
-            class="issue-tab relative min-h-12 px-4 inline-flex items-center justify-center gap-2 text-sm font-bold text-brand transition-colors cursor-pointer"
+            class="issue-tab relative min-h-12 px-2 medium:px-4 whitespace-nowrap inline-flex items-center justify-center gap-2 text-sm font-bold text-brand transition-colors cursor-pointer"
           >
             <span>전체</span>
-            <span class="text-xs font-mono opacity-80">({recentIssues.length})</span>
+            <span class="text-xs font-mono opacity-80">({recentByFilter.all.length})</span>
             <span class="tab-indicator absolute bottom-0 left-3 right-3 h-[3px] rounded-t-full bg-brand"></span>
           </button>
           <button
@@ -127,10 +126,10 @@ const recentIssues = sortedIssues.slice(0, 5);
             role="tab"
             aria-selected="false"
             data-issue-filter="projects"
-            class="issue-tab relative min-h-12 px-4 inline-flex items-center justify-center gap-2 text-sm font-medium text-text-muted hover:text-text-primary transition-colors cursor-pointer"
+            class="issue-tab relative min-h-12 px-2 medium:px-4 whitespace-nowrap inline-flex items-center justify-center gap-2 text-sm font-medium text-text-muted hover:text-text-primary transition-colors cursor-pointer"
           >
-            <span>Projects</span>
-            <span class="text-xs font-mono opacity-80">({recentIssues.filter(i => i.collectionType === "projects").length})</span>
+            <span>프로젝트</span>
+            <span class="text-xs font-mono opacity-80">({recentByFilter.projects.length})</span>
             <span class="tab-indicator absolute bottom-0 left-3 right-3 h-[3px] rounded-t-full bg-brand hidden"></span>
           </button>
           <button
@@ -138,89 +137,88 @@ const recentIssues = sortedIssues.slice(0, 5);
             role="tab"
             aria-selected="false"
             data-issue-filter="tech"
-            class="issue-tab relative min-h-12 px-4 inline-flex items-center justify-center gap-2 text-sm font-medium text-text-muted hover:text-text-primary transition-colors cursor-pointer"
+            class="issue-tab relative min-h-12 px-2 medium:px-4 whitespace-nowrap inline-flex items-center justify-center gap-2 text-sm font-medium text-text-muted hover:text-text-primary transition-colors cursor-pointer"
           >
-            <span>Tech</span>
-            <span class="text-xs font-mono opacity-80">({recentIssues.filter(i => i.collectionType === "tech").length})</span>
+            <span>기술</span>
+            <span class="text-xs font-mono opacity-80">({recentByFilter.tech.length})</span>
             <span class="tab-indicator absolute bottom-0 left-3 right-3 h-[3px] rounded-t-full bg-brand hidden"></span>
           </button>
         </div>
       </div>
       
-      {recentIssues.length === 0 ? (
-        <div class="text-center py-12 px-4 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism text-text-muted">
-          아직 등록된 이슈가 없습니다
-        </div>
-      ) : (
-        <div id="issue-list" class="grid grid-cols-1 expanded:grid-cols-2 gap-4 medium:gap-6">
-          {recentIssues.map((post) => (
-            <a
-              href={`/${post.collectionType}/${post.id}`}
-              data-issue-type={post.collectionType}
-              class="issue-card group relative flex flex-col justify-between p-5 medium:p-6 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism hover:shadow-neumorphism-hover transition-all duration-300 hover:-translate-y-0.5 overflow-hidden"
-            >
-              <div class="space-y-3">
-                <div class="flex items-center justify-between gap-2 flex-wrap">
-                  <div class="flex items-center gap-2">
-                    <span class={`text-xs font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider font-mono ${
-                      post.collectionType === "projects"
-                        ? "bg-brand-muted text-brand border border-brand/20"
-                        : "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20"
-                    }`}>
-                      {post.collectionType === "projects" ? "Project" : "Tech"}
-                    </span>
-                    <span class="text-xs text-text-muted font-medium">
-                      {post.data.category}
-                    </span>
-                  </div>
+      <div
+        id="issue-empty"
+        class:list={[
+          "text-center py-12 px-4 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism text-text-muted",
+          { hidden: recentByFilter.all.length > 0 },
+        ]}
+      >
+        아직 등록된 이슈가 없습니다
+      </div>
 
-                  <time
-                    datetime={post.data.pubDate.toISOString()}
-                    class="text-xs font-mono text-text-muted whitespace-nowrap"
-                  >
-                    {new Date(post.data.pubDate).toLocaleDateString("ko-KR", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </time>
+      <div id="issue-list" class="grid grid-cols-1 expanded:grid-cols-2 gap-4 medium:gap-6">
+        {displayedIssues.map((post) => (
+          <a
+            href={`/${post.collectionType}/${post.id}`}
+            data-issue-filters={issueFilters.get(post)?.join(" ")}
+            class:list={[
+              "issue-card group relative flex flex-col justify-between p-5 medium:p-6 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism hover:shadow-neumorphism-hover transition-all duration-300 hover:-translate-y-0.5 overflow-hidden",
+              { hidden: !issueFilters.get(post)?.includes("all") },
+            ]}
+          >
+            <div class="space-y-3">
+              <div class="flex items-center justify-between gap-2 flex-wrap">
+                <div class="flex items-center gap-2">
+                  <span class={`text-xs font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider font-mono ${
+                    post.collectionType === "projects"
+                      ? "bg-brand-muted text-brand border border-brand/20"
+                      : "bg-accent/10 text-accent border border-accent/20"
+                  }`}>
+                    {post.collectionType === "projects" ? "프로젝트" : "기술"}
+                  </span>
+                  <span class="text-xs text-text-muted font-medium">
+                    {post.data.category}
+                  </span>
                 </div>
-                
-                <h3 class="text-lg medium:text-xl font-bold group-hover:text-brand transition-colors duration-200">
-                  {post.data.title}
-                </h3>
-                
-                {post.data.description && (
-                  <p class="text-sm text-text-muted line-clamp-2 leading-relaxed">
-                    {post.data.description}
-                  </p>
-                )}
+
+                <time
+                  datetime={post.data.pubDate.toISOString()}
+                  class="text-xs font-mono text-text-muted whitespace-nowrap"
+                >
+                  {formatDate(post.data.pubDate)}
+                </time>
               </div>
-
-              {post.data.tags && post.data.tags.length > 0 && (
-                <div class="flex flex-wrap gap-1.5 pt-4 mt-4 border-t border-glass-border">
-                  {post.data.tags.map((tag: string) => (
-                    <span class="text-xs px-2.5 py-0.5 rounded-md bg-brand-soft text-brand/85 border border-brand/10 font-medium">
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
+              
+              <h3 class="text-lg medium:text-xl font-bold group-hover:text-brand transition-colors duration-200">
+                {post.data.title}
+              </h3>
+              
+              {post.data.description && (
+                <p class="text-sm text-text-muted line-clamp-2 leading-relaxed">
+                  {post.data.description}
+                </p>
               )}
-            </a>
-          ))}
-        </div>
-      )}
-    </section>
+            </div>
 
-    <!-- Footer -->
-    <footer class="pt-6 border-t border-glass-border text-center text-text-muted text-xs font-mono tracking-widest">
-      © 2026 HYUN-TAK LEE. BUILT WITH ASTRO
-    </footer>
+            {post.data.tags && post.data.tags.length > 0 && (
+              <div class="flex flex-wrap gap-1.5 pt-4 mt-4 border-t border-glass-border">
+                {post.data.tags.map((tag: string) => (
+                  <span class="text-xs px-2.5 py-0.5 rounded-md bg-brand-soft text-brand/85 border border-brand/10 font-medium">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
+          </a>
+        ))}
+      </div>
+    </section>
   </div>
 
   <script>
     const tabs = document.querySelectorAll<HTMLButtonElement>(".issue-tab");
     const cards = document.querySelectorAll<HTMLElement>(".issue-card");
+    const emptyState = document.getElementById("issue-empty");
 
     tabs.forEach((tab) => {
       tab.addEventListener("click", () => {
@@ -236,10 +234,13 @@ const recentIssues = sortedIssues.slice(0, 5);
           t.querySelector(".tab-indicator")?.classList.toggle("hidden", !isSelected);
         });
 
+        let visibleCount = 0;
         cards.forEach((card) => {
-          const match = filter === "all" || card.dataset.issueType === filter;
+          const match = card.dataset.issueFilters?.split(" ").includes(filter) ?? false;
           card.classList.toggle("hidden", !match);
+          if (match) visibleCount++;
         });
+        emptyState?.classList.toggle("hidden", visibleCount > 0);
       });
     });
   </script>

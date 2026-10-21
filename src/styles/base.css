@@ -1,21 +1,15 @@
 @layer base {
   :root {
     color-scheme: light dark;
+
+    /* 단일 행(4rem) + 하단 테두리 1px */
+    @variant expanded {
+      --spacing-header: calc(4rem + 1px);
+    }
   }
 
   html {
-    font-family:
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      Oxygen,
-      Ubuntu,
-      Cantarell,
-      "Open Sans",
-      "Helvetica Neue",
-      sans-serif;
+    font-family: var(--font-sans);
     font-size: 100%;
     line-height: 1.6;
     background-color: var(--color-background);
@@ -32,6 +26,8 @@
     min-height: 100dvh;
     overflow-x: clip;
     overflow-wrap: break-word;
+    /* 한글 어절 단위 줄바꿈 (끊을 곳 없는 긴 문자열은 overflow-wrap이 처리) */
+    word-break: keep-all;
   }
 
   img,
@@ -68,26 +64,6 @@
 
     &:hover {
       background: var(--color-scrollbar-thumb-hover);
-    }
-  }
-
-  .prose {
-    --tw-prose-body: var(--color-text-primary);
-    --tw-prose-headings: var(--color-text-primary);
-    --tw-prose-bold: var(--color-text-primary);
-    --tw-prose-links: var(--color-brand);
-    --tw-prose-quotes: var(--color-text-muted);
-    --tw-prose-counters: var(--color-text-muted);
-    --tw-prose-bullets: var(--color-text-muted);
-    --tw-prose-code: var(--color-text-primary);
-    --tw-prose-hr: var(--color-glass-border);
-  }
-
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    &::-webkit-scrollbar {
-      display: none;
     }
   }
 }

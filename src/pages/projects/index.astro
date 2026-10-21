@@ -1,31 +1,33 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { formatDate } from "../../utils/date";
 
 const projects = await getCollection("projects");
 const sortedProjects = projects.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 // Group by category
-const categories = [...new Set(projects.map(p => p.data.category))];
+const postsByCategory = Object.groupBy(sortedProjects, (post) => post.data.category);
+const categories = Object.keys(postsByCategory);
 ---
 
 <BaseLayout 
-  title="Projects | Hyun-Tak Lee" 
+  title="프로젝트 | Hyun-Tak Lee" 
   description="수행한 웹 애플리케이션 및 시스템 인프라 구축 프로젝트 포트폴리오를 소개하고 핵심 기여 사항을 정리한 페이지입니다."
 >
   <div class="space-y-8 medium:space-y-12">
     <header class="p-6 medium:p-8 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism flex flex-col medium:flex-row medium:items-end justify-between gap-4">
       <div>
-        <span class="text-xs font-mono font-bold uppercase tracking-wider text-brand">Portfolio</span>
+        <span class="text-xs font-mono font-bold uppercase tracking-wider text-brand">포트폴리오</span>
         <h1 class="text-3xl medium:text-4xl expanded:text-5xl font-extrabold tracking-tight mt-1">
-          Projects
+          프로젝트
         </h1>
         <p class="text-sm medium:text-base text-text-muted mt-2">
           수행한 웹 애플리케이션 및 시스템 인프라 구축 프로젝트
         </p>
       </div>
       <div class="text-xs font-mono text-text-muted">
-        Total <strong class="text-brand font-bold">{projects.length}</strong> projects
+        총 <strong class="text-brand font-bold">{projects.length}</strong>개 프로젝트
       </div>
     </header>
 
@@ -36,7 +38,7 @@ const categories = [...new Set(projects.map(p => p.data.category))];
     ) : (
       <div>
         <!-- M3 Sticky Scrollable Category Tabs (Right-edge Fade Affordance + Auto-Center on Tap) -->
-        <div class="sticky top-[6.5rem] md:top-16 z-30 -mx-4 px-4 md:mx-0 md:px-0 bg-surface-nav/95 backdrop-blur-xl border-b border-glass-border mb-8 relative">
+        <div class="sticky top-header z-30 -mx-4 px-4 medium:mx-0 medium:px-0 bg-surface-nav/95 backdrop-blur-xl border-b border-glass-border mb-8 relative">
           <div
             role="tablist"
             aria-label="프로젝트 카테고리 필터"
@@ -63,7 +65,7 @@ const categories = [...new Set(projects.map(p => p.data.category))];
               >
                 <span>{category}</span>
                 <span class="text-xs font-mono opacity-80">
-                  ({sortedProjects.filter((p) => p.data.category === category).length})
+                  ({postsByCategory[category]?.length ?? 0})
                 </span>
                 <span class="tab-indicator absolute bottom-0 left-3 right-3 h-[3px] rounded-t-full bg-brand hidden"></span>
               </button>
@@ -71,7 +73,7 @@ const categories = [...new Set(projects.map(p => p.data.category))];
           </div>
           <!-- Right-edge Gradient Affordance hinting horizontal swipe -->
           <div
-            class="pointer-events-none absolute right-0 top-0 bottom-0 w-12 bg-linear-to-l from-base-bg-end to-transparent md:hidden"
+            class="pointer-events-none absolute right-0 top-0 bottom-0 w-12 bg-linear-to-l from-base-bg-end to-transparent medium:hidden"
             aria-hidden="true"
           ></div>
         </div>
@@ -83,39 +85,38 @@ const categories = [...new Set(projects.map(p => p.data.category))];
                 {category}
               </h2>
               <div class="grid grid-cols-1 expanded:grid-cols-2 gap-4 medium:gap-6">
-                {sortedProjects
-                  .filter(p => p.data.category === category)
-                  .map(project => (
-                    <a 
-                      href={`/projects/${project.id}`}
-                      class="group flex flex-col justify-between p-5 medium:p-6 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism hover:shadow-neumorphism-hover transition-all duration-300"
-                    >
-                      <div>
-                        <div class="flex items-center justify-between gap-2 mb-2">
-                          <span class="text-xs font-mono text-brand font-semibold">{project.data.category}</span>
-                          <time datetime={project.data.pubDate.toISOString()} class="text-xs text-text-muted font-mono">
-                            {new Date(project.data.pubDate).toLocaleDateString('ko-KR')}
-                          </time>
-                        </div>
-                        <h3 class="text-lg medium:text-xl font-bold mb-2 group-hover:text-brand transition-colors">
-                          {project.data.title}
-                        </h3>
+                {postsByCategory[category]?.map(project => (
+                  <a 
+                    href={`/projects/${project.id}`}
+                    class="group flex flex-col justify-between p-5 medium:p-6 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism hover:shadow-neumorphism-hover transition-all duration-300"
+                  >
+                    <div>
+                      <div class="flex items-center justify-between gap-2 mb-2">
+                        <span class="text-xs font-mono text-brand font-semibold">{project.data.category}</span>
+                        <time datetime={project.data.pubDate.toISOString()} class="text-xs text-text-muted font-mono">
+                          {formatDate(project.data.pubDate)}
+                        </time>
+                      </div>
+                      <h3 class="text-lg medium:text-xl font-bold mb-2 group-hover:text-brand transition-colors">
+                        {project.data.title}
+                      </h3>
+                      {project.data.description && (
                         <p class="text-sm text-text-muted mb-4 line-clamp-2 leading-relaxed">
                           {project.data.description}
                         </p>
-                      </div>
-                      {project.data.tags && project.data.tags.length > 0 && (
-                        <div class="flex flex-wrap gap-2 pt-3 border-t border-glass-border">
-                          {project.data.tags.map(tag => (
-                            <span class="text-xs px-2.5 py-0.5 rounded-md bg-brand-muted text-brand font-medium">
-                              #{tag}
-                            </span>
-                          ))}
-                        </div>
                       )}
-                    </a>
-                  ))
-                }
+                    </div>
+                    {project.data.tags && project.data.tags.length > 0 && (
+                      <div class="flex flex-wrap gap-2 pt-3 border-t border-glass-border">
+                        {project.data.tags.map(tag => (
+                          <span class="text-xs px-2.5 py-0.5 rounded-md bg-brand-muted text-brand font-medium">
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </a>
+                ))}
               </div>
             </section>
           ))}

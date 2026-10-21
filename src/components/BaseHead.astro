@@ -8,7 +8,7 @@ interface Props {
 
 const {
   title,
-  description = "Hyun-Tak Lee's personal website containing tech articles and projects.",
+  description = "Hyun-Tak Lee의 기술 문서와 프로젝트를 정리한 개인 웹사이트입니다.",
   image = "/favicon.svg",
   type = "website",
 } = Astro.props;
@@ -21,6 +21,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <meta name="generator" content={Astro.generator} />
+
+<!-- Web Font: Google Sans Flex(영문) + Noto Sans KR(한글), Google Fonts CDN (가변 굵기 400~900, 글자 범위별 분할 로드) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400..900&family=Noto+Sans+KR:wght@400..900&display=swap"
+/>
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />

@@ -1,0 +1,59 @@
+/*
+ * Typography 플러그인 색상 테마 (prose-brand)
+ *
+ * 마크다운 본문 스타일 적용 흐름
+ * ① Preflight   : Tailwind 기본 리셋으로 h2, ul, strong 등의 기본 스타일 초기화 (크기·굵기는 부모 값 상속)
+ * ② prose       : @tailwindcss/typography 플러그인이 `.prose` 하위 태그(h2, ul, code 등)에 크기·굵기·간격·색 규칙 적용
+ *                 단, 색은 직접 지정하지 않고 `--tw-prose-*` 변수로 비워둠 (예: h2 { color: var(--tw-prose-headings) })
+ * ③ prose-brand : ②의 규칙은 수정하지 않고, 비워둔 `--tw-prose-*` 변수에 사이트 시멘틱 토큰 값만 채움
+ *                 → 크기·굵기·간격은 prose 그대로, 색상만 플러그인 기본 회색 대신 사이트 색상으로 대체
+ *
+ * 사용 규칙
+ * - prose-brand는 변수만 정의하므로 단독으로는 화면 변화 없음 → 반드시 `prose`와 함께 사용
+ *   예: <article class="prose prose-brand">
+ * - 색상 변경: 이 파일의 변수 값 수정
+ * - 크기·간격 등 구조 변경: <article>에 prose 요소 수정자 클래스 추가 (예: prose-h2:text-3xl, prose-h2:mt-12)
+ *
+ * 구현 근거
+ * - @utility로 정의해야 플러그인 규칙과 같은 utilities 레이어에서 플러그인 기본 색상보다 우선 적용됨
+ *   (@layer base에 두면 레이어 순서 base < utilities에 따라 플러그인 기본 색상에 덮어씌워짐)
+ * - light-dark() 기반 토큰을 참조하므로 dark:prose-invert 없이 다크 모드 자동 대응
+ */
+@utility prose-brand {
+  /* 텍스트 */
+  --tw-prose-body: var(--color-text-primary); /* 본문 기본 글자 (p, li 등) */
+  --tw-prose-headings: var(--color-text-primary); /* h1~h4, 표 헤더(th) */
+  --tw-prose-lead: var(--color-text-muted); /* 도입 문단 (.lead) */
+  --tw-prose-links: var(--color-brand); /* 링크 (a) */
+  --tw-prose-bold: var(--color-text-primary); /* 굵은 글자 (strong) */
+  --tw-prose-captions: var(--color-text-muted); /* 이미지·표 캡션 (figcaption) */
+
+  /* 목록 */
+  --tw-prose-counters: var(--color-text-muted); /* 번호 목록 숫자 (ol) */
+  --tw-prose-bullets: var(--color-text-muted); /* 글머리 기호 (ul) */
+
+  /* 인용문·구분선 */
+  --tw-prose-quotes: var(--color-text-muted); /* 인용문 글자 (blockquote) */
+  --tw-prose-quote-borders: var(--color-brand); /* 인용문 왼쪽 테두리 */
+  --tw-prose-hr: var(--color-glass-border); /* 구분선 (hr) */
+
+  /* 코드·키보드 */
+  --tw-prose-code: var(--color-text-primary); /* 인라인 코드 (`code`) */
+  --tw-prose-pre-code: var(--color-on-surface-code); /* 코드 블록 글자 (Shiki 하이라이팅 적용 시 Shiki 테마 색 우선) */
+  --tw-prose-pre-bg: var(--color-surface-code); /* 코드 블록 배경 (Shiki 하이라이팅 적용 시 Shiki 테마 색 우선) */
+  --tw-prose-kbd: var(--color-text-primary); /* 키보드 입력 표기 (kbd) */
+  --tw-prose-kbd-shadows: color-mix(in srgb, var(--color-text-primary) 10%, transparent); /* kbd 테두리 그림자 */
+
+  /* 표 */
+  --tw-prose-th-borders: var(--color-glass-border); /* 표 헤더 테두리 */
+  --tw-prose-td-borders: var(--color-glass-border); /* 표 셀 테두리 */
+}
+
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

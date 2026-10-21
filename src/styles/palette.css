@@ -1,0 +1,42 @@
+/*
+ * Raw Color Palette
+ * - 유틸리티 클래스를 생성하지 않는 원시 색상 값 정의
+ * - 컴포넌트에서 직접 참조하지 않고 theme.css 시멘틱 토큰을 통해서만 사용
+ */
+:root {
+  /* Neutral */
+  --palette-white: #ffffff;
+  --palette-black: #000000;
+  --palette-gray-100: #e0e0e0;
+  --palette-gray-200: #d0d0d0;
+  --palette-gray-600: #666666;
+  --palette-gray-700: #4a4a4a;
+  --palette-gray-800: #333333;
+  --palette-gray-850: #2a2a2a;
+  --palette-gray-900: #1a1a1a;
+  --palette-gray-950: #151515;
+
+  /* Slate */
+  --palette-slate-700: #252b33;
+  --palette-slate-800: #1e2024;
+  --palette-slate-850: #16181c;
+  --palette-slate-900: #0d1014;
+  --palette-slate-950: #020618;
+
+  /* Blue */
+  --palette-blue-25: #f9fcfe;
+  --palette-blue-50: #f3f8fe;
+  --palette-blue-100: #e9f4fd;
+  --palette-blue-150: #e6f3ff;
+  --palette-blue-300: #8ab4f8;
+  --palette-blue-400: #5195ee;
+  --palette-blue-600: #1a73e8;
+  --palette-blue-700: #1662c1;
+  --palette-blue-900: #1a3a5f;
+
+  /* Cyan */
+  --palette-cyan-50: #dbf9ff;
+
+  /* Emerald */
+  --palette-emerald-500: oklch(69.6% 0.17 162.48);
+}

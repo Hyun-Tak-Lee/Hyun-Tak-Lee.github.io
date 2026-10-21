@@ -1,5 +1,6 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 
 const postSchema = z.object({
   category: z.string(),
@@ -10,7 +11,7 @@ const postSchema = z.object({
   author: z.string().default("Hyun-Tak Lee"),
   tags: z.array(z.string()).optional(),
   image: z.object({
-    url: z.string().url(),
+    url: z.url(),
     alt: z.string()
   }).optional(),
 });
