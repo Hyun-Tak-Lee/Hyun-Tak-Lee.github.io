@@ -4,7 +4,6 @@ pubDate: 2026-04-02
 category: "Frontend"
 sub_category: ["Framework", "Architecture"]
 description: "Zero JS 사전 렌더링, 정적 HTML 배포, 부분 하이드레이션 및 검색 엔진 최적화 중심의 Astro 도입 배경"
-author: "Hyun-Tak Lee"
 tags: ["Astro", "SSG", "SEO", "Performance"]
 ---
 

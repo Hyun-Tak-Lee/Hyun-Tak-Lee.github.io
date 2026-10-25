@@ -6,7 +6,6 @@ export interface RepoInspectorItem {
   category: string;
   sub_category?: string[];
   pubDate: Date;
-  author: string;
   tags?: string[];
   headings: Array<{ depth: number; slug: string; text: string }>;
 }
@@ -59,10 +58,6 @@ const processedItems = items.map((item) => ({
                   <span class="font-medium text-text-primary">{item.sub_category.join(", ")}</span>
                 </div>
               )}
-              <div class="flex justify-between items-center text-text-muted">
-                <span>작성자</span>
-                <span class="font-medium text-text-primary">{item.author}</span>
-              </div>
               <div class="flex justify-between items-center text-text-muted">
                 <span>발행일</span>
                 <time datetime={item.pubDate.toISOString()} class="font-mono text-text-primary">

@@ -60,14 +60,11 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
             </p>
           )
         }
-        <div
-          class="flex flex-wrap items-center text-xs medium:text-sm text-text-muted font-mono gap-x-4 gap-y-2">
-          <time datetime={post.data.pubDate.toISOString()}>
-            {formatDate(post.data.pubDate)}
-          </time>
-          <span>•</span>
-          <span>작성자 {post.data.author}</span>
-        </div>
+        <time
+          datetime={post.data.pubDate.toISOString()}
+          class="block text-xs medium:text-sm text-text-muted font-mono">
+          {formatDate(post.data.pubDate)}
+        </time>
       </header>
 
       <!-- Mobile / Tablet Collapsible TOC (Hidden on Expanded PC where sticky sidebar is shown) -->
