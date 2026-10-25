@@ -3,6 +3,7 @@ import RepoFileTree from "./RepoFileTree.astro";
 import RepoInspector from "./RepoInspector.astro";
 import SidebarToggleIcon from "../icons/SidebarToggleIcon.astro";
 import FileCodeIcon from "../icons/FileCodeIcon.astro";
+import ExpandIcon from "../icons/ExpandIcon.astro";
 import { formatDate } from "../../utils/date";
 
 export interface WorkspaceItem {
@@ -50,13 +51,13 @@ const defaultActiveId = items.length > 0 ? items[0].id : "";
       </p>
     </div>
 
-    <!-- 모바일 탐색기 토글 버튼 & 전체 수량 -->
+    <!-- 탐색기 드로어 토글 버튼(compact·medium) & 전체 수량 -->
     <div class="flex items-center gap-3">
       <button
         type="button"
         id="mobile-drawer-toggle"
         aria-label="파일 탐색기 열기"
-        class="medium:hidden min-h-12 px-4 rounded-2xl bg-brand-soft border border-brand/30 text-brand font-bold text-xs flex items-center gap-2 hover:bg-brand-muted transition-colors cursor-pointer">
+        class="expanded:hidden min-h-12 px-4 rounded-2xl bg-brand-soft border border-brand/30 text-brand font-bold text-xs flex items-center gap-2 hover:bg-brand-muted transition-colors cursor-pointer">
         <SidebarToggleIcon class="w-4 h-4" />
         <span>파일 탐색기</span>
       </button>
@@ -79,15 +80,15 @@ const defaultActiveId = items.length > 0 ? items[0].id : "";
   {
     items.length > 0 && (
       <div
-        class="grid grid-cols-1 medium:grid-cols-12 gap-6 items-start relative"
+        class="grid grid-cols-1 expanded:grid-cols-12 gap-6 items-start relative"
         id="repo-workspace">
-        <div class="hidden medium:block medium:col-span-4 expanded:col-span-3 sticky top-[calc(var(--spacing-header)+1rem)] h-[calc(100dvh-var(--spacing-header)-3rem)]">
+        <div class="hidden expanded:block expanded:col-span-4 large:col-span-3 sticky top-[calc(var(--spacing-header)+1rem)] h-[calc(100dvh-var(--spacing-header)-3rem)]">
           <RepoFileTree items={items} activeId={defaultActiveId} collectionName={collectionName} />
         </div>
 
         <div
           id="mobile-drawer-backdrop"
-          class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs transition-opacity opacity-0 pointer-events-none medium:hidden"
+          class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs transition-opacity opacity-0 pointer-events-none expanded:hidden"
           aria-hidden="true">
           <div
             id="mobile-drawer-content"
@@ -120,7 +121,7 @@ const defaultActiveId = items.length > 0 ? items[0].id : "";
           </div>
         </div>
 
-        <div class="col-span-12 medium:col-span-8 expanded:col-span-6 flex flex-col gap-4">
+        <div class="col-span-12 expanded:col-span-8 large:col-span-6 flex flex-col gap-4">
           <div class="p-3.5 rounded-2xl bg-surface-container border border-glass-border shadow-neumorphism flex items-center justify-between gap-2 overflow-x-auto">
             <div class="flex items-center gap-2 min-w-0">
               <FileCodeIcon class="w-4 h-4 text-brand shrink-0" />
@@ -152,6 +153,7 @@ const defaultActiveId = items.length > 0 ? items[0].id : "";
             {items.map((item) => {
               const isActive = item.id === defaultActiveId;
               const ItemContent = item.Content;
+              const toc = item.headings.filter((h) => h.depth === 2 || h.depth === 3);
 
               return (
                 <article
@@ -159,14 +161,23 @@ const defaultActiveId = items.length > 0 ? items[0].id : "";
                   data-category={item.category}
                   class:list={["space-y-6", !isActive && "hidden"]}>
                   <header class="pb-6 border-b border-glass-border space-y-3">
-                    <div class="text-xs font-mono tracking-widest text-brand uppercase flex flex-wrap items-center gap-2">
-                      <span>{item.category}</span>
-                      {item.sub_category?.map((sub) => (
-                        <span class="flex items-center gap-2 text-text-muted">
-                          <span>•</span>
-                          <span>{sub}</span>
-                        </span>
-                      ))}
+                    <div class="flex items-center justify-between gap-2 -mt-3 -mr-3">
+                      <div class="text-xs font-mono tracking-widest text-brand uppercase flex flex-wrap items-center gap-2">
+                        <span>{item.category}</span>
+                        {item.sub_category?.map((sub) => (
+                          <span class="flex items-center gap-2 text-text-muted">
+                            <span>•</span>
+                            <span>{sub}</span>
+                          </span>
+                        ))}
+                      </div>
+                      <a
+                        href={`/${collectionName}/${item.id}`}
+                        aria-label={`${item.title} 전체 화면으로 보기`}
+                        title="전체 화면으로 보기"
+                        class="shrink-0 min-h-12 min-w-12 inline-flex items-center justify-center rounded-full text-text-muted hover:text-brand hover:bg-glass-bg-hover transition-colors">
+                        <ExpandIcon class="w-5 h-5" />
+                      </a>
                     </div>
 
                     <h2 class="text-2xl medium:text-3xl font-extrabold tracking-tight leading-snug">
@@ -183,13 +194,37 @@ const defaultActiveId = items.length > 0 ? items[0].id : "";
                       <time datetime={item.pubDate.toISOString()}>{formatDate(item.pubDate)}</time>
                       <span>•</span>
                       <span>작성자 {item.author}</span>
-                      <a
-                        href={`/${collectionName}/${item.id}`}
-                        aria-label={`${item.title} 전체 화면으로 보기`}
-                        class="ml-auto min-h-12 inline-flex items-center px-4 rounded-2xl bg-brand-soft border border-brand/30 text-brand font-bold font-sans hover:bg-brand-muted transition-colors">
-                        전체 화면으로 보기
-                      </a>
                     </div>
+
+                    <!-- 인스펙터가 숨겨지는 large 미만에서 태그·목차를 본문 헤더에 표시 -->
+                    {item.tags && item.tags.length > 0 && (
+                      <div class="large:hidden flex flex-wrap gap-1.5 pt-1">
+                        {item.tags.map((tag) => (
+                          <span class="px-2.5 py-1 rounded-xl bg-glass-bg border border-glass-border text-xs text-text-primary font-mono">
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    {toc.length > 0 && (
+                      <details class="large:hidden px-4 rounded-2xl bg-glass-bg border border-glass-border">
+                        <summary class="min-h-12 flex items-center text-sm font-bold text-brand cursor-pointer select-none">
+                          목차
+                        </summary>
+                        <ul class="pb-2 text-sm border-t border-glass-border">
+                          {toc.map((heading) => (
+                            <li class={heading.depth === 3 ? "pl-4" : ""}>
+                              <a
+                                href={`#${heading.slug}`}
+                                class="min-h-12 flex items-center text-text-muted hover:text-brand transition-colors">
+                                {heading.text}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </details>
+                    )}
                   </header>
 
                   <div class="prose prose-brand prose-base max-w-none prose-headings:font-bold prose-headings:scroll-mt-[calc(var(--spacing-header)+1rem)] prose-a:text-brand hover:prose-a:underline prose-img:rounded-2xl prose-pre:overflow-x-auto text-text-primary">
@@ -201,7 +236,7 @@ const defaultActiveId = items.length > 0 ? items[0].id : "";
           </main>
         </div>
 
-        <div class="hidden expanded:block expanded:col-span-3 sticky top-[calc(var(--spacing-header)+1rem)] h-[calc(100dvh-var(--spacing-header)-3rem)]">
+        <div class="hidden large:block large:col-span-3 sticky top-[calc(var(--spacing-header)+1rem)] h-[calc(100dvh-var(--spacing-header)-3rem)]">
           <RepoInspector
             items={items}
             activeId={defaultActiveId}

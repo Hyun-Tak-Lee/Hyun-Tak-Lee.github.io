@@ -4,10 +4,11 @@
  * - 색상은 palette.css 원시 색상만 참조하고 light-dark()로 라이트/다크 모드를 분기
  */
 @theme {
-  /* Material Design 3 Window Size Classes: compact(< medium) / medium / expanded */
+  /* Material Design 3 Window Size Classes: compact(< medium) / medium / expanded / large */
   --breakpoint-*: initial;
-  --breakpoint-medium: 37.5rem;
-  --breakpoint-expanded: 52.5rem;
+  --breakpoint-medium: 37.5rem; /* 600px */
+  --breakpoint-expanded: 52.5rem; /* 840px */
+  --breakpoint-large: 75rem; /* 1200px */
 
   /* Typography: Google Sans Flex(영문·숫자) + Noto Sans KR(한글) — Google 제품 한국어 화면과 동일한 조합 */
   --font-sans:
