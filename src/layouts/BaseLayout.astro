@@ -18,15 +18,17 @@ const currentYear = new Date().getFullYear();
   <head>
     <BaseHead title={title} description={description} image={image} type={type} />
   </head>
-  <body class="min-h-dvh flex flex-col bg-linear-to-r from-base-bg-start via-base-bg-mid to-base-bg-end">
+  <body
+    class="min-h-dvh flex flex-col bg-linear-to-r from-base-bg-start via-base-bg-mid to-base-bg-end">
     <Header currentPath={Astro.url.pathname} />
     <main class="pt-header flex-1 flex flex-col">
-      <div class="w-full max-w-6xl mx-auto px-4 medium:px-8 pt-6 medium:pt-10 flex-1 flex flex-col">
+      <div class="w-full max-w-page mx-auto px-4 medium:px-8 pt-6 medium:pt-10 flex-1 flex flex-col">
         <slot />
       </div>
     </main>
-    <footer class="w-full max-w-6xl mx-auto px-4 medium:px-8 pb-6 medium:pb-10">
-      <p class="mt-10 expanded:mt-14 pt-6 border-t border-glass-border text-center text-text-muted text-xs font-mono tracking-widest">
+    <footer class="w-full max-w-page mx-auto px-4 medium:px-8 pb-6 medium:pb-10">
+      <p
+        class="mt-10 expanded:mt-14 pt-6 border-t border-glass-border text-center text-text-muted text-xs font-mono tracking-widest">
         © {currentYear} Hyun-Tak Lee. Astro로 제작되었습니다.
       </p>
     </footer>
