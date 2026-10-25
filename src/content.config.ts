@@ -8,7 +8,6 @@ const postSchema = z.object({
   title: z.string(),
   pubDate: z.date(),
   description: z.string().optional(),
-  author: z.string().default("Hyun-Tak Lee"),
   tags: z.array(z.string()).optional(),
   image: z.object({
     url: z.url(),

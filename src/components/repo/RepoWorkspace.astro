@@ -12,7 +12,6 @@ export interface WorkspaceItem {
   category: string;
   sub_category?: string[];
   pubDate: Date;
-  author: string;
   description?: string;
   tags?: string[];
   headings: Array<{ depth: number; slug: string; text: string }>;
@@ -161,7 +160,8 @@ const defaultActiveId = items.length > 0 ? items[0].id : "";
                   data-category={item.category}
                   class:list={["space-y-6", !isActive && "hidden"]}>
                   <header class="pb-6 border-b border-glass-border space-y-3">
-                    <div class="flex items-center justify-between gap-2 -mt-3 -mr-3">
+                    <!-- 단일 컬럼(expanded 미만)에서는 전체 화면과 차이가 없어 확장 버튼 숨김 -->
+                    <div class="flex items-center justify-between gap-2 expanded:-mt-3 expanded:-mr-3">
                       <div class="text-xs font-mono tracking-widest text-brand uppercase flex flex-wrap items-center gap-2">
                         <span>{item.category}</span>
                         {item.sub_category?.map((sub) => (
@@ -175,7 +175,7 @@ const defaultActiveId = items.length > 0 ? items[0].id : "";
                         href={`/${collectionName}/${item.id}`}
                         aria-label={`${item.title} 전체 화면으로 보기`}
                         title="전체 화면으로 보기"
-                        class="shrink-0 min-h-12 min-w-12 inline-flex items-center justify-center rounded-full text-text-muted hover:text-brand hover:bg-glass-bg-hover transition-colors">
+                        class="hidden expanded:inline-flex shrink-0 min-h-12 min-w-12 items-center justify-center rounded-full text-text-muted hover:text-brand hover:bg-glass-bg-hover transition-colors">
                         <ExpandIcon class="w-5 h-5" />
                       </a>
                     </div>
@@ -190,11 +190,11 @@ const defaultActiveId = items.length > 0 ? items[0].id : "";
                       </p>
                     )}
 
-                    <div class="flex flex-wrap items-center text-xs text-text-muted font-mono gap-x-4 gap-y-1.5 pt-1">
-                      <time datetime={item.pubDate.toISOString()}>{formatDate(item.pubDate)}</time>
-                      <span>•</span>
-                      <span>작성자 {item.author}</span>
-                    </div>
+                    <time
+                      datetime={item.pubDate.toISOString()}
+                      class="block text-xs text-text-muted font-mono pt-1">
+                      {formatDate(item.pubDate)}
+                    </time>
 
                     <!-- 인스펙터가 숨겨지는 large 미만에서 태그·목차를 본문 헤더에 표시 -->
                     {item.tags && item.tags.length > 0 && (
