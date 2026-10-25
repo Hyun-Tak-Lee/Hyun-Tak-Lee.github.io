@@ -3,12 +3,10 @@ import { formatDate } from "../../utils/date";
 
 export interface RepoInspectorItem {
   id: string;
-  title: string;
   category: string;
   sub_category?: string[];
   pubDate: Date;
   author: string;
-  description?: string;
   tags?: string[];
   headings: Array<{ depth: number; slug: string; text: string }>;
 }
@@ -36,7 +34,7 @@ const processedItems = items.map((item) => ({
     <span class="text-xs font-mono font-bold uppercase tracking-wider text-brand">인스펙터 (속성)</span>
   </div>
 
-  <div class="flex-1 overflow-y-auto p-4 space-y-6 custom-scrollbar">
+  <div class="flex-1 overflow-y-auto p-4 space-y-6">
     {processedItems.map((item) => {
       const isActive = item.id === activeId;
 
@@ -120,11 +118,5 @@ const processedItems = items.map((item) => ({
         </div>
       );
     })}
-
-    {items.length === 0 && (
-      <div class="p-6 text-center text-xs text-text-muted">
-        선택된 문서가 없습니다.
-      </div>
-    )}
   </div>
 </aside>

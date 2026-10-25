@@ -8,7 +8,6 @@ export interface RepoTreeItem {
   title: string;
   category: string;
   sub_category?: string[];
-  pubDate: Date;
   tags?: string[];
 }
 
@@ -22,9 +21,8 @@ const { items, activeId, collectionName } = Astro.props;
 
 // 카테고리별 그룹화
 const grouped = items.reduce<Record<string, RepoTreeItem[]>>((acc, item) => {
-  const cat = item.category || "일반";
-  if (!acc[cat]) acc[cat] = [];
-  acc[cat].push(item);
+  if (!acc[item.category]) acc[item.category] = [];
+  acc[item.category].push(item);
   return acc;
 }, {});
 
@@ -56,8 +54,8 @@ const categories = Object.keys(grouped).sort();
       />
       <input
         type="search"
-        id="repo-search-input"
-        placeholder="문서명, 태그 검색..."
+        data-repo-search
+        placeholder="문서명, 분류, 태그 검색..."
         aria-label="저장소 파일 실시간 검색"
         class="w-full min-h-12 pl-10 pr-4 rounded-2xl bg-glass-bg border border-glass-border text-xs medium:text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all"
       />
@@ -65,73 +63,65 @@ const categories = Object.keys(grouped).sort();
   </div>
 
   <!-- 계층 트리 목록 -->
-  <div class="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar" id="repo-tree-container">
+  <div class="flex-1 overflow-y-auto p-3 space-y-3">
     {
-      categories.length === 0 ? (
-        <div class="p-6 text-center text-xs text-text-muted">표시할 파일이 없습니다.</div>
-      ) : (
-        categories.map((category) => {
-          const catItems = grouped[category];
-          return (
-            <details open class="group/folder mb-2">
-              <summary class="min-h-12 flex items-center justify-between px-3 py-2 rounded-2xl hover:bg-glass-bg cursor-pointer text-xs font-bold text-text-muted hover:text-text-primary uppercase tracking-wider transition-colors list-none">
-                <div class="flex items-center gap-2 min-w-0">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-3.5 h-3.5 text-text-muted group-open/folder:rotate-90 transition-transform shrink-0"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2.5"
-                    aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                  </svg>
-                  <FolderIcon class="w-4 h-4 text-brand shrink-0" />
-                  <span class="truncate">{category}</span>
-                </div>
-                <span class="text-[11px] font-mono text-text-muted font-normal ml-2">
-                  {catItems.length}
-                </span>
-              </summary>
+      categories.map((category) => {
+        const catItems = grouped[category];
+        return (
+          <details open data-tree-folder class="group/folder mb-2">
+            <summary class="min-h-12 flex items-center justify-between px-3 py-2 rounded-2xl hover:bg-glass-bg cursor-pointer text-xs font-bold text-text-muted hover:text-text-primary uppercase tracking-wider transition-colors list-none">
+              <div class="flex items-center gap-2 min-w-0">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-3.5 h-3.5 text-text-muted group-open/folder:rotate-90 transition-transform shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+                <FolderIcon class="w-4 h-4 text-brand shrink-0" />
+                <span class="truncate">{category}</span>
+              </div>
+              <span data-folder-count class="text-[11px] font-mono text-text-muted font-normal ml-2">
+                {catItems.length}
+              </span>
+            </summary>
 
-              <ul class="pl-4 mt-1 border-l border-glass-border space-y-1">
-                {catItems.map((item) => {
-                  const isActive = item.id === activeId;
-                  const searchCorpus =
-                    `${item.title} ${item.tags?.join(" ") ?? ""} ${item.category}`.toLowerCase();
-                  return (
-                    <li data-tree-item data-file-id={item.id} data-search-text={searchCorpus}>
-                      <button
-                        type="button"
-                        data-repo-file-btn={item.id}
-                        aria-current={isActive ? "true" : "false"}
-                        class:list={[
-                          "w-full min-h-12 px-3 py-2 rounded-2xl flex items-center justify-between text-left transition-all duration-150 cursor-pointer group text-xs medium:text-sm",
-                          isActive
-                            ? "bg-brand-soft text-brand font-bold border border-brand/35 shadow-xs"
-                            : "text-text-muted hover:text-text-primary hover:bg-glass-bg border border-transparent",
-                        ]}>
-                        <div class="flex items-center gap-2 min-w-0">
-                          <FileCodeIcon
-                            class:list={[
-                              "w-4 h-4 shrink-0 transition-colors",
-                              isActive
-                                ? "text-brand"
-                                : "text-text-muted group-hover:text-text-primary",
-                            ]}
-                          />
-                          <span class="truncate">{item.title}</span>
-                        </div>
-                        <span class="text-[10px] font-mono text-text-muted ml-2 shrink-0">.md</span>
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            </details>
-          );
-        })
-      )
+            <ul class="pl-4 mt-1 border-l border-glass-border space-y-1">
+              {catItems.map((item) => {
+                const searchCorpus = [
+                  item.title,
+                  item.category,
+                  ...(item.sub_category ?? []),
+                  ...(item.tags ?? []),
+                ]
+                  .join(" ")
+                  .toLowerCase();
+                return (
+                  <li data-tree-item data-search-text={searchCorpus}>
+                    <button
+                      type="button"
+                      data-repo-file-btn={item.id}
+                      aria-current={item.id === activeId ? "true" : "false"}
+                      class="w-full min-h-12 px-3 py-2 rounded-2xl flex items-center justify-between text-left transition-all duration-150 cursor-pointer text-xs medium:text-sm border border-transparent text-text-muted aria-[current=false]:hover:text-text-primary aria-[current=false]:hover:bg-glass-bg aria-[current=true]:bg-brand-soft aria-[current=true]:text-brand aria-[current=true]:font-bold aria-[current=true]:border-brand/35 aria-[current=true]:shadow-xs">
+                      <div class="flex items-center gap-2 min-w-0">
+                        <FileCodeIcon class="w-4 h-4 shrink-0" />
+                        <span class="truncate">{item.title}</span>
+                      </div>
+                      <span class="text-[10px] font-mono text-text-muted ml-2 shrink-0">.md</span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </details>
+        );
+      })
     }
+    <p data-tree-empty class="hidden p-6 text-center text-xs text-text-muted">
+      검색 결과가 없습니다.
+    </p>
   </div>
 </aside>
