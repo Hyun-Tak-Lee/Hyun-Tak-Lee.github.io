@@ -10,7 +10,13 @@
 
   html {
     font-family: var(--font-sans);
-    font-size: 100%;
+    /*
+     * 유동 루트 폰트 크기: rem 기반 텍스트·간격·컨테이너 폭을 화면 폭에 비례해 함께 확대
+     * - 약 1024px 이하는 100%(16px) 유지, 이후 선형 증가하여 약 2000px에서 112.5%(18px) 상한
+     * - % 단위 최소·최대값과 rem 기준값으로 사용자 브라우저 글꼴 설정을 존중
+     * - 미디어 쿼리 rem은 루트 font-size 영향을 받지 않으므로 브레이크포인트는 변하지 않음
+     */
+    font-size: clamp(100%, 0.875rem + 0.2vw, 112.5%);
     line-height: 1.6;
     background-color: var(--color-background);
     color: var(--color-text-primary);

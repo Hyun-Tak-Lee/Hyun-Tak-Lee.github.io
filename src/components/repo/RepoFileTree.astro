@@ -44,7 +44,7 @@ const categories = Object.keys(grouped).sort();
           {items.length}
         </span>
       </div>
-      <span class="text-[11px] font-mono text-text-muted">/{collectionName}</span>
+      <span class="text-xs font-mono text-text-muted">/{collectionName}</span>
     </div>
 
     <!-- 실시간 필터 검색 인풋 -->
@@ -84,7 +84,7 @@ const categories = Object.keys(grouped).sort();
                 <FolderIcon class="w-4 h-4 text-brand shrink-0" />
                 <span class="truncate">{category}</span>
               </div>
-              <span data-folder-count class="text-[11px] font-mono text-text-muted font-normal ml-2">
+              <span data-folder-count class="text-xs font-mono text-text-muted font-normal ml-2">
                 {catItems.length}
               </span>
             </summary>
@@ -110,7 +110,7 @@ const categories = Object.keys(grouped).sort();
                         <FileCodeIcon class="w-4 h-4 shrink-0" />
                         <span class="truncate">{item.title}</span>
                       </div>
-                      <span class="text-[10px] font-mono text-text-muted ml-2 shrink-0">.md</span>
+                      <span class="text-xs font-mono text-text-muted ml-2 shrink-0">.md</span>
                     </button>
                   </li>
                 );

@@ -71,7 +71,7 @@ const processedItems = items.map((item) => ({
               </div>
               <div class="pt-2 border-t border-glass-border flex justify-between items-center text-text-muted">
                 <span>가상 경로</span>
-                <span class="font-mono text-[11px] text-brand truncate max-w-[140px]" title={`/${collectionName}/${item.id}.md`}>
+                <span class="font-mono text-xs text-brand truncate max-w-[140px]" title={`/${collectionName}/${item.id}.md`}>
                   /{collectionName}/{item.id}.md
                 </span>
               </div>
@@ -106,7 +106,7 @@ const processedItems = items.map((item) => ({
                     href={`#${heading.slug}`}
                     class:list={[
                       "min-h-12 flex items-center px-2.5 py-1.5 rounded-xl text-xs text-text-muted hover:text-brand hover:bg-glass-bg transition-colors",
-                      heading.depth === 3 && "pl-5 text-[11px]",
+                      heading.depth === 3 && "pl-5",
                     ]}
                   >
                     <span class="truncate">{heading.text}</span>
