@@ -1,0 +1,369 @@
+---
+import RepoFileTree, { type RepoTreeItem } from "./RepoFileTree.astro";
+import RepoInspector, { type RepoInspectorItem } from "./RepoInspector.astro";
+import SidebarToggleIcon from "../icons/SidebarToggleIcon.astro";
+import FileCodeIcon from "../icons/FileCodeIcon.astro";
+import { formatDate } from "../../utils/date";
+
+export interface WorkspaceItem {
+  id: string;
+  title: string;
+  category: string;
+  sub_category?: string[];
+  pubDate: Date;
+  author: string;
+  description?: string;
+  tags?: string[];
+  headings: Array<{ depth: number; slug: string; text: string }>;
+  Content: any;
+}
+
+interface Props {
+  collectionName: string;
+  title: string;
+  description: string;
+  badge: string;
+  items: WorkspaceItem[];
+}
+
+const { collectionName, title, description, badge, items } = Astro.props;
+
+const defaultActiveId = items.length > 0 ? items[0].id : "";
+
+const treeItems: RepoTreeItem[] = items.map((i) => ({
+  id: i.id,
+  title: i.title,
+  category: i.category,
+  sub_category: i.sub_category,
+  pubDate: i.pubDate,
+  tags: i.tags,
+}));
+
+const inspectorItems: RepoInspectorItem[] = items.map((i) => ({
+  id: i.id,
+  title: i.title,
+  category: i.category,
+  sub_category: i.sub_category,
+  pubDate: i.pubDate,
+  author: i.author,
+  description: i.description,
+  tags: i.tags,
+  headings: i.headings,
+}));
+---
+
+<div class="space-y-6">
+  <!-- 저장소 헤더 바 -->
+  <header
+    class="p-6 medium:p-8 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism flex flex-col medium:flex-row medium:items-end justify-between gap-4">
+    <div>
+      <div class="flex items-center gap-2 mb-1.5">
+        <span class="text-xs font-mono font-bold uppercase tracking-wider text-brand">{badge}</span>
+        <span class="text-text-muted text-xs">•</span>
+        <span class="text-xs font-mono text-text-muted">대화형 저장소</span>
+      </div>
+      <h1
+        class="text-3xl medium:text-4xl expanded:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-linear-to-r from-brand to-brand-hover">
+        {title}
+      </h1>
+      <p class="text-sm medium:text-base text-text-muted mt-2">
+        {description}
+      </p>
+    </div>
+
+    <!-- 모바일 탐색기 토글 버튼 & 전체 수량 -->
+    <div class="flex items-center gap-3">
+      <button
+        type="button"
+        id="mobile-drawer-toggle"
+        aria-label="파일 탐색기 열기"
+        class="medium:hidden min-h-12 px-4 rounded-2xl bg-brand-soft border border-brand/30 text-brand font-bold text-xs flex items-center gap-2 hover:bg-brand-muted transition-colors cursor-pointer">
+        <SidebarToggleIcon class="w-4 h-4" />
+        <span>파일 탐색기</span>
+      </button>
+
+      <div
+        class="text-xs font-mono text-text-muted px-3 py-2 rounded-xl bg-glass-bg border border-glass-border">
+        저장소 인덱스 <strong class="text-brand font-bold">{items.length}</strong>건
+      </div>
+    </div>
+  </header>
+
+  {
+    items.length === 0 && (
+      <div class="text-center py-20 px-4 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism text-text-muted">
+        저장소에 등록된 문서가 없습니다.
+      </div>
+    )
+  }
+
+  {
+    items.length > 0 && (
+      <div
+        class="grid grid-cols-1 medium:grid-cols-12 gap-6 items-start relative"
+        id="repo-workspace">
+        <div class="hidden medium:block medium:col-span-4 expanded:col-span-3 sticky top-[calc(var(--spacing-header)+1rem)] h-[calc(100dvh-var(--spacing-header)-3rem)]">
+          <RepoFileTree
+            items={treeItems}
+            activeId={defaultActiveId}
+            collectionName={collectionName}
+          />
+        </div>
+
+        <div
+          id="mobile-drawer-backdrop"
+          class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs transition-opacity opacity-0 pointer-events-none medium:hidden"
+          aria-hidden="true">
+          <div
+            id="mobile-drawer-content"
+            class="absolute inset-y-0 left-0 w-5/6 max-w-xs bg-surface-container p-4 shadow-2xl transform -translate-x-full transition-transform flex flex-col">
+            <div class="flex items-center justify-between pb-3 mb-2 border-b border-glass-border">
+              <span class="font-bold text-sm text-text-primary">파일 탐색기</span>
+              <button
+                type="button"
+                id="mobile-drawer-close"
+                aria-label="탐색기 닫기"
+                class="min-h-12 min-w-12 flex items-center justify-center text-text-muted hover:text-text-primary cursor-pointer">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div class="flex-1 overflow-hidden">
+              <RepoFileTree
+                items={treeItems}
+                activeId={defaultActiveId}
+                collectionName={collectionName}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="col-span-12 medium:col-span-8 expanded:col-span-6 flex flex-col gap-4">
+          <div class="p-3.5 rounded-2xl bg-surface-container border border-glass-border shadow-neumorphism flex items-center justify-between gap-2 overflow-x-auto">
+            <div class="flex items-center gap-2 min-w-0">
+              <FileCodeIcon class="w-4 h-4 text-brand shrink-0" />
+              <div class="flex items-center gap-1.5 text-xs font-mono text-text-muted truncate">
+                <span>{collectionName}</span>
+                <span>/</span>
+                <span
+                  id="active-breadcrumb-category"
+                  class="text-text-primary font-medium truncate">
+                  {items[0]?.category ?? ""}
+                </span>
+                <span>/</span>
+                <span id="active-breadcrumb-title" class="text-brand font-bold truncate">
+                  {items[0] ? `${items[0].id}.md` : ""}
+                </span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 shrink-0">
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded-md bg-glass-bg border border-glass-border text-text-muted">
+                Markdown
+              </span>
+            </div>
+          </div>
+
+          <main
+            id="repo-content-viewer"
+            class="p-5 medium:p-8 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism min-h-[60dvh]">
+            {items.map((item) => {
+              const isActive = item.id === defaultActiveId;
+              const ItemContent = item.Content;
+
+              return (
+                <article
+                  data-viewer-article={item.id}
+                  data-category={item.category}
+                  data-title={item.title}
+                  class:list={["space-y-6", !isActive && "hidden"]}>
+                  <header class="pb-6 border-b border-glass-border space-y-3">
+                    <div class="text-xs font-mono tracking-widest text-brand uppercase flex flex-wrap items-center gap-2">
+                      <span>{item.category}</span>
+                      {item.sub_category?.map((sub) => (
+                        <span class="flex items-center gap-2 text-text-muted">
+                          <span>•</span>
+                          <span>{sub}</span>
+                        </span>
+                      ))}
+                    </div>
+
+                    <h2 class="text-2xl medium:text-3xl font-extrabold tracking-tight leading-snug">
+                      {item.title}
+                    </h2>
+
+                    {item.description && (
+                      <p class="text-sm medium:text-base text-text-muted leading-relaxed">
+                        {item.description}
+                      </p>
+                    )}
+
+                    <div class="flex flex-wrap items-center text-xs text-text-muted font-mono gap-x-4 gap-y-1.5 pt-1">
+                      <time datetime={item.pubDate.toISOString()}>{formatDate(item.pubDate)}</time>
+                      <span>•</span>
+                      <span>작성자 {item.author}</span>
+                    </div>
+                  </header>
+
+                  <div class="prose prose-brand prose-base max-w-none prose-headings:font-bold prose-headings:scroll-mt-[calc(var(--spacing-header)+1rem)] prose-a:text-brand hover:prose-a:underline prose-img:rounded-2xl prose-pre:overflow-x-auto text-text-primary">
+                    <ItemContent />
+                  </div>
+                </article>
+              );
+            })}
+          </main>
+        </div>
+
+        <div class="hidden expanded:block expanded:col-span-3 sticky top-[calc(var(--spacing-header)+1rem)] h-[calc(100dvh-var(--spacing-header)-3rem)]">
+          <RepoInspector
+            items={inspectorItems}
+            activeId={defaultActiveId}
+            collectionName={collectionName}
+          />
+        </div>
+      </div>
+    )
+  }
+</div>
+
+<!-- 인터랙티브 스왑 및 URL 상태 관리 클라이언트 스크립트 (Zero 외부 종속성) -->
+<script is:inline>
+  (() => {
+    const initRepoWorkspace = () => {
+      const workspace = document.getElementById("repo-workspace");
+      if (!workspace) return;
+
+      const fileButtons = document.querySelectorAll("[data-repo-file-btn]");
+      const viewerArticles = document.querySelectorAll("[data-viewer-article]");
+      const inspectorPanels = document.querySelectorAll("[data-inspector-panel]");
+      const breadcrumbCat = document.getElementById("active-breadcrumb-category");
+      const breadcrumbTitle = document.getElementById("active-breadcrumb-title");
+      const searchInput = document.getElementById("repo-search-input");
+      const treeItems = document.querySelectorAll("[data-tree-item]");
+      const mobileToggle = document.getElementById("mobile-drawer-toggle");
+      const mobileBackdrop = document.getElementById("mobile-drawer-backdrop");
+      const mobileContent = document.getElementById("mobile-drawer-content");
+      const mobileClose = document.getElementById("mobile-drawer-close");
+
+      const activateFile = (fileId, updateUrl = true) => {
+        let matched = false;
+
+        viewerArticles.forEach((article) => {
+          if (article.dataset.viewerArticle === fileId) {
+            article.classList.remove("hidden");
+            matched = true;
+            if (breadcrumbCat) breadcrumbCat.textContent = article.dataset.category || "";
+            if (breadcrumbTitle) breadcrumbTitle.textContent = `${fileId}.md`;
+          } else {
+            article.classList.add("hidden");
+          }
+        });
+
+        if (!matched) return;
+
+        fileButtons.forEach((btn) => {
+          const isTarget = btn.getAttribute("data-repo-file-btn") === fileId;
+          btn.setAttribute("aria-current", isTarget ? "true" : "false");
+          if (isTarget) {
+            btn.classList.add(
+              "bg-brand-soft",
+              "text-brand",
+              "font-bold",
+              "border-brand/35",
+              "shadow-xs",
+            );
+            btn.classList.remove("text-text-muted", "border-transparent");
+            const details = btn.closest("details");
+            if (details) details.open = true;
+          } else {
+            btn.classList.remove(
+              "bg-brand-soft",
+              "text-brand",
+              "font-bold",
+              "border-brand/35",
+              "shadow-xs",
+            );
+            btn.classList.add("text-text-muted", "border-transparent");
+          }
+        });
+
+        inspectorPanels.forEach((panel) => {
+          if (panel.dataset.inspectorPanel === fileId) {
+            panel.classList.remove("hidden");
+          } else {
+            panel.classList.add("hidden");
+          }
+        });
+
+        if (updateUrl) {
+          const url = new URL(window.location.href);
+          url.searchParams.set("file", fileId);
+          window.history.replaceState({}, "", url.toString());
+        }
+
+        closeMobileDrawer();
+      };
+
+      fileButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const fileId = btn.getAttribute("data-repo-file-btn");
+          if (fileId) activateFile(fileId, true);
+        });
+      });
+
+      // 실시간 검색 필터
+      if (searchInput) {
+        searchInput.addEventListener("input", (e) => {
+          const query = (e.target.value || "").trim().toLowerCase();
+          treeItems.forEach((li) => {
+            const text = li.dataset.searchText || "";
+            const matches = !query || text.includes(query);
+            li.classList.toggle("hidden", !matches);
+          });
+        });
+      }
+
+      // 모바일 드로어 인터랙션
+      const openMobileDrawer = () => {
+        if (!mobileBackdrop || !mobileContent) return;
+        mobileBackdrop.classList.remove("pointer-events-none", "opacity-0");
+        mobileBackdrop.classList.add("opacity-100");
+        mobileContent.classList.remove("-translate-x-full");
+      };
+
+      const closeMobileDrawer = () => {
+        if (!mobileBackdrop || !mobileContent) return;
+        mobileBackdrop.classList.remove("opacity-100");
+        mobileBackdrop.classList.add("opacity-0", "pointer-events-none");
+        mobileContent.classList.add("-translate-x-full");
+      };
+
+      if (mobileToggle) mobileToggle.addEventListener("click", openMobileDrawer);
+      if (mobileClose) mobileClose.addEventListener("click", closeMobileDrawer);
+      if (mobileBackdrop) {
+        mobileBackdrop.addEventListener("click", (e) => {
+          if (e.target === mobileBackdrop) closeMobileDrawer();
+        });
+      }
+
+      // URL 쿼리 파라미터 초기 활성화
+      const initialFile = new URLSearchParams(window.location.search).get("file");
+      if (initialFile) {
+        activateFile(initialFile, false);
+      }
+    };
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initRepoWorkspace);
+    } else {
+      initRepoWorkspace();
+    }
+  })();
+</script>

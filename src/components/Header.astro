@@ -23,46 +23,46 @@ function isActive(href: string, path: string): boolean {
 <!-- Google Web Standard Top Header: 2-tier Fixed Tabs below Expanded, 1-tier Inline Bar on Expanded -->
 <header
   id="main-header"
-  class="fixed top-0 left-0 right-0 z-40 bg-surface-nav backdrop-blur-xl border-b border-glass-border"
->
+  class="fixed top-0 left-0 right-0 z-40 bg-surface-nav backdrop-blur-xl border-b border-glass-border">
   <div class="max-w-6xl mx-auto px-4 medium:px-8">
     <!-- Top Row: Brand Logo + Desktop Primary Tabs + GitHub Action -->
     <div class="h-14 expanded:h-16 flex items-center justify-between gap-4">
       <div class="flex items-center gap-8 min-w-0 h-full">
         <a
           href="/"
-          class="min-h-12 inline-flex items-center text-lg expanded:text-2xl font-extrabold tracking-tight hover:opacity-85 transition-opacity truncate"
-        >
-          <span class="text-transparent bg-clip-text bg-linear-to-r from-brand to-brand-hover truncate">
+          class="min-h-12 inline-flex items-center text-lg expanded:text-2xl font-extrabold tracking-tight hover:opacity-85 transition-opacity truncate">
+          <span
+            class="text-transparent bg-clip-text bg-linear-to-r from-brand to-brand-hover truncate">
             Hyun-Tak Lee
           </span>
         </a>
 
         <!-- PC Primary Navigation Tabs (Inline on Expanded) -->
         <nav aria-label="주 메뉴" class="hidden expanded:flex items-center h-full gap-1">
-          {navItems.map((item) => {
-            const active = isActive(item.href, currentPath);
-            return (
-              <a
-                href={item.href}
-                aria-current={active ? "page" : undefined}
-                class:list={[
-                  "relative h-full inline-flex items-center px-4 text-sm font-semibold tracking-tight transition-colors",
-                  active
-                    ? "text-brand font-bold"
-                    : "text-text-muted hover:text-text-primary hover:bg-glass-bg-hover/50",
-                ]}
-              >
-                {item.name}
-                {active && (
-                  <span
-                    class="absolute bottom-0 left-3 right-3 h-[3px] rounded-t-full bg-brand"
-                    aria-hidden="true"
-                  />
-                )}
-              </a>
-            );
-          })}
+          {
+            navItems.map((item) => {
+              const active = isActive(item.href, currentPath);
+              return (
+                <a
+                  href={item.href}
+                  aria-current={active ? "page" : undefined}
+                  class:list={[
+                    "relative h-full inline-flex items-center px-4 text-sm font-semibold tracking-tight transition-colors",
+                    active
+                      ? "text-brand font-bold"
+                      : "text-text-muted hover:text-text-primary hover:bg-glass-bg-hover/50",
+                  ]}>
+                  {item.name}
+                  {active && (
+                    <span
+                      class="absolute bottom-0 left-3 right-3 h-[3px] rounded-t-full bg-brand"
+                      aria-hidden="true"
+                    />
+                  )}
+                </a>
+              );
+            })
+          }
         </nav>
       </div>
 
@@ -72,8 +72,7 @@ function isActive(href: string, path: string): boolean {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="GitHub 프로필 열기"
-        class="min-h-12 min-w-12 px-3 justify-center inline-flex items-center gap-2 rounded-full hover:bg-glass-bg-hover text-text-muted hover:text-brand transition-colors text-sm font-medium shrink-0"
-      >
+        class="min-h-12 min-w-12 px-3 justify-center inline-flex items-center gap-2 rounded-full hover:bg-glass-bg-hover text-text-muted hover:text-brand transition-colors text-sm font-medium shrink-0">
         <GitHubIcon class="w-5 h-5" />
         <span class="hidden medium:inline">GitHub</span>
       </a>
@@ -82,31 +81,31 @@ function isActive(href: string, path: string): boolean {
     <!-- Mobile Primary Navigation Tabs (2nd Row below Expanded: 4 Equal-Width Fixed Tabs, No Hamburger) -->
     <nav
       aria-label="모바일 주 메뉴"
-      class="expanded:hidden grid grid-cols-4 border-t border-glass-border -mx-4 medium:-mx-8 px-2 medium:px-6"
-    >
-      {navItems.map((item) => {
-        const active = isActive(item.href, currentPath);
-        return (
-          <a
-            href={item.href}
-            aria-current={active ? "page" : undefined}
-            class:list={[
-              "relative h-12 inline-flex items-center justify-center text-sm tracking-tight transition-colors",
-              active
-                ? "text-brand font-bold"
-                : "text-text-muted hover:text-text-primary font-medium",
-            ]}
-          >
-            {item.name}
-            {active && (
-              <span
-                class="absolute bottom-0 left-3 right-3 h-[3px] rounded-t-full bg-brand"
-                aria-hidden="true"
-              />
-            )}
-          </a>
-        );
-      })}
+      class="expanded:hidden grid grid-cols-4 border-t border-glass-border -mx-4 medium:-mx-8 px-2 medium:px-6">
+      {
+        navItems.map((item) => {
+          const active = isActive(item.href, currentPath);
+          return (
+            <a
+              href={item.href}
+              aria-current={active ? "page" : undefined}
+              class:list={[
+                "relative h-12 inline-flex items-center justify-center text-sm tracking-tight transition-colors",
+                active
+                  ? "text-brand font-bold"
+                  : "text-text-muted hover:text-text-primary font-medium",
+              ]}>
+              {item.name}
+              {active && (
+                <span
+                  class="absolute bottom-0 left-3 right-3 h-[3px] rounded-t-full bg-brand"
+                  aria-hidden="true"
+                />
+              )}
+            </a>
+          );
+        })
+      }
     </nav>
   </div>
 </header>
