@@ -39,10 +39,18 @@
 
   /* 코드·키보드 */
   --tw-prose-code: var(--color-text-primary); /* 인라인 코드 (`code`) */
-  --tw-prose-pre-code: var(--color-on-surface-code); /* 코드 블록 글자 (Shiki 하이라이팅 적용 시 Shiki 테마 색 우선) */
-  --tw-prose-pre-bg: var(--color-surface-code); /* 코드 블록 배경 (Shiki 하이라이팅 적용 시 Shiki 테마 색 우선) */
+  --tw-prose-pre-code: var(
+    --color-on-surface-code
+  ); /* 코드 블록 글자 (Shiki 하이라이팅 적용 시 Shiki 테마 색 우선) */
+  --tw-prose-pre-bg: var(
+    --color-surface-code
+  ); /* 코드 블록 배경 (Shiki 하이라이팅 적용 시 Shiki 테마 색 우선) */
   --tw-prose-kbd: var(--color-text-primary); /* 키보드 입력 표기 (kbd) */
-  --tw-prose-kbd-shadows: color-mix(in srgb, var(--color-text-primary) 10%, transparent); /* kbd 테두리 그림자 */
+  --tw-prose-kbd-shadows: color-mix(
+    in srgb,
+    var(--color-text-primary) 10%,
+    transparent
+  ); /* kbd 테두리 그림자 */
 
   /* 표 */
   --tw-prose-th-borders: var(--color-glass-border); /* 표 헤더 테두리 */

@@ -1,6 +1,6 @@
-import { defineCollection } from 'astro:content';
-import { glob } from 'astro/loaders';
-import { z } from 'astro/zod';
+import { defineCollection } from "astro:content";
+import { glob } from "astro/loaders";
+import { z } from "astro/zod";
 
 const postSchema = z.object({
   category: z.string(),
@@ -9,19 +9,21 @@ const postSchema = z.object({
   pubDate: z.date(),
   description: z.string().optional(),
   tags: z.array(z.string()).optional(),
-  image: z.object({
-    url: z.url(),
-    alt: z.string()
-  }).optional(),
+  image: z
+    .object({
+      url: z.url(),
+      alt: z.string(),
+    })
+    .optional(),
 });
 
 const projectsCollection = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: "./src/content/projects" }),
+  loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/projects" }),
   schema: postSchema,
 });
 
 const techCollection = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: "./src/content/tech" }),
+  loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/tech" }),
   schema: postSchema,
 });
 

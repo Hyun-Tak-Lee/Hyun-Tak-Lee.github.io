@@ -5,16 +5,19 @@
 ## fnm 환경 설정 (cmd.exe)
 
 ### 1. fnm 설치
+
 ```cmd
 winget install Schniz.fnm
 ```
 
 ### 2. cmd 자동 실행 스크립트 생성
+
 ```cmd
 (echo @echo off & echo if not defined FNM_AUTORUN_GUARD ( & echo   set "FNM_AUTORUN_GUARD=AutorunGuard" & echo   FOR /f "tokens=*" %%%%z IN ('fnm env --use-on-cd'^) DO CALL %%%%z & echo ^)) > "%USERPROFILE%\fnm_init.cmd"
 ```
 
 ### 3. 레지스트리(AutoRun) 등록
+
 ```cmd
 reg add "HKCU\Software\Microsoft\Command Processor" /v AutoRun /t REG_EXPAND_SZ /d "%USERPROFILE%\fnm_init.cmd" /f
 ```
