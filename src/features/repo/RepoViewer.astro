@@ -1,0 +1,113 @@
+---
+import ExpandIcon from "../../components/icons/ExpandIcon.astro";
+import ArchitectureGraph from "../projects/ArchitectureGraph.astro";
+import type { WorkspaceItem } from "./types";
+import { formatDate } from "../../utils/date";
+
+interface Props {
+  collectionName: string;
+  items: WorkspaceItem[];
+  activeId: string;
+}
+
+const { collectionName, items, activeId } = Astro.props;
+---
+
+<main
+  id="repo-content-viewer"
+  class="p-5 medium:p-8 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism min-h-[60dvh]">
+  {items.map((item) => {
+    const isActive = item.id === activeId;
+    const ItemContent = item.Content;
+    const toc = item.headings.filter((h) => h.depth === 2 || h.depth === 3);
+
+    return (
+      <article
+        data-viewer-article={item.id}
+        data-category={item.category}
+        class:list={["space-y-6", !isActive && "hidden"]}>
+        <header class="pb-6 border-b border-glass-border space-y-3">
+          <!-- 단일 컬럼(expanded 미만)에서는 전체 화면과 차이가 없어 확장 버튼 숨김 -->
+          <div class="flex items-center justify-between gap-2 expanded:-mt-3 expanded:-mr-3">
+            <div class="text-xs font-mono tracking-widest text-brand uppercase flex flex-wrap items-center gap-2">
+              <span>{item.category}</span>
+              {item.sub_category?.map((sub) => (
+                <span class="flex items-center gap-2 text-text-muted">
+                  <span>•</span>
+                  <span>{sub}</span>
+                </span>
+              ))}
+            </div>
+            <a
+              href={`/${collectionName}/${item.id}`}
+              aria-label={`${item.title} 전체 화면으로 보기`}
+              title="전체 화면으로 보기"
+              class="hidden expanded:inline-flex shrink-0 min-h-12 min-w-12 items-center justify-center rounded-full text-text-muted hover:text-brand hover:bg-glass-bg-hover transition-colors">
+              <ExpandIcon class="w-5 h-5" />
+            </a>
+          </div>
+
+          <h2 class="text-2xl medium:text-3xl font-extrabold tracking-tight leading-snug">
+            {item.title}
+          </h2>
+
+          {item.description && (
+            <p class="text-sm medium:text-base text-text-muted leading-relaxed">
+              {item.description}
+            </p>
+          )}
+
+          <time
+            datetime={item.pubDate.toISOString()}
+            class="block text-xs text-text-muted font-mono pt-1">
+            {formatDate(item.pubDate)}
+          </time>
+
+          <!-- 인스펙터가 숨겨지거나 접힌 상태에서 태그·목차를 본문 헤더에 표시 -->
+          {item.tags && item.tags.length > 0 && (
+            <div data-inspector-fallback class="large:hidden flex flex-wrap gap-1.5 pt-1">
+              {item.tags.map((tag) => (
+                <span class="px-2.5 py-1 rounded-xl bg-glass-bg border border-glass-border text-xs text-text-primary font-mono">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {toc.length > 0 && (
+            <details
+              data-inspector-fallback
+              class="large:hidden px-4 rounded-2xl bg-glass-bg border border-glass-border">
+              <summary class="min-h-12 flex items-center text-sm font-bold text-brand cursor-pointer select-none">
+                목차
+              </summary>
+              <ul class="pb-2 text-sm border-t border-glass-border">
+                {toc.map((heading) => (
+                  <li class={heading.depth === 3 ? "pl-4" : ""}>
+                    <a
+                      href={`#${heading.slug}`}
+                      class="min-h-12 flex items-center text-text-muted hover:text-brand transition-colors">
+                      {heading.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          )}
+        </header>
+
+        {item.architecture && (
+          <ArchitectureGraph
+            architecture={item.architecture}
+            instanceId={`workspace-${collectionName}-${item.id}`}
+          />
+        )}
+
+        <div class="prose prose-brand prose-base max-w-none prose-headings:font-bold prose-headings:scroll-mt-[calc(var(--spacing-header)+1rem)] prose-a:text-brand hover:prose-a:underline prose-img:rounded-2xl prose-pre:overflow-x-auto text-text-primary">
+          <ItemContent />
+        </div>
+      </article>
+    );
+  })}
+</main>
+

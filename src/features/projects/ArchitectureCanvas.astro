@@ -1,0 +1,162 @@
+---
+import type { ArchitectureEdge } from "../../content.config";
+import type { ArchitectureGroupWithNodes } from "./architecture";
+
+interface Props {
+  uid: string;
+  groupedNodes: ArchitectureGroupWithNodes[];
+  edges: ArchitectureEdge[];
+  defaultNodeId: string;
+}
+
+const { uid, groupedNodes, edges, defaultNodeId } = Astro.props;
+---
+
+<!-- 클러스터 그래프 캔버스 (그룹 컨테이너 + SVG 간선 오버레이) -->
+<div data-arch-canvas class="relative">
+  <!-- Expanded(840px~) 전용 다대다 SVG 간선 레이어 -->
+  <svg
+    data-arch-svg
+    aria-hidden="true"
+    class="hidden expanded:block absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible">
+    <defs>
+      <marker
+        id={`arch-arrow-muted-${uid}`}
+        viewBox="0 0 10 10"
+        refX="8"
+        refY="5"
+        markerWidth="5"
+        markerHeight="5"
+        orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--color-text-muted)" fill-opacity="0.45"></path>
+      </marker>
+      <marker
+        id={`arch-arrow-out-${uid}`}
+        viewBox="0 0 10 10"
+        refX="8"
+        refY="5"
+        markerWidth="6"
+        markerHeight="6"
+        orient="auto-start-reverse">
+        <path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-brand)"></path>
+      </marker>
+      <marker
+        id={`arch-arrow-in-${uid}`}
+        viewBox="0 0 10 10"
+        refX="8"
+        refY="5"
+        markerWidth="6"
+        markerHeight="6"
+        orient="auto-start-reverse">
+        <path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"></path>
+      </marker>
+    </defs>
+    <g data-arch-edges-group>
+      {edges.map((edge, idx) => (
+        <path
+          data-arch-edge={idx}
+          data-from={edge.from}
+          data-to={edge.to}
+          data-bidirectional={edge.bidirectional ? "true" : "false"}
+          fill="none"
+          stroke="var(--color-text-muted)"
+          stroke-opacity="0.3"
+          stroke-width="1.75"
+          stroke-dasharray="4 4"
+          marker-end={`url(#arch-arrow-muted-${uid})`}
+          marker-start={edge.bidirectional ? `url(#arch-arrow-muted-${uid})` : undefined}
+          class="transition-opacity duration-200"></path>
+      ))}
+    </g>
+  </svg>
+
+  <!-- 그룹(클러스터) 그리드 레이아웃 -->
+  <div class="grid grid-cols-1 expanded:grid-cols-2 gap-4 expanded:gap-6 relative z-20">
+    {groupedNodes.map((group) => (
+      <div
+        data-arch-group={group.id}
+        class="rounded-2xl bg-glass-bg border border-glass-border p-4 flex flex-col gap-3">
+        <!-- 그룹 헤더 -->
+        <div class="flex items-start justify-between gap-2 pb-2.5 border-b border-glass-border">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-brand shrink-0"></span>
+              <h3 class="text-xs font-mono font-bold uppercase tracking-wider text-brand">
+                {group.label}
+              </h3>
+            </div>
+            {group.description && <p class="text-xs text-text-muted mt-0.5">{group.description}</p>}
+          </div>
+          <span class="text-xs font-mono px-2 py-0.5 rounded-full bg-brand-muted text-brand font-semibold shrink-0">
+            {group.items.length}
+          </span>
+        </div>
+
+        <!-- 그룹 내부 파츠(노드) 목록 -->
+        <div class="grid grid-cols-1 gap-2.5">
+          {group.items.map((node) => {
+            const isDefaultSelected = node.id === defaultNodeId;
+            return (
+              <button
+                type="button"
+                data-arch-node={node.id}
+                data-node-group={group.id}
+                aria-pressed={isDefaultSelected ? "true" : "false"}
+                class="group/node w-full min-h-12 p-3.5 rounded-2xl bg-surface-container border border-glass-border text-left transition-all duration-200 cursor-pointer flex flex-col gap-2 hover:border-brand/60 focus:outline-none focus:ring-2 focus:ring-brand">
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex items-center gap-2 min-w-0">
+                    {node.role && (
+                      <span class="text-xs font-mono px-2 py-0.5 rounded-lg bg-glass-bg border border-glass-border text-text-muted truncate">
+                        {node.role}
+                      </span>
+                    )}
+                    <span
+                      data-arch-node-badge={node.id}
+                      class="hidden text-xs font-mono font-bold px-2 py-0.5 rounded-lg shrink-0"></span>
+                  </div>
+
+                  <!-- 모바일 및 전체 화면 공통 In/Out 연결 수 카운터 -->
+                  <div class="flex items-center gap-1.5 text-xs font-mono shrink-0">
+                    {node.inbounds.length > 0 && (
+                      <span
+                        title={`입력 연결 ${node.inbounds.length}건`}
+                        class="px-1.5 py-0.5 rounded-md bg-glass-bg border border-glass-border text-text-muted">
+                        In <strong class="text-accent">{node.inbounds.length}</strong>
+                      </span>
+                    )}
+                    {node.outbounds.length > 0 && (
+                      <span
+                        title={`출력 연결 ${node.outbounds.length}건`}
+                        class="px-1.5 py-0.5 rounded-md bg-glass-bg border border-glass-border text-text-muted">
+                        Out <strong class="text-brand">{node.outbounds.length}</strong>
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <div class="text-sm medium:text-base font-bold text-text-primary group-hover/node:text-brand transition-colors">
+                    {node.title}
+                  </div>
+                  <p class="text-xs text-text-muted line-clamp-2 mt-0.5 leading-relaxed">
+                    {node.summary}
+                  </p>
+                </div>
+
+                {node.tech && node.tech.length > 0 && (
+                  <div class="flex flex-wrap gap-1.5 pt-1">
+                    {node.tech.map((t) => (
+                      <span class="text-xs font-mono px-2 py-0.5 rounded-md bg-brand-soft text-brand font-medium">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>

@@ -1,27 +1,9 @@
 ---
-import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import RepoWorkspace, { type WorkspaceItem } from "../../components/repo/RepoWorkspace.astro";
+import RepoWorkspace from "../../features/repo/RepoWorkspace.astro";
+import { getTechWorkspaceItems } from "../../features/tech/queries";
 
-const techPosts = await getCollection("tech");
-const sortedTech = techPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-
-const items: WorkspaceItem[] = await Promise.all(
-  sortedTech.map(async (post) => {
-    const { Content, headings } = await render(post);
-    return {
-      id: post.id,
-      title: post.data.title,
-      category: post.data.category,
-      sub_category: post.data.sub_category,
-      pubDate: post.data.pubDate,
-      description: post.data.description,
-      tags: post.data.tags,
-      headings,
-      Content,
-    };
-  }),
-);
+const items = await getTechWorkspaceItems();
 ---
 
 <BaseLayout

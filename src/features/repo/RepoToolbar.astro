@@ -1,0 +1,57 @@
+---
+import SidebarToggleIcon from "../../components/icons/SidebarToggleIcon.astro";
+import FileCodeIcon from "../../components/icons/FileCodeIcon.astro";
+import InfoIcon from "../../components/icons/InfoIcon.astro";
+
+interface Props {
+  collectionName: string;
+  initialCategory?: string;
+  initialFileId?: string;
+}
+
+const { collectionName, initialCategory = "", initialFileId = "" } = Astro.props;
+---
+
+<div class="px-3.5 py-2 rounded-2xl bg-surface-container border border-glass-border shadow-neumorphism flex items-center justify-between gap-2 overflow-x-auto">
+  <div class="flex items-center gap-2 min-w-0">
+    <button
+      type="button"
+      data-explorer-toggle
+      aria-expanded="true"
+      aria-controls="repo-explorer-column"
+      aria-label="저장소 탐색기 접기"
+      title="저장소 탐색기 접기"
+      class="hidden expanded:inline-flex min-h-12 min-w-12 -my-1 -ml-1.5 items-center justify-center rounded-xl bg-brand-soft border border-brand/35 text-brand hover:bg-glass-bg-hover transition-colors cursor-pointer shrink-0">
+      <SidebarToggleIcon class="w-4 h-4" />
+    </button>
+    <FileCodeIcon class="w-4 h-4 text-brand shrink-0" />
+    <div class="flex items-center gap-1.5 text-xs font-mono text-text-muted truncate">
+      <span>{collectionName}</span>
+      <span>/</span>
+      <span id="active-breadcrumb-category" class="text-text-primary font-medium truncate">
+        {initialCategory}
+      </span>
+      <span>/</span>
+      <span id="active-breadcrumb-title" class="text-brand font-bold truncate">
+        {initialFileId ? `${initialFileId}.md` : ""}
+      </span>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-2 shrink-0">
+    <span class="text-xs font-mono px-2 py-0.5 rounded-md bg-glass-bg border border-glass-border text-text-muted">
+      Markdown
+    </span>
+    <button
+      type="button"
+      data-inspector-toggle
+      aria-expanded="true"
+      aria-controls="repo-inspector-column"
+      aria-label="인스펙터 닫기"
+      title="인스펙터 닫기"
+      class="hidden large:inline-flex min-h-12 min-w-12 -my-1 -mr-1.5 items-center justify-center rounded-xl bg-brand-soft border border-brand/35 text-brand hover:bg-glass-bg-hover transition-colors cursor-pointer shrink-0">
+      <InfoIcon class="w-4 h-4" />
+    </button>
+  </div>
+</div>
+

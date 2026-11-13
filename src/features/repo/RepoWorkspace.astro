@@ -1,0 +1,296 @@
+---
+import RepoHeader from "./RepoHeader.astro";
+import RepoFileTree from "./RepoFileTree.astro";
+import RepoToolbar from "./RepoToolbar.astro";
+import RepoViewer from "./RepoViewer.astro";
+import RepoInspector from "./RepoInspector.astro";
+import CloseIcon from "../../components/icons/CloseIcon.astro";
+import type { WorkspaceItem } from "./types";
+
+export type { WorkspaceItem };
+
+interface Props {
+  collectionName: string;
+  title: string;
+  description: string;
+  badge: string;
+  items: WorkspaceItem[];
+}
+
+const { collectionName, title, description, badge, items } = Astro.props;
+
+const defaultActiveId = items.length > 0 ? items[0].id : "";
+---
+
+<div class="space-y-6">
+  <RepoHeader title={title} description={description} badge={badge} totalCount={items.length} />
+
+  {items.length === 0 && (
+    <div class="text-center py-20 px-4 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism text-text-muted">
+      저장소에 등록된 문서가 없습니다.
+    </div>
+  )}
+
+  {items.length > 0 && (
+    <div
+      class="grid grid-cols-1 expanded:flex expanded:items-start expanded:gap-6 relative"
+      id="repo-workspace">
+      <div
+        id="repo-explorer-column"
+        class="hidden expanded:block expanded:w-64 large:w-72 shrink-0 sticky top-[calc(var(--spacing-header)+1rem)] h-[calc(100dvh-var(--spacing-header)-3rem)]">
+        <RepoFileTree items={items} activeId={defaultActiveId} collectionName={collectionName} />
+      </div>
+
+      <div
+        id="mobile-drawer-backdrop"
+        class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs transition-opacity opacity-0 pointer-events-none expanded:hidden"
+        aria-hidden="true">
+        <div
+          id="mobile-drawer-content"
+          class="absolute inset-y-0 left-0 w-5/6 max-w-xs bg-surface-container p-4 shadow-2xl transform -translate-x-full transition-transform flex flex-col">
+          <div class="flex items-center justify-between pb-3 mb-2 border-b border-glass-border">
+            <span class="font-bold text-sm text-text-primary">파일 탐색기</span>
+            <button
+              type="button"
+              id="mobile-drawer-close"
+              aria-label="탐색기 닫기"
+              class="min-h-12 min-w-12 flex items-center justify-center text-text-muted hover:text-text-primary cursor-pointer">
+              <CloseIcon class="w-5 h-5" />
+            </button>
+          </div>
+          <div class="flex-1 overflow-hidden">
+            <RepoFileTree
+              items={items}
+              activeId={defaultActiveId}
+              collectionName={collectionName}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="repo-main-column"
+        class="w-full expanded:flex-1 min-w-0 flex flex-col gap-4">
+        <RepoToolbar
+          collectionName={collectionName}
+          initialCategory={items[0]?.category}
+          initialFileId={items[0]?.id}
+        />
+
+        <RepoViewer collectionName={collectionName} items={items} activeId={defaultActiveId} />
+      </div>
+
+      <div
+        id="repo-inspector-column"
+        class="hidden large:block large:w-72 shrink-0 sticky top-[calc(var(--spacing-header)+1rem)] h-[calc(100dvh-var(--spacing-header)-3rem)]">
+        <RepoInspector items={items} activeId={defaultActiveId} collectionName={collectionName} />
+      </div>
+    </div>
+  )}
+</div>
+
+<!-- 인터랙티브 스왑 및 URL 상태 관리 클라이언트 스크립트 (Zero 외부 종속성) -->
+<script is:inline>
+  (() => {
+    const workspace = document.getElementById("repo-workspace");
+    if (!workspace) return;
+
+    const fileButtons = document.querySelectorAll("[data-repo-file-btn]");
+    const viewerArticles = document.querySelectorAll("[data-viewer-article]");
+    const inspectorPanels = document.querySelectorAll("[data-inspector-panel]");
+    const breadcrumbCat = document.getElementById("active-breadcrumb-category");
+    const breadcrumbTitle = document.getElementById("active-breadcrumb-title");
+    // 탐색기가 사이드바와 모바일 드로어에 각각 렌더링되므로 id 대신 data 속성으로 모두 선택
+    const searchInputs = document.querySelectorAll("[data-repo-search]");
+    const treeFolders = document.querySelectorAll("[data-tree-folder]");
+    const treeEmptyMessages = document.querySelectorAll("[data-tree-empty]");
+    const mobileToggle = document.getElementById("mobile-drawer-toggle");
+    const mobileBackdrop = document.getElementById("mobile-drawer-backdrop");
+    const mobileContent = document.getElementById("mobile-drawer-content");
+    const mobileClose = document.getElementById("mobile-drawer-close");
+    const explorerColumn = document.getElementById("repo-explorer-column");
+    const inspectorColumn = document.getElementById("repo-inspector-column");
+    const explorerToggleButton = workspace.querySelector("[data-explorer-toggle]");
+    const inspectorToggleButton = workspace.querySelector("[data-inspector-toggle]");
+    const inspectorCloseButton = workspace.querySelector("[data-inspector-close]");
+    const inspectorFallbacks = workspace.querySelectorAll("[data-inspector-fallback]");
+
+    const STORAGE_EXPLORER_KEY = "repo-explorer-collapsed";
+    const STORAGE_INSPECTOR_KEY = "repo-inspector-collapsed";
+
+    const readFlag = (key) => {
+      try {
+        return localStorage.getItem(key) === "true";
+      } catch {
+        return false;
+      }
+    };
+
+    const writeFlag = (key, value) => {
+      try {
+        localStorage.setItem(key, value ? "true" : "false");
+      } catch {
+        // 스토리지 접근 제한 환경 무시
+      }
+    };
+
+    let isExplorerCollapsed = readFlag(STORAGE_EXPLORER_KEY);
+    let isInspectorCollapsed = readFlag(STORAGE_INSPECTOR_KEY);
+
+    const syncTriggerButton = (btn, isOpen, openLabel, closeLabel) => {
+      if (!btn) return;
+      const nextLabel = isOpen ? closeLabel : openLabel;
+      btn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      btn.setAttribute("aria-label", nextLabel);
+      btn.setAttribute("title", nextLabel);
+      btn.classList.toggle("bg-brand-soft", isOpen);
+      btn.classList.toggle("border-brand/35", isOpen);
+      btn.classList.toggle("text-brand", isOpen);
+      btn.classList.toggle("bg-glass-bg", !isOpen);
+      btn.classList.toggle("border-glass-border", !isOpen);
+      btn.classList.toggle("text-text-muted", !isOpen);
+    };
+
+    const syncPanelLayout = (notifyResize = true) => {
+      if (explorerColumn) {
+        explorerColumn.classList.toggle("expanded:block", !isExplorerCollapsed);
+      }
+
+      if (inspectorColumn) {
+        inspectorColumn.classList.toggle("large:block", !isInspectorCollapsed);
+      }
+
+      inspectorFallbacks.forEach((el) => {
+        el.classList.toggle("large:hidden", !isInspectorCollapsed);
+      });
+
+      syncTriggerButton(
+        explorerToggleButton,
+        !isExplorerCollapsed,
+        "저장소 탐색기 펼치기",
+        "저장소 탐색기 접기",
+      );
+      syncTriggerButton(
+        inspectorToggleButton,
+        !isInspectorCollapsed,
+        "인스펙터 열기",
+        "인스펙터 닫기",
+      );
+
+      if (notifyResize) {
+        requestAnimationFrame(() => {
+          window.dispatchEvent(new Event("resize"));
+        });
+      }
+    };
+
+    const closeMobileDrawer = () => {
+      mobileBackdrop.classList.add("opacity-0", "pointer-events-none");
+      mobileContent.classList.add("-translate-x-full");
+    };
+
+    const openMobileDrawer = () => {
+      mobileBackdrop.classList.remove("opacity-0", "pointer-events-none");
+      mobileContent.classList.remove("-translate-x-full");
+    };
+
+    const activateFile = (fileId, updateUrl) => {
+      const target = [...viewerArticles].find((a) => a.dataset.viewerArticle === fileId);
+      if (!target) return;
+
+      viewerArticles.forEach((article) => article.classList.toggle("hidden", article !== target));
+      inspectorPanels.forEach((panel) =>
+        panel.classList.toggle("hidden", panel.dataset.inspectorPanel !== fileId),
+      );
+      breadcrumbCat.textContent = target.dataset.category;
+      breadcrumbTitle.textContent = `${fileId}.md`;
+
+      // 선택 강조 스타일은 aria-current 변형 클래스로 처리
+      fileButtons.forEach((btn) => {
+        const isTarget = btn.dataset.repoFileBtn === fileId;
+        btn.setAttribute("aria-current", isTarget ? "true" : "false");
+        if (isTarget) btn.closest("details").open = true;
+      });
+
+      if (updateUrl) {
+        const url = new URL(window.location.href);
+        url.searchParams.set("file", fileId);
+        window.history.replaceState({}, "", url.toString());
+      }
+
+      closeMobileDrawer();
+      requestAnimationFrame(() => {
+        window.dispatchEvent(new Event("resize"));
+      });
+    };
+
+    const filterTree = (rawQuery) => {
+      const query = rawQuery.trim().toLowerCase();
+
+      treeFolders.forEach((folder) => {
+        let visibleCount = 0;
+        folder.querySelectorAll("[data-tree-item]").forEach((li) => {
+          const matches = !query || li.dataset.searchText.includes(query);
+          li.classList.toggle("hidden", !matches);
+          if (matches) visibleCount++;
+        });
+        folder.classList.toggle("hidden", visibleCount === 0);
+        folder.querySelector("[data-folder-count]").textContent = visibleCount;
+      });
+
+      // 모든 폴더가 숨겨지면 결과 없음 안내 표시
+      const hasResult = [...treeFolders].some((folder) => !folder.classList.contains("hidden"));
+      treeEmptyMessages.forEach((msg) => msg.classList.toggle("hidden", hasResult));
+    };
+
+    fileButtons.forEach((btn) => {
+      btn.addEventListener("click", () => activateFile(btn.dataset.repoFileBtn, true));
+    });
+
+    // 사이드바와 드로어 검색어를 동기화
+    searchInputs.forEach((input) => {
+      input.addEventListener("input", () => {
+        searchInputs.forEach((other) => {
+          if (other !== input) other.value = input.value;
+        });
+        filterTree(input.value);
+      });
+    });
+
+    mobileToggle.addEventListener("click", openMobileDrawer);
+    mobileClose.addEventListener("click", closeMobileDrawer);
+    mobileBackdrop.addEventListener("click", (e) => {
+      if (e.target === mobileBackdrop) closeMobileDrawer();
+    });
+
+    if (explorerToggleButton) {
+      explorerToggleButton.addEventListener("click", () => {
+        isExplorerCollapsed = !isExplorerCollapsed;
+        writeFlag(STORAGE_EXPLORER_KEY, isExplorerCollapsed);
+        syncPanelLayout();
+      });
+    }
+
+    if (inspectorToggleButton) {
+      inspectorToggleButton.addEventListener("click", () => {
+        isInspectorCollapsed = !isInspectorCollapsed;
+        writeFlag(STORAGE_INSPECTOR_KEY, isInspectorCollapsed);
+        syncPanelLayout();
+      });
+    }
+
+    if (inspectorCloseButton) {
+      inspectorCloseButton.addEventListener("click", () => {
+        isInspectorCollapsed = true;
+        writeFlag(STORAGE_INSPECTOR_KEY, true);
+        syncPanelLayout();
+      });
+    }
+
+    syncPanelLayout(false);
+
+    // URL 쿼리 파라미터 초기 활성화
+    const initialFile = new URLSearchParams(window.location.search).get("file");
+    if (initialFile) activateFile(initialFile, false);
+  })();
+</script>

@@ -1,0 +1,82 @@
+---
+import ExpandIcon from "../../components/icons/ExpandIcon.astro";
+import CloseIcon from "../../components/icons/CloseIcon.astro";
+
+interface Props {
+  summary?: string;
+  groupCount: number;
+  nodeCount: number;
+  edgeCount: number;
+}
+
+const { summary, groupCount, nodeCount, edgeCount } = Astro.props;
+---
+
+<!-- 상단 헤더 및 컨트롤 바 -->
+<div class="flex flex-col medium:flex-row medium:items-center justify-between gap-3 pb-4 border-b border-glass-border">
+  <div class="space-y-1">
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="text-xs font-mono font-bold uppercase tracking-wider text-brand">
+        Architecture Graph
+      </span>
+      <span class="text-xs text-text-muted">•</span>
+      <span class="text-xs font-mono text-text-muted">
+        그룹{groupCount}· 파츠{nodeCount}· 연결{edgeCount}
+      </span>
+    </div>
+    <h2 class="text-lg medium:text-xl font-extrabold tracking-tight text-text-primary">
+      시스템 아키텍처 토폴로지
+    </h2>
+    {summary && <p class="text-xs medium:text-sm text-text-muted leading-relaxed">{summary}</p>}
+  </div>
+
+  <div class="flex flex-wrap items-center gap-2 shrink-0">
+    <!-- 상태 범례 -->
+    <div
+      class="hidden medium:flex items-center gap-3 px-3 py-2 rounded-2xl bg-glass-bg border border-glass-border text-xs font-mono"
+      aria-hidden="true">
+      <span class="flex items-center gap-1.5 text-brand font-bold">
+        <span class="w-2.5 h-2.5 rounded-full bg-brand inline-block"></span>
+        선택/출력(Out)
+      </span>
+      <span class="flex items-center gap-1.5 text-accent font-bold">
+        <span class="w-2.5 h-2.5 rounded-full bg-accent inline-block"></span>
+        입력(In)
+      </span>
+    </div>
+
+    <button
+      type="button"
+      data-arch-reset
+      aria-pressed="false"
+      class="min-h-12 px-4 rounded-2xl bg-glass-bg hover:bg-glass-bg-hover border border-glass-border text-xs font-mono font-bold text-text-muted hover:text-brand transition-colors cursor-pointer">
+      전체 연결 보기
+    </button>
+
+    <button
+      type="button"
+      data-arch-modal-toggle
+      aria-pressed="false"
+      aria-label="아키텍처 그래프 전체 화면으로 확대"
+      title="전체 화면으로 확대"
+      class="min-h-12 min-w-12 inline-flex items-center justify-center rounded-2xl bg-glass-bg hover:bg-glass-bg-hover border border-glass-border text-text-muted hover:text-brand transition-colors cursor-pointer">
+      <span data-arch-expand-icon class="inline-flex items-center justify-center">
+        <ExpandIcon class="w-4 h-4" />
+      </span>
+      <span data-arch-collapse-icon class="hidden items-center justify-center">
+        <CloseIcon class="w-4 h-4" />
+      </span>
+    </button>
+  </div>
+</div>
+
+<!-- 안내 배너 -->
+<div class="flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-2xl bg-brand-soft border border-brand/20 text-xs text-text-muted">
+  <span>
+    각 그룹 내부의<strong class="text-brand font-bold">아키텍처 파츠(노드)</strong>를 선택하면
+    입·출력 의존성 경로와 설계 근거가 하단에 표시됩니다.
+  </span>
+  <span data-arch-mode-label class="font-mono text-brand font-bold shrink-0">
+    포커스 모드
+  </span>
+</div>

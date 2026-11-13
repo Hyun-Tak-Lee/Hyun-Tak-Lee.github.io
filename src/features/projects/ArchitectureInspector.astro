@@ -1,0 +1,145 @@
+---
+import type { EnrichedArchitectureNode } from "./architecture";
+
+interface Props {
+  enrichedNodes: EnrichedArchitectureNode[];
+  defaultNodeId: string;
+}
+
+const { enrichedNodes, defaultNodeId } = Astro.props;
+---
+
+<!-- 선택된 노드 상세 인스펙터 및 입·출력(Upstream/Downstream) 연결 탐색 패널 -->
+<div class="pt-2">
+  {enrichedNodes.map((node) => {
+    const isDefault = node.id === defaultNodeId;
+    return (
+      <div
+        data-arch-inspector={node.id}
+        class:list={[
+          "rounded-2xl bg-glass-bg border border-glass-border p-4 medium:p-5 space-y-4",
+          !isDefault && "hidden",
+        ]}>
+        <div class="flex flex-col medium:flex-row medium:items-center justify-between gap-2 pb-3 border-b border-glass-border">
+          <div class="space-y-1">
+            <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
+              <span class="text-brand font-bold uppercase">{node.groupLabel}</span>
+              {node.role && (
+                <>
+                  <span class="text-text-muted">/</span>
+                  <span class="text-text-muted">{node.role}</span>
+                </>
+              )}
+            </div>
+            <h3 class="text-base medium:text-lg font-extrabold text-text-primary">{node.title}</h3>
+          </div>
+
+          {node.tech && node.tech.length > 0 && (
+            <div class="flex flex-wrap gap-1.5">
+              {node.tech.map((t) => (
+                <span class="px-2.5 py-1 rounded-xl bg-surface-container border border-glass-border text-xs font-mono text-brand font-semibold">
+                  {t}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <!-- 핵심 설명 및 설계 근거 -->
+        <div class="space-y-2.5">
+          <p class="text-xs medium:text-sm text-text-primary leading-relaxed font-medium">
+            {node.summary}
+          </p>
+          {node.details && node.details.length > 0 && (
+            <ul class="space-y-1.5 text-xs medium:text-sm text-text-muted list-disc pl-4">
+              {node.details.map((detail) => (
+                <li class="leading-relaxed">{detail}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <!-- 입·출력(Upstream / Downstream) 그래프 연결 목록 (클릭 시 해당 노드로 포커스 이동) -->
+        <div class="grid grid-cols-1 medium:grid-cols-2 gap-3 pt-2 border-t border-glass-border">
+          <!-- Inbound (Upstream) -->
+          <div class="rounded-2xl bg-surface-container border border-glass-border p-3.5 space-y-2">
+            <div class="flex items-center justify-between text-xs font-mono">
+              <span class="font-bold text-accent uppercase tracking-wider">
+                ← 입력 / 호출 주체 (Upstream)
+              </span>
+              <span class="text-text-muted">{node.inbounds.length}건</span>
+            </div>
+
+            {node.inbounds.length === 0 ? (
+              <p class="text-xs text-text-muted py-2">
+                외부 진입점이거나 상위 호출 노드가 없습니다.
+              </p>
+            ) : (
+              <div class="flex flex-col gap-1.5">
+                {node.inbounds.map((peer) => (
+                  <button
+                    type="button"
+                    data-arch-jump={peer.nodeId}
+                    class="min-h-12 px-3 py-2 rounded-xl bg-glass-bg hover:bg-glass-bg-hover border border-glass-border hover:border-accent/50 text-left flex items-center justify-between gap-2 transition-colors cursor-pointer">
+                    <div class="min-w-0">
+                      <div class="text-xs font-bold text-text-primary truncate">
+                        {peer.nodeTitle}
+                      </div>
+                      <div class="text-xs font-mono text-text-muted truncate">
+                        {peer.groupLabel}
+                      </div>
+                    </div>
+                    {peer.edgeLabel && (
+                      <span class="text-xs font-mono px-2 py-0.5 rounded-md bg-surface-container border border-glass-border text-accent shrink-0">
+                        {peer.edgeLabel}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <!-- Outbound (Downstream) -->
+          <div class="rounded-2xl bg-surface-container border border-glass-border p-3.5 space-y-2">
+            <div class="flex items-center justify-between text-xs font-mono">
+              <span class="font-bold text-brand uppercase tracking-wider">
+                → 출력 / 의존 대상 (Downstream)
+              </span>
+              <span class="text-text-muted">{node.outbounds.length}건</span>
+            </div>
+
+            {node.outbounds.length === 0 ? (
+              <p class="text-xs text-text-muted py-2">
+                최종 종단(Sink)이거나 하위 호출 대상이 없습니다.
+              </p>
+            ) : (
+              <div class="flex flex-col gap-1.5">
+                {node.outbounds.map((peer) => (
+                  <button
+                    type="button"
+                    data-arch-jump={peer.nodeId}
+                    class="min-h-12 px-3 py-2 rounded-xl bg-glass-bg hover:bg-glass-bg-hover border border-glass-border hover:border-brand/50 text-left flex items-center justify-between gap-2 transition-colors cursor-pointer">
+                    <div class="min-w-0">
+                      <div class="text-xs font-bold text-text-primary truncate">
+                        {peer.nodeTitle}
+                      </div>
+                      <div class="text-xs font-mono text-text-muted truncate">
+                        {peer.groupLabel}
+                      </div>
+                    </div>
+                    {peer.edgeLabel && (
+                      <span class="text-xs font-mono px-2 py-0.5 rounded-md bg-surface-container border border-glass-border text-brand shrink-0">
+                        {peer.edgeLabel}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  })}
+</div>

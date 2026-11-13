@@ -1,0 +1,44 @@
+---
+import SidebarToggleIcon from "../../components/icons/SidebarToggleIcon.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  badge: string;
+  totalCount: number;
+}
+
+const { title, description, badge, totalCount } = Astro.props;
+---
+
+<!-- 저장소 헤더 바 -->
+<header class="p-6 medium:p-8 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism flex flex-col medium:flex-row medium:items-end justify-between gap-4">
+  <div>
+    <div class="flex items-center gap-2 mb-1.5">
+      <span class="text-xs font-mono font-bold uppercase tracking-wider text-brand">{badge}</span>
+      <span class="text-text-muted text-xs">•</span>
+      <span class="text-xs font-mono text-text-muted">대화형 저장소</span>
+    </div>
+    <h1 class="text-3xl medium:text-4xl expanded:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-linear-to-r from-brand to-brand-hover">
+      {title}
+    </h1>
+    <p class="text-sm medium:text-base text-text-muted mt-2">{description}</p>
+  </div>
+
+  <!-- 탐색기 드로어 토글 버튼(compact·medium) & 전체 수량 -->
+  <div class="flex items-center gap-3">
+    <button
+      type="button"
+      id="mobile-drawer-toggle"
+      aria-label="파일 탐색기 열기"
+      class="expanded:hidden min-h-12 px-4 rounded-2xl bg-brand-soft border border-brand/30 text-brand font-bold text-xs flex items-center gap-2 hover:bg-brand-muted transition-colors cursor-pointer">
+      <SidebarToggleIcon class="w-4 h-4" />
+      <span>파일 탐색기</span>
+    </button>
+
+    <div class="text-xs font-mono text-text-muted px-3 py-2 rounded-xl bg-glass-bg border border-glass-border">
+      저장소 인덱스<strong class="text-brand font-bold">{totalCount}</strong>건
+    </div>
+  </div>
+</header>
+

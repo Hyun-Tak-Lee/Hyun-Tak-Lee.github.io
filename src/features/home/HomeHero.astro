@@ -1,0 +1,80 @@
+---
+interface Props {
+  profileImageUrl: string;
+  projectCount: number;
+  techCount: number;
+}
+
+const { profileImageUrl, projectCount, techCount } = Astro.props;
+---
+
+<!-- Hero / Overview Banner: Single column on Compact, Split Pane on Expanded (PC) -->
+<section class="grid grid-cols-1 expanded:grid-cols-12 gap-6 expanded:gap-8 items-stretch">
+  <div class="expanded:col-span-8 large:col-span-9 p-6 medium:p-8 expanded:p-10 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism flex flex-col justify-center">
+    <!-- Profile: GitHub 아바타 + 이름 + 한 줄 소개 -->
+    <div class="flex items-center gap-4 medium:gap-6">
+      <img
+        src={profileImageUrl}
+        alt="Hyun-Tak Lee 프로필 사진"
+        width="96"
+        height="96"
+        decoding="async"
+        class="w-16 h-16 medium:w-24 medium:h-24 rounded-full border border-glass-border bg-brand-muted shrink-0 object-cover"
+      />
+      <div class="min-w-0">
+        <h1 class="text-2xl medium:text-3xl font-bold tracking-tight">Hyun-Tak Lee</h1>
+        <p class="mt-1 medium:mt-2 text-sm medium:text-base text-text-muted">
+          진행한 프로젝트와 기술별 사용 이유를 정리해 둔 공간입니다.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PC / Tablet Summary Metrics Pane -->
+  <div class="expanded:col-span-4 large:col-span-3 grid grid-cols-2 expanded:grid-cols-1 gap-4">
+    <a
+      href="/projects"
+      class="p-5 medium:p-6 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism hover:shadow-neumorphism-hover transition-all flex flex-col justify-between group">
+      <div class="flex items-center justify-between text-text-muted">
+        <span class="text-xs font-mono uppercase tracking-wider">프로젝트</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-5 h-5 text-brand group-hover:translate-x-0.5 transition-transform"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"></path>
+        </svg>
+      </div>
+      <div class="mt-4 text-3xl medium:text-4xl font-black text-brand">{projectCount}</div>
+    </a>
+
+    <a
+      href="/tech"
+      class="p-5 medium:p-6 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism hover:shadow-neumorphism-hover transition-all flex flex-col justify-between group">
+      <div class="flex items-center justify-between text-text-muted">
+        <span class="text-xs font-mono uppercase tracking-wider">기술 문서</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-5 h-5 text-brand group-hover:translate-x-0.5 transition-transform"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+        </svg>
+      </div>
+      <div class="mt-4 text-3xl medium:text-4xl font-black text-brand">{techCount}</div>
+    </a>
+  </div>
+</section>
+
