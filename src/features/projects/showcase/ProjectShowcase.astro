@@ -1,0 +1,81 @@
+---
+import ProjectHeader from "./ProjectHeader.astro";
+import ProjectSidebar from "./ProjectSidebar.astro";
+import ProjectToolbar from "./ProjectToolbar.astro";
+import ProjectViewer from "./ProjectViewer.astro";
+import CloseIcon from "@components/icons/CloseIcon.astro";
+import type { ProjectShowcaseItem } from "../types";
+
+interface Props {
+  title?: string;
+  description?: string;
+  badge?: string;
+  items: ProjectShowcaseItem[];
+}
+
+const { title, description, badge, items } = Astro.props;
+
+const defaultActiveId = items.length > 0 ? items[0].id : "";
+const architectureCount = items.filter((item) => Boolean(item.architecture)).length;
+---
+
+<div class="space-y-6">
+  <ProjectHeader
+    title={title}
+    description={description}
+    badge={badge}
+    totalCount={items.length}
+    architectureCount={architectureCount}
+  />
+
+  {items.length === 0 && (
+    <div class="text-center py-20 px-4 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism text-text-muted">
+      등록된 프로젝트가 없습니다.
+    </div>
+  )}
+
+  {items.length > 0 && (
+    <div
+      class="grid grid-cols-1 expanded:flex expanded:items-start expanded:gap-6 relative"
+      id="project-showcase">
+      <div
+        id="project-sidebar-column"
+        class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs transition-opacity opacity-0 invisible pointer-events-none expanded:static expanded:inset-auto expanded:z-auto expanded:bg-transparent expanded:backdrop-blur-none expanded:transition-none expanded:opacity-100 expanded:visible expanded:pointer-events-auto expanded:block expanded:w-72 large:w-80 expanded:shrink-0 expanded:sticky expanded:top-[calc(var(--spacing-header)+1rem)] expanded:h-[calc(100svh-var(--spacing-header)-3rem)]">
+        <div
+          id="project-drawer-content"
+          class="absolute inset-y-0 left-0 w-5/6 max-w-xs bg-surface-container p-4 shadow-2xl transform -translate-x-full transition-transform flex flex-col expanded:static expanded:inset-auto expanded:w-full expanded:max-w-none expanded:h-full expanded:bg-transparent expanded:p-0 expanded:shadow-none expanded:translate-x-0 expanded:transition-none">
+          <div class="flex items-center justify-between pb-3 mb-2 border-b border-glass-border expanded:hidden">
+            <span class="font-bold text-sm text-text-primary">프로젝트 목록</span>
+            <button
+              type="button"
+              id="project-drawer-close"
+              aria-label="목록 닫기"
+              class="min-h-12 min-w-12 flex items-center justify-center text-text-muted hover:text-text-primary cursor-pointer">
+              <CloseIcon class="w-5 h-5" />
+            </button>
+          </div>
+          <div class="flex-1 overflow-hidden expanded:h-full">
+            <ProjectSidebar items={items} activeId={defaultActiveId} />
+          </div>
+        </div>
+      </div>
+
+      <div id="project-main-column" class="w-full expanded:flex-1 min-w-0 flex flex-col gap-4">
+        <ProjectToolbar
+          initialCategory={items[0]?.category}
+          initialTitle={items[0]?.title}
+          initialProjectId={items[0]?.id}
+        />
+
+        <ProjectViewer items={items} activeId={defaultActiveId} />
+      </div>
+    </div>
+  )}
+</div>
+
+<!-- 프로젝트 전환, 검색, 사이드바 토글 및 아키텍처 그래프 리사이즈 동기화 -->
+<script>
+  import { initProjectShowcase } from "./showcase.client";
+
+  initProjectShowcase();
+</script>

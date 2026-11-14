@@ -1,5 +1,5 @@
 ---
-import { formatDate } from "../../utils/date";
+import { formatDate } from "@utils/date";
 import type { IssueCardItem, IssueFilter } from "./issues";
 
 interface Props {
@@ -67,7 +67,9 @@ const { countsByFilter, displayedIssues } = Astro.props;
     아직 등록된 이슈가 없습니다
   </div>
 
-  <div id="issue-list" class="grid grid-cols-1 expanded:grid-cols-2 large:grid-cols-3 gap-4 medium:gap-6">
+  <div
+    id="issue-list"
+    class="grid grid-cols-1 expanded:grid-cols-2 large:grid-cols-3 gap-4 medium:gap-6">
     {displayedIssues.map((post) => (
       <a
         href={`/${post.collectionType}?file=${post.id}`}
@@ -151,4 +153,3 @@ const { countsByFilter, displayedIssues } = Astro.props;
     });
   });
 </script>
-

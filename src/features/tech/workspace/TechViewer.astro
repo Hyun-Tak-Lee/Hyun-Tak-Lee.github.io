@@ -1,21 +1,19 @@
 ---
-import ExpandIcon from "../../components/icons/ExpandIcon.astro";
-import ArchitectureGraph from "../projects/ArchitectureGraph.astro";
-import type { WorkspaceItem } from "./types";
-import { formatDate } from "../../utils/date";
+import ExpandIcon from "@components/icons/ExpandIcon.astro";
+import type { TechWorkspaceItem } from "../types";
+import { formatDate } from "@utils/date";
 
 interface Props {
-  collectionName: string;
-  items: WorkspaceItem[];
+  items: TechWorkspaceItem[];
   activeId: string;
 }
 
-const { collectionName, items, activeId } = Astro.props;
+const { items, activeId } = Astro.props;
 ---
 
 <main
-  id="repo-content-viewer"
-  class="p-5 medium:p-8 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism min-h-[60dvh]">
+  id="tech-content-viewer"
+  class="p-5 medium:p-8 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism min-h-[60svh]">
   {items.map((item) => {
     const isActive = item.id === activeId;
     const ItemContent = item.Content;
@@ -23,7 +21,7 @@ const { collectionName, items, activeId } = Astro.props;
 
     return (
       <article
-        data-viewer-article={item.id}
+        data-tech-viewer-article={item.id}
         data-category={item.category}
         class:list={["space-y-6", !isActive && "hidden"]}>
         <header class="pb-6 border-b border-glass-border space-y-3">
@@ -39,7 +37,7 @@ const { collectionName, items, activeId } = Astro.props;
               ))}
             </div>
             <a
-              href={`/${collectionName}/${item.id}`}
+              href={`/tech/${item.id}`}
               aria-label={`${item.title} 전체 화면으로 보기`}
               title="전체 화면으로 보기"
               class="hidden expanded:inline-flex shrink-0 min-h-12 min-w-12 items-center justify-center rounded-full text-text-muted hover:text-brand hover:bg-glass-bg-hover transition-colors">
@@ -65,7 +63,7 @@ const { collectionName, items, activeId } = Astro.props;
 
           <!-- 인스펙터가 숨겨지거나 접힌 상태에서 태그·목차를 본문 헤더에 표시 -->
           {item.tags && item.tags.length > 0 && (
-            <div data-inspector-fallback class="large:hidden flex flex-wrap gap-1.5 pt-1">
+            <div data-tech-inspector-fallback class="large:hidden flex flex-wrap gap-1.5 pt-1">
               {item.tags.map((tag) => (
                 <span class="px-2.5 py-1 rounded-xl bg-glass-bg border border-glass-border text-xs text-text-primary font-mono">
                   #{tag}
@@ -76,7 +74,7 @@ const { collectionName, items, activeId } = Astro.props;
 
           {toc.length > 0 && (
             <details
-              data-inspector-fallback
+              data-tech-inspector-fallback
               class="large:hidden px-4 rounded-2xl bg-glass-bg border border-glass-border">
               <summary class="min-h-12 flex items-center text-sm font-bold text-brand cursor-pointer select-none">
                 목차
@@ -96,11 +94,10 @@ const { collectionName, items, activeId } = Astro.props;
           )}
         </header>
 
-        {item.architecture && (
-          <ArchitectureGraph
-            architecture={item.architecture}
-            instanceId={`workspace-${collectionName}-${item.id}`}
-          />
+        {item.image && (
+          <div class="rounded-2xl medium:rounded-3xl overflow-hidden shadow-neumorphism">
+            <img src={item.image.url} alt={item.image.alt} class="w-full h-auto object-cover" />
+          </div>
         )}
 
         <div class="prose prose-brand prose-base max-w-none prose-headings:font-bold prose-headings:scroll-mt-[calc(var(--spacing-header)+1rem)] prose-a:text-brand hover:prose-a:underline prose-img:rounded-2xl prose-pre:overflow-x-auto text-text-primary">
@@ -110,4 +107,3 @@ const { collectionName, items, activeId } = Astro.props;
     );
   })}
 </main>
-

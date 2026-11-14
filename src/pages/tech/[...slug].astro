@@ -1,7 +1,7 @@
 ---
 import { render } from "astro:content";
-import RepoDetailLayout from "../../features/repo/RepoDetailLayout.astro";
-import { getSortedTechPosts } from "../../features/tech/queries";
+import TechDetailLayout from "@features/tech/detail/TechDetailLayout.astro";
+import { getSortedTechPosts } from "@features/tech/queries";
 
 export async function getStaticPaths() {
   const techPosts = await getSortedTechPosts();
@@ -15,9 +15,7 @@ const { post } = Astro.props;
 const { Content, headings } = await render(post);
 ---
 
-<RepoDetailLayout
-  collectionName="tech"
-  collectionLabel="기술"
+<TechDetailLayout
   backLabel="기술 문서 저장소로 돌아가기"
   itemId={post.id}
   data={post.data}

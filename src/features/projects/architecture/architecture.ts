@@ -4,7 +4,7 @@ import type {
   ArchitectureFragment,
   ArchitectureGroup,
   ArchitectureNode,
-} from "../../content.config";
+} from "@/content.config";
 
 export interface ConnectedPeer {
   nodeId: string;
@@ -187,4 +187,3 @@ export function buildArchitectureGraphModel(
     defaultNodeId: nodes[0]?.id ?? "",
   };
 }
-

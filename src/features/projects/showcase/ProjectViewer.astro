@@ -1,0 +1,44 @@
+---
+import ProjectArticleStage from "../detail/ProjectArticleStage.astro";
+import type { ProjectShowcaseItem } from "../types";
+
+interface Props {
+  items: ProjectShowcaseItem[];
+  activeId: string;
+}
+
+const { items, activeId } = Astro.props;
+---
+
+<main
+  id="project-stage-viewer"
+  class="p-5 medium:p-8 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism min-h-[60svh]">
+  {items.map((item) => {
+    const isActive = item.id === activeId;
+
+    return (
+      <article
+        data-project-article={item.id}
+        data-category={item.category}
+        data-title={item.title}
+        class:list={["space-y-8", !isActive && "hidden"]}>
+        <ProjectArticleStage
+          id={item.id}
+          title={item.title}
+          category={item.category}
+          sub_category={item.sub_category}
+          pubDate={item.pubDate}
+          description={item.description}
+          tags={item.tags}
+          image={item.image}
+          architecture={item.architecture}
+          headings={item.headings}
+          Content={item.Content}
+          isStandalone={false}
+          archSectionId={`project-arch-${item.id}`}
+          archInstanceId={`project-showcase-${item.id}`}
+        />
+      </article>
+    );
+  })}
+</main>

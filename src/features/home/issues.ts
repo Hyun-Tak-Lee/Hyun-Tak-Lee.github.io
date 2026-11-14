@@ -1,5 +1,5 @@
 import { getCollection } from "astro:content";
-import type { PostData } from "../../content.config";
+import type { PostData } from "@/content.config";
 
 export type IssueFilter = "all" | "projects" | "tech";
 

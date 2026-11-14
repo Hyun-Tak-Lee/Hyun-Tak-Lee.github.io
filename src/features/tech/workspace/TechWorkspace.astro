@@ -1,0 +1,77 @@
+---
+import TechHeader from "./TechHeader.astro";
+import TechFileTree from "./TechFileTree.astro";
+import TechToolbar from "./TechToolbar.astro";
+import TechViewer from "./TechViewer.astro";
+import TechInspector from "./TechInspector.astro";
+import CloseIcon from "@components/icons/CloseIcon.astro";
+import type { TechWorkspaceItem } from "../types";
+
+interface Props {
+  title?: string;
+  description?: string;
+  badge?: string;
+  items: TechWorkspaceItem[];
+}
+
+const { title, description, badge, items } = Astro.props;
+
+const defaultActiveId = items.length > 0 ? items[0].id : "";
+---
+
+<div class="space-y-6">
+  <TechHeader title={title} description={description} badge={badge} totalCount={items.length} />
+
+  {items.length === 0 && (
+    <div class="text-center py-20 px-4 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism text-text-muted">
+      저장소에 등록된 기술 문서가 없습니다.
+    </div>
+  )}
+
+  {items.length > 0 && (
+    <div
+      class="grid grid-cols-1 expanded:flex expanded:items-start expanded:gap-6 relative"
+      id="tech-workspace">
+      <div
+        id="tech-explorer-column"
+        class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs transition-opacity opacity-0 invisible pointer-events-none expanded:static expanded:inset-auto expanded:z-auto expanded:bg-transparent expanded:backdrop-blur-none expanded:transition-none expanded:opacity-100 expanded:visible expanded:pointer-events-auto expanded:block expanded:w-64 large:w-72 expanded:shrink-0 expanded:sticky expanded:top-[calc(var(--spacing-header)+1rem)] expanded:h-[calc(100dvh-var(--spacing-header)-3rem)]">
+        <div
+          id="tech-drawer-content"
+          class="absolute inset-y-0 left-0 w-5/6 max-w-xs bg-surface-container p-4 shadow-2xl transform -translate-x-full transition-transform flex flex-col expanded:static expanded:inset-auto expanded:w-full expanded:max-w-none expanded:h-full expanded:bg-transparent expanded:p-0 expanded:shadow-none expanded:translate-x-0 expanded:transition-none">
+          <div class="flex items-center justify-between pb-3 mb-2 border-b border-glass-border expanded:hidden">
+            <span class="font-bold text-sm text-text-primary">파일 탐색기</span>
+            <button
+              type="button"
+              id="tech-drawer-close"
+              aria-label="탐색기 닫기"
+              class="min-h-12 min-w-12 flex items-center justify-center text-text-muted hover:text-text-primary cursor-pointer">
+              <CloseIcon class="w-5 h-5" />
+            </button>
+          </div>
+          <div class="flex-1 overflow-hidden expanded:h-full">
+            <TechFileTree items={items} activeId={defaultActiveId} />
+          </div>
+        </div>
+      </div>
+
+      <div id="tech-main-column" class="w-full expanded:flex-1 min-w-0 flex flex-col gap-4">
+        <TechToolbar initialCategory={items[0]?.category} initialFileId={items[0]?.id} />
+
+        <TechViewer items={items} activeId={defaultActiveId} />
+      </div>
+
+      <div
+        id="tech-inspector-column"
+        class="hidden large:block large:w-72 shrink-0 sticky top-[calc(var(--spacing-header)+1rem)] h-[calc(100dvh-var(--spacing-header)-3rem)]">
+        <TechInspector items={items} activeId={defaultActiveId} />
+      </div>
+    </div>
+  )}
+</div>
+
+<!-- 인터랙티브 스왑 및 URL 상태 관리 클라이언트 스크립트 -->
+<script>
+  import { initTechWorkspace } from "./workspace.client";
+
+  initTechWorkspace();
+</script>

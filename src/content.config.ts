@@ -59,10 +59,17 @@ export const postSchema = z.object({
       alt: z.string(),
     })
     .optional(),
+});
+
+export const projectSchema = postSchema.extend({
   architecture: architectureSchema.optional(),
 });
 
+export const techSchema = postSchema;
+
 export type PostData = z.infer<typeof postSchema>;
+export type ProjectData = z.infer<typeof projectSchema>;
+export type TechData = z.infer<typeof techSchema>;
 
 const normalizeContentId = ({ entry }: { entry: string }) =>
   entry
@@ -76,7 +83,7 @@ const projectsCollection = defineCollection({
     base: "./src/content/projects",
     generateId: normalizeContentId,
   }),
-  schema: postSchema,
+  schema: projectSchema,
 });
 
 const projectArchitecturesCollection = defineCollection({
@@ -94,7 +101,7 @@ const techCollection = defineCollection({
     base: "./src/content/tech",
     generateId: normalizeContentId,
   }),
-  schema: postSchema,
+  schema: techSchema,
 });
 
 export const collections = {

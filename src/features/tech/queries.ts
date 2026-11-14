@@ -1,5 +1,5 @@
 import { getCollection, render, type CollectionEntry } from "astro:content";
-import type { WorkspaceItem } from "../repo/types";
+import type { TechWorkspaceItem } from "./types";
 
 export async function getSortedTechPosts(): Promise<CollectionEntry<"tech">[]> {
   const techPosts = await getCollection("tech");
@@ -9,7 +9,7 @@ export async function getSortedTechPosts(): Promise<CollectionEntry<"tech">[]> {
 /**
  * 기술 문서 저장소 워크스페이스용 아이템 목록을 생성한다.
  */
-export async function getTechWorkspaceItems(): Promise<WorkspaceItem[]> {
+export async function getTechWorkspaceItems(): Promise<TechWorkspaceItem[]> {
   const sortedTech = await getSortedTechPosts();
 
   return Promise.all(
@@ -23,6 +23,7 @@ export async function getTechWorkspaceItems(): Promise<WorkspaceItem[]> {
         pubDate: post.data.pubDate,
         description: post.data.description,
         tags: post.data.tags,
+        image: post.data.image,
         headings,
         Content,
       };

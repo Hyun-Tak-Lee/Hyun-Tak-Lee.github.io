@@ -1,0 +1,59 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import ArrowLeftIcon from "@components/icons/ArrowLeftIcon.astro";
+import ProjectArticleStage from "./ProjectArticleStage.astro";
+import type { ArchitectureData, ProjectData } from "@/content.config";
+import type { ProjectHeading } from "../types";
+
+interface Props {
+  itemId: string;
+  data: ProjectData;
+  architecture?: ArchitectureData;
+  headings: ProjectHeading[];
+  Content: any;
+  backLabel?: string;
+}
+
+const {
+  itemId,
+  data,
+  architecture,
+  headings,
+  Content,
+  backLabel = "프로젝트 쇼케이스로 돌아가기",
+} = Astro.props;
+---
+
+<BaseLayout
+  title={`${data.title} | Hyun-Tak Lee`}
+  description={data.description}
+  image={data.image?.url}
+  type="article">
+  <article class="min-w-0 p-5 medium:p-8 expanded:p-10 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism space-y-8">
+    <ProjectArticleStage
+      id={itemId}
+      title={data.title}
+      category={data.category}
+      sub_category={data.sub_category}
+      pubDate={data.pubDate}
+      description={data.description}
+      tags={data.tags}
+      image={data.image}
+      architecture={architecture}
+      headings={headings}
+      Content={Content}
+      isStandalone={true}
+      archSectionId={`project-detail-arch-${itemId}`}
+      archInstanceId={`project-detail-${itemId}`}
+    />
+
+    <div class="pt-6 border-t border-glass-border flex items-center justify-between gap-4">
+      <a
+        href={`/projects?file=${itemId}`}
+        class="min-h-12 inline-flex items-center text-sm medium:text-base font-bold text-brand hover:underline">
+        <ArrowLeftIcon class="h-5 w-5 mr-2 shrink-0" />
+        {backLabel}
+      </a>
+    </div>
+  </article>
+</BaseLayout>

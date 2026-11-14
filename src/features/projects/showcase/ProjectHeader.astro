@@ -1,0 +1,64 @@
+---
+import SidebarToggleIcon from "@components/icons/SidebarToggleIcon.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+  badge?: string;
+  totalCount: number;
+  architectureCount?: number;
+}
+
+const {
+  title = "프로젝트 쇼케이스",
+  description = "수행한 웹 애플리케이션과 시스템 인프라 구축 프로젝트의 아키텍처와 구현 세부 사항을 집중적으로 살펴볼 수 있습니다.",
+  badge = "PROJECT SHOWCASE",
+  totalCount,
+  architectureCount = 0,
+} = Astro.props;
+---
+
+<!-- 프로젝트 쇼케이스 상단 헤더 -->
+<header class="p-6 medium:p-8 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism flex flex-col expanded:flex-row expanded:items-end justify-between gap-4">
+  <div>
+    <div class="flex flex-wrap items-center gap-2 mb-1.5">
+      <span class="text-xs font-mono font-bold uppercase tracking-wider text-brand">{badge}</span>
+      <span class="text-text-muted text-xs">•</span>
+      <span class="text-xs font-mono text-text-muted">시스템 설계 및 구현 아카이브</span>
+    </div>
+    <h1 class="text-3xl medium:text-4xl expanded:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-linear-to-r from-brand to-brand-hover">
+      {title}
+    </h1>
+    <p class="text-sm medium:text-base text-text-muted mt-2 max-w-3xl leading-relaxed">
+      {description}
+    </p>
+  </div>
+
+  <!-- 목록 드로어 토글 버튼(compact·medium) & 쇼케이스 수량 요약 -->
+  <div class="flex flex-wrap items-center gap-3 shrink-0">
+    {totalCount > 0 && (
+      <button
+        type="button"
+        id="project-drawer-toggle"
+        aria-label="프로젝트 목록 열기"
+        class="expanded:hidden min-h-12 px-4 rounded-2xl bg-brand-soft border border-brand/30 text-brand font-bold text-xs flex items-center gap-2 hover:bg-brand-muted transition-colors cursor-pointer">
+        <SidebarToggleIcon class="w-4 h-4" />
+        <span>프로젝트 목록</span>
+      </button>
+    )}
+
+    <div class="flex items-center gap-2 text-xs font-mono text-text-muted px-3.5 py-2.5 rounded-2xl bg-glass-bg border border-glass-border">
+      <span>
+        전체<strong class="text-brand font-bold">{totalCount}</strong>건
+      </span>
+      {architectureCount > 0 && (
+        <>
+          <span class="text-glass-border">|</span>
+          <span>
+            아키텍처 <strong class="text-accent font-bold">{architectureCount}</strong>건
+          </span>
+        </>
+      )}
+    </div>
+  </div>
+</header>

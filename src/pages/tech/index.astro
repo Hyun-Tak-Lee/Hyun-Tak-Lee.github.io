@@ -1,7 +1,7 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import RepoWorkspace from "../../features/repo/RepoWorkspace.astro";
-import { getTechWorkspaceItems } from "../../features/tech/queries";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import TechWorkspace from "@features/tech/workspace/TechWorkspace.astro";
+import { getTechWorkspaceItems } from "@features/tech/queries";
 
 const items = await getTechWorkspaceItems();
 ---
@@ -9,8 +9,7 @@ const items = await getTechWorkspaceItems();
 <BaseLayout
   title="기술 문서 저장소 | Hyun-Tak Lee"
   description="사용한 기술 스펙과 아키텍처 의사결정 기록을 탐색할 수 있는 공간입니다.">
-  <RepoWorkspace
-    collectionName="tech"
+  <TechWorkspace
     title="기술 문서 저장소"
     description="사용한 기술 스펙과 아키텍처 의사결정 기록을 탐색할 수 있습니다."
     badge="엔지니어링 노트"

@@ -1,19 +1,18 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import RepoWorkspace from "../../features/repo/RepoWorkspace.astro";
-import { getProjectWorkspaceItems } from "../../features/projects/queries";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import ProjectShowcase from "@features/projects/showcase/ProjectShowcase.astro";
+import { getProjectShowcaseItems } from "@features/projects/queries";
 
-const items = await getProjectWorkspaceItems();
+const items = await getProjectShowcaseItems();
 ---
 
 <BaseLayout
-  title="프로젝트 저장소 | Hyun-Tak Lee"
-  description="수행한 웹 애플리케이션 및 시스템 인프라 구축 프로젝트를 탐색할 수 있는 공간입니다.">
-  <RepoWorkspace
-    collectionName="projects"
-    title="프로젝트 저장소"
-    description="수행한 웹 애플리케이션 및 시스템 인프라 구축 프로젝트 포트폴리오를 탐색할 수 있습니다."
-    badge="포트폴리오 저장소"
+  title="프로젝트 쇼케이스 | Hyun-Tak Lee"
+  description="수행한 웹 애플리케이션 및 시스템 인프라 구축 프로젝트의 아키텍처와 구현 세부 사항을 탐색할 수 있는 공간입니다.">
+  <ProjectShowcase
+    title="프로젝트 쇼케이스"
+    description="수행한 웹 애플리케이션과 시스템 인프라 구축 프로젝트의 아키텍처와 구현 세부 사항을 집중적으로 살펴볼 수 있습니다."
+    badge="PROJECT SHOWCASE"
     items={items}
   />
 </BaseLayout>

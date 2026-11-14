@@ -1,0 +1,48 @@
+---
+import SidebarToggleIcon from "@components/icons/SidebarToggleIcon.astro";
+import ExpandIcon from "@components/icons/ExpandIcon.astro";
+
+interface Props {
+  initialCategory?: string;
+  initialTitle?: string;
+  initialProjectId?: string;
+}
+
+const { initialCategory = "", initialTitle = "", initialProjectId = "" } = Astro.props;
+---
+
+<div class="px-3.5 py-2 rounded-2xl bg-surface-container border border-glass-border shadow-neumorphism flex items-center justify-between gap-2 overflow-x-auto">
+  <div class="flex items-center gap-2 min-w-0">
+    <button
+      type="button"
+      data-project-sidebar-toggle
+      aria-expanded="true"
+      aria-controls="project-sidebar-column"
+      aria-label="프로젝트 목록 접기"
+      title="프로젝트 목록 접기"
+      class="hidden expanded:inline-flex min-h-12 min-w-12 -my-1 -ml-1.5 items-center justify-center rounded-xl bg-brand-soft border border-brand/35 text-brand hover:bg-glass-bg-hover transition-colors cursor-pointer shrink-0">
+      <SidebarToggleIcon class="w-4 h-4" />
+    </button>
+
+    <div class="flex items-center gap-1.5 text-xs font-mono text-text-muted truncate">
+      <span class="shrink-0">프로젝트</span>
+      <span class="shrink-0">/</span>
+      <span id="active-project-category" class="text-text-primary font-medium truncate">
+        {initialCategory}
+      </span>
+      <span class="shrink-0">/</span>
+      <span id="active-project-title" class="text-brand font-bold truncate">
+        {initialTitle}
+      </span>
+    </div>
+  </div>
+
+  <a
+    id="active-project-expand-link"
+    href={initialProjectId ? `/projects/${initialProjectId}` : "/projects"}
+    aria-label={initialTitle ? `${initialTitle} 단독 페이지로 보기` : "단독 페이지로 보기"}
+    class="hidden expanded:inline-flex min-h-12 -my-1 -mr-1.5 px-3.5 items-center gap-2 rounded-xl bg-glass-bg hover:bg-glass-bg-hover border border-glass-border text-xs font-semibold text-text-muted hover:text-brand transition-colors shrink-0">
+    <ExpandIcon class="w-4 h-4 shrink-0" />
+    <span>단독 페이지로 보기</span>
+  </a>
+</div>

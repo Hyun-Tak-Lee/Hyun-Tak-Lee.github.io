@@ -1,33 +1,20 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import ArrowLeftIcon from "../../components/icons/ArrowLeftIcon.astro";
-import CollapseIcon from "../../components/icons/CollapseIcon.astro";
-import ArchitectureGraph from "../projects/ArchitectureGraph.astro";
-import type { ArchitectureData, PostData } from "../../content.config";
-import type { RepoHeading } from "./types";
-import { formatDate } from "../../utils/date";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import ArrowLeftIcon from "@components/icons/ArrowLeftIcon.astro";
+import CollapseIcon from "@components/icons/CollapseIcon.astro";
+import type { TechData } from "@/content.config";
+import type { TechHeading } from "../types";
+import { formatDate } from "@utils/date";
 
 interface Props {
-  collectionName: "projects" | "tech";
-  collectionLabel: string;
-  backLabel: string;
   itemId: string;
-  data: PostData;
-  architecture?: ArchitectureData;
-  headings: RepoHeading[];
+  data: TechData;
+  headings: TechHeading[];
   Content: any;
+  backLabel?: string;
 }
 
-const {
-  collectionName,
-  collectionLabel,
-  backLabel,
-  itemId,
-  data,
-  architecture,
-  headings,
-  Content,
-} = Astro.props;
+const { itemId, data, headings, Content, backLabel = "기술 문서 저장소로 돌아가기" } = Astro.props;
 
 const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 ---
@@ -43,9 +30,7 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
       <header class="mb-8 pb-6 border-b border-glass-border">
         <div class="flex items-center justify-between gap-2 mb-3 -mt-3 -mr-3">
           <div class="text-xs font-mono tracking-widest text-brand flex flex-wrap items-center gap-2 uppercase">
-            <span>
-              {collectionLabel}/{data.category}
-            </span>
+            <span>기술/{data.category}</span>
             {data.sub_category?.map((sub) => (
               <span class="flex items-center gap-2 text-text-muted">
                 <span>•</span>
@@ -54,7 +39,7 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
             ))}
           </div>
           <a
-            href={`/${collectionName}?file=${itemId}`}
+            href={`/tech?file=${itemId}`}
             aria-label={`${data.title} 저장소 화면으로 축소`}
             title="저장소 화면으로 축소"
             class="shrink-0 min-h-12 min-w-12 inline-flex items-center justify-center rounded-full text-text-muted hover:text-brand hover:bg-glass-bg-hover transition-colors">
@@ -84,7 +69,7 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 
       {tocHeadings.length > 0 && (
         <details class="expanded:hidden mb-8 px-4 rounded-2xl bg-glass-bg border border-glass-border">
-          <summary class="py-3.5 text-sm font-bold text-brand cursor-pointer select-none">
+          <summary class="min-h-12 flex items-center text-sm font-bold text-brand cursor-pointer select-none">
             목차
           </summary>
           <ul class="pt-2 pb-3 text-sm border-t border-glass-border">
@@ -101,22 +86,13 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
         </details>
       )}
 
-      {architecture && (
-        <div class="mb-8">
-          <ArchitectureGraph
-            architecture={architecture}
-            instanceId={`${collectionName}-${itemId}`}
-          />
-        </div>
-      )}
-
       <article class="prose prose-brand prose-base medium:prose-lg max-w-none prose-headings:font-bold prose-headings:scroll-mt-[calc(var(--spacing-header)+1rem)] prose-a:text-brand hover:prose-a:underline prose-img:rounded-2xl medium:prose-img:rounded-3xl prose-pre:overflow-x-auto">
         <Content />
       </article>
 
       <div class="mt-12 pt-6 border-t border-glass-border flex flex-col medium:flex-row justify-between items-start medium:items-center gap-4">
         <a
-          href={`/${collectionName}?file=${itemId}`}
+          href={`/tech?file=${itemId}`}
           class="min-h-12 inline-flex items-center text-sm medium:text-base font-bold text-brand hover:underline">
           <ArrowLeftIcon class="h-5 w-5 mr-2 shrink-0" />
           {backLabel}
@@ -134,7 +110,7 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 
     <!-- Supporting Pane (PC Expanded Only) -->
     <aside
-      aria-label={`${collectionLabel} 목차 및 정보`}
+      aria-label="기술 문서 목차 및 정보"
       class="hidden expanded:flex flex-col gap-6 sticky top-[calc(var(--spacing-header)+2rem)]">
       {tocHeadings.length > 0 && (
         <div class="p-6 rounded-3xl bg-surface-container border border-glass-border shadow-neumorphism">

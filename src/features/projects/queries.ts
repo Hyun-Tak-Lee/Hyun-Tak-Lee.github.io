@@ -1,7 +1,7 @@
 import { getCollection, render, type CollectionEntry } from "astro:content";
-import type { ArchitectureData } from "../../content.config";
-import type { WorkspaceItem } from "../repo/types";
-import { mergeArchitectureFragments } from "./architecture";
+import type { ArchitectureData } from "@/content.config";
+import type { ProjectShowcaseItem } from "./types";
+import { mergeArchitectureFragments } from "./architecture/architecture";
 
 export interface EnrichedProjectEntry {
   entry: CollectionEntry<"projects">;
@@ -38,9 +38,9 @@ export async function getEnrichedProjects(): Promise<EnrichedProjectEntry[]> {
 }
 
 /**
- * 프로젝트 저장소 워크스페이스용 아이템 목록을 생성한다.
+ * 프로젝트 쇼케이스 화면용 아이템 목록을 생성한다.
  */
-export async function getProjectWorkspaceItems(): Promise<WorkspaceItem[]> {
+export async function getProjectShowcaseItems(): Promise<ProjectShowcaseItem[]> {
   const enrichedProjects = await getEnrichedProjects();
   return Promise.all(
     enrichedProjects.map(async ({ entry, architecture }) => {
@@ -53,6 +53,7 @@ export async function getProjectWorkspaceItems(): Promise<WorkspaceItem[]> {
         pubDate: entry.data.pubDate,
         description: entry.data.description,
         tags: entry.data.tags,
+        image: entry.data.image,
         architecture,
         headings,
         Content,

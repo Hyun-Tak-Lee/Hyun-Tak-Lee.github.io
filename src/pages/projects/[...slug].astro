@@ -1,7 +1,7 @@
 ---
 import { render } from "astro:content";
-import RepoDetailLayout from "../../features/repo/RepoDetailLayout.astro";
-import { getEnrichedProjects } from "../../features/projects/queries";
+import ProjectDetailLayout from "@features/projects/detail/ProjectDetailLayout.astro";
+import { getEnrichedProjects } from "@features/projects/queries";
 
 export async function getStaticPaths() {
   const enrichedProjects = await getEnrichedProjects();
@@ -15,10 +15,8 @@ const { project, architecture } = Astro.props;
 const { Content, headings } = await render(project);
 ---
 
-<RepoDetailLayout
-  collectionName="projects"
-  collectionLabel="프로젝트"
-  backLabel="프로젝트 저장소로 돌아가기"
+<ProjectDetailLayout
+  backLabel="프로젝트 쇼케이스로 돌아가기"
   itemId={project.id}
   data={project.data}
   architecture={architecture}
