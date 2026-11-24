@@ -11,6 +11,7 @@ const navItems = [
   { name: "Home", href: "/" },
   { name: "Projects", href: "/projects" },
   { name: "Tech", href: "/tech" },
+  { name: "Math", href: "/math" },
   { name: "Contact", href: "/contact" },
 ] as const;
 
@@ -75,10 +76,10 @@ function isActive(href: string, path: string): boolean {
       </a>
     </div>
 
-    <!-- Mobile Primary Navigation Tabs (2nd Row below Expanded: 4 Equal-Width Fixed Tabs, No Hamburger) -->
+    <!-- Mobile Primary Navigation Tabs (2nd Row below Expanded: 5 Equal-Width Fixed Tabs, No Hamburger) -->
     <nav
       aria-label="모바일 주 메뉴"
-      class="expanded:hidden grid grid-cols-4 border-t border-glass-border -mx-4 medium:-mx-8 px-2 medium:px-6">
+      class="expanded:hidden grid grid-cols-5 border-t border-glass-border -mx-4 medium:-mx-8 px-2 medium:px-6">
       {navItems.map((item) => {
         const active = isActive(item.href, currentPath);
         return (

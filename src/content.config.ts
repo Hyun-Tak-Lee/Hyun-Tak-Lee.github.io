@@ -66,10 +66,12 @@ export const projectSchema = postSchema.extend({
 });
 
 export const techSchema = postSchema;
+export const mathSchema = postSchema;
 
 export type PostData = z.infer<typeof postSchema>;
 export type ProjectData = z.infer<typeof projectSchema>;
 export type TechData = z.infer<typeof techSchema>;
+export type MathData = z.infer<typeof mathSchema>;
 
 const normalizeContentId = ({ entry }: { entry: string }) =>
   entry
@@ -104,8 +106,18 @@ const techCollection = defineCollection({
   schema: techSchema,
 });
 
+const mathCollection = defineCollection({
+  loader: glob({
+    pattern: "**/[^_]*.{md,mdx}",
+    base: "./src/content/math",
+    generateId: normalizeContentId,
+  }),
+  schema: mathSchema,
+});
+
 export const collections = {
   projects: projectsCollection,
   projectArchitectures: projectArchitecturesCollection,
   tech: techCollection,
+  math: mathCollection,
 };
